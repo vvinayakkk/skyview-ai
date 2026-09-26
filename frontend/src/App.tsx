@@ -26,6 +26,7 @@ import HardwareSetup from "./pages/HardwareSetup";
 import BuyHardware from "./pages/BuyHardware";
 import Marketplace from "./pages/Marketplace";
 import FarmersMap from "./pages/FarmersMap";
+import CropDoctor from "./pages/CropDoctor";
 
 import { ThemeProvider } from "next-themes";
 
@@ -255,6 +256,16 @@ const AppContent = () => {
             <ProtectedRoute>
               <HardwareGate>
                 <Dashboard />
+              </HardwareGate>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/crop-doctor"
+          element={
+            <ProtectedRoute>
+              <HardwareGate>
+                <CropDoctor />
               </HardwareGate>
             </ProtectedRoute>
           }

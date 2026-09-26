@@ -15,6 +15,7 @@ import {
   Shuffle,
   Map,
   Cloud,
+  Stethoscope,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
@@ -47,6 +48,11 @@ export function DashboardHeader({
       path: '/dashboard',
       label: 'Dashboard',
       icon: LayoutDashboard,
+    },
+    {
+      path: '/crop-doctor',
+      label: 'Crop Doctor',
+      icon: Stethoscope,
     },
     {
       path: '/profile',
