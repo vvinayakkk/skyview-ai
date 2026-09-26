@@ -1,0 +1,270 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Edge-Hosted Weather Intelligence Dashboard Design System
+   Clean, minimal, utilitarian design for agricultural monitoring
+   All colors MUST be HSL */
+
+@layer base {
+  :root {
+    /* Primary Color: Agricultural Green (HSL: 142 70% 45%) */
+    --background: 80 40% 98%;
+    /* Light cream/parchment background */
+    --foreground: 142 50% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 142 50% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 142 50% 10%;
+
+    --primary: 160 84% 39%;
+    /* Vibrant Farm Green */
+    --primary-foreground: 142 10% 98%;
+
+    --secondary: 35 40% 92%;
+    /* Earthy/Sandy secondary */
+    --secondary-foreground: 160 84% 22%;
+
+    --muted: 142 10% 94%;
+    --muted-foreground: 142 20% 40%;
+
+    --accent: 45 90% 60%;
+    /* Sunflower Yellow */
+    --accent-foreground: 142 50% 10%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --success: 160 84% 30%;
+    --success-foreground: 210 40% 98%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 210 40% 98%;
+
+    --atmospheric: 195 90% 45%;
+    /* Sky Blue */
+    --atmospheric-foreground: 210 40% 98%;
+
+    --border: 142 20% 90%;
+    --input: 142 20% 90%;
+    --ring: 160 84% 39%;
+
+    --radius: 1rem;
+  }
+
+  .dark {
+    --background: 142 50% 4%;
+    /* Deep forest background */
+    --foreground: 142 20% 95%;
+
+    --card: 142 50% 6%;
+    --card-foreground: 142 20% 95%;
+
+    --popover: 142 50% 6%;
+    --popover-foreground: 142 20% 95%;
+
+    --primary: 160 84% 39%;
+    --primary-foreground: 142 10% 5%;
+
+    --secondary: 142 30% 12%;
+    --secondary-foreground: 142 20% 90%;
+
+    --muted: 142 30% 12%;
+    --muted-foreground: 142 10% 60%;
+
+    --accent: 45 90% 60%;
+    --accent-foreground: 142 10% 5%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 210 40% 98%;
+
+    --success: 160 84% 30%;
+    --success-foreground: 210 40% 98%;
+
+    --warning: 38 92% 30%;
+    --warning-foreground: 210 40% 98%;
+
+    --atmospheric: 195 90% 40%;
+    --atmospheric-foreground: 210 40% 98%;
+
+    --border: 142 30% 15%;
+    --input: 142 30% 15%;
+    --ring: 160 84% 39%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    font-family: 'Inter', sans-serif !important;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', sans-serif;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Typography Scale */
+  h1 {
+    @apply text-3xl font-bold tracking-tight;
+  }
+
+  h2 {
+    @apply text-2xl font-semibold tracking-tight;
+  }
+
+  h3 {
+    @apply text-xl font-semibold;
+  }
+
+  /* Large numeric display for weather values */
+  .value-display {
+    @apply text-4xl font-bold tracking-tight tabular-nums;
+  }
+
+  .value-display-lg {
+    @apply text-5xl font-bold tracking-tight tabular-nums;
+  }
+
+  .value-unit {
+    @apply text-lg font-medium text-muted-foreground ml-1;
+  }
+}
+
+@layer components {
+
+  /* Parameter Card Styles */
+  .parameter-card {
+    @apply bg-card border border-border rounded-xl p-5 shadow-sm transition-all duration-200;
+  }
+
+  .parameter-card:hover {
+    @apply shadow-md border-primary/20;
+  }
+
+  /* Status indicator pill */
+  .status-pill {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium;
+  }
+
+  .status-normal {
+    @apply bg-success/10 text-success;
+  }
+
+  .status-elevated {
+    @apply bg-warning/10 text-warning;
+  }
+
+  .status-critical {
+    @apply bg-destructive/10 text-destructive;
+  }
+
+  /* Freshness indicator */
+  .freshness-indicator {
+    @apply inline-flex items-center gap-2 text-sm text-muted-foreground;
+  }
+
+  .freshness-dot {
+    @apply w-2 h-2 rounded-full bg-success animate-pulse;
+  }
+
+  .freshness-dot-offline {
+    @apply w-2 h-2 rounded-full bg-destructive;
+  }
+
+  /* System health card */
+  .health-card {
+    @apply bg-secondary/50 border border-border rounded-lg p-4;
+  }
+
+  /* Alert item */
+  .alert-item {
+    @apply flex items-start gap-3 p-3 rounded-lg border border-border bg-card;
+  }
+}
+
+/* Smooth scrollbar styling */
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--muted)) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--muted));
+    border-radius: 3px;
+  }
+
+  .animate-spin-slow {
+    animation: spin 8s linear infinite;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+/* Aggressive Google Translate UI Hiding */
+#google_translate_element,
+.goog-te-banner-frame,
+.goog-te-menu-frame,
+.goog-te-balloon-frame,
+.goog-te-gadget-icon,
+.goog-te-gadget-simple,
+.goog-te-gadget-simple img,
+.goog-te-menu-value span:nth-child(3),
+.goog-te-menu-value span:nth-child(5),
+.goog-te-menu-value img,
+.goog-tooltip,
+.goog-tooltip:hover,
+#goog-gt-tt,
+#goog-gt-vt,
+.goog-te-spinner-pos,
+.goog-te-banner-frame.skiptranslate,
+#google_translate_element2 {
+  display: none !important;
+}
+
+/* Force body and html to ignore Google's added margin */
+body, html {
+  top: 0 !important;
+  position: static !important;
+}
+
+body {
+  top: 0 !important;
+}
+
+.goog-text-highlight {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Ensure no offset at the top of the page */
+.skiptranslate {
+  display: none !important;
+}
+
+iframe.goog-te-banner-frame {
+  display: none !important;
+  visibility: hidden !important;
+}
