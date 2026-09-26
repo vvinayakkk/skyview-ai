@@ -201,7 +201,7 @@ class _CropDoctorScreenState extends ConsumerState<CropDoctorScreen> {
                   decoration: BoxDecoration(
                     color: AppColors.primaryGreen.withOpacity(0.12),
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.parse('1px solid ${AppColors.primaryGreen.value}').toBorder(),
+                    border: Border.all(color: AppColors.primaryGreen.withOpacity(0.3), width: 1.0),
                   ),
                   child: Row(
                     children: [

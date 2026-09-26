@@ -16,10 +16,10 @@ subprojects {
     project.layout.buildDirectory.value(newSubprojectBuildDir)
 }
 open class FlutterStub {
-    val compileSdkVersion: Int = 35
+    val compileSdkVersion: Int = 36
     val minSdkVersion: Int = 24
-    val targetSdkVersion: Int = 35
-    val ndkVersion: String = "27.0.12077973"
+    val targetSdkVersion: Int = 36
+    val ndkVersion: String = "25.1.8937393"
 }
 
 subprojects {
@@ -32,7 +32,7 @@ subprojects {
         }
         try {
             val method = android?.javaClass?.getMethod("compileSdkVersion", Int::class.javaPrimitiveType)
-            method?.invoke(android, 35)
+            method?.invoke(android, 36)
         } catch (_: Exception) {}
     }
 }

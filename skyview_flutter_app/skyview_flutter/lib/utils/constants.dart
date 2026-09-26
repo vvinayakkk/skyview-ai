@@ -201,7 +201,7 @@ ThemeData buildAppTheme({bool dark = false}) {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     ),
 
-    cardTheme: CardThemeData(
+    cardTheme: CardTheme(
       color: Colors.white.withOpacity(0.15),
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),

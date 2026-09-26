@@ -7,8 +7,8 @@ plugins {
 
 android {
     namespace = "com.example.skyview_app"
-    compileSdk = 35
-    ndkVersion = flutter.ndkVersion
+    compileSdk = 36
+    ndkVersion = "25.1.8937393"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
