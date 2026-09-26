@@ -87,9 +87,9 @@ def _register(module_path: str, attr: str = "router", prefix: str = ""):
         mod = importlib.import_module(module_path)
         router = getattr(mod, attr)
         app.include_router(router, prefix=prefix)
-        logger.info("✅ Registered: %s", module_path)
+        logger.info("[OK] Registered: %s", module_path)
     except Exception as exc:
-        logger.warning("⚠️  Could not register %s: %s", module_path, exc)
+        logger.warning("[WARN] Could not register %s: %s", module_path, exc)
 
 
 # Core system routes
@@ -127,6 +127,9 @@ _register("skyview.api.profile_routes")
 
 # Marketplace matching
 _register("skyview.api.marketplace_routes")
+
+# Crop disease detection & plant pathology diagnostics
+_register("skyview.api.disease_routes")
 
 # Admin panel
 _register("skyview.admin.admin_routes")
