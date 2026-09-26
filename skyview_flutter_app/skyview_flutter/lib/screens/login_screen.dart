@@ -201,9 +201,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final textColor = isDark ? AppColors.darkText : AppColors.lightText;
     final subColor = isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary;
     final surface = isDark
-        ? AppColors.darkCard.withValues(alpha: 0.96)
-        : Colors.white.withValues(alpha: 0.62);
-    final borderColor = isDark ? AppColors.darkBorder : Colors.white.withValues(alpha: 0.75);
+        ? AppColors.darkCard.withOpacity(0.96)
+        : Colors.white.withOpacity(0.62);
+    final borderColor = isDark ? AppColors.darkBorder : Colors.white.withOpacity(0.75);
 
     return Scaffold(
       body: Stack(
@@ -282,7 +282,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         border: Border.all(color: borderColor),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.primaryDark.withValues(alpha: 0.12),
+                            color: AppColors.primaryDark.withOpacity(0.12),
                             blurRadius: 30,
                             spreadRadius: 1,
                           ),
@@ -337,8 +337,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                       padding: const EdgeInsets.symmetric(horizontal: 12),
                                       decoration: BoxDecoration(
                                         color: isDark
-                                            ? AppColors.darkCard.withValues(alpha: 0.96)
-                                            : Colors.white.withValues(alpha: 0.55),
+                                            ? AppColors.darkCard.withOpacity(0.96)
+                                            : Colors.white.withOpacity(0.55),
                                         borderRadius: BorderRadius.circular(12),
                                         border: Border.all(color: borderColor),
                                       ),
@@ -376,8 +376,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                         hintText: 'login.phone_hint'.tr(),
                                         filled: true,
                                         fillColor: isDark
-                                            ? AppColors.darkCard.withValues(alpha: 0.96)
-                                            : Colors.white.withValues(alpha: 0.55),
+                                            ? AppColors.darkCard.withOpacity(0.96)
+                                            : Colors.white.withOpacity(0.55),
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(12),
                                           borderSide: BorderSide(color: borderColor),
@@ -437,10 +437,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                                   decoration: BoxDecoration(
-                                    color: AppColors.warning.withValues(alpha: 0.15),
+                                    color: AppColors.warning.withOpacity(0.15),
                                     borderRadius: BorderRadius.circular(8),
                                     border: Border.all(
-                                      color: AppColors.warning.withValues(alpha: 0.4),
+                                      color: AppColors.warning.withOpacity(0.4),
                                     ),
                                   ),
                                   child: Row(
@@ -467,10 +467,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                                   decoration: BoxDecoration(
-                                    color: AppColors.primaryLight.withValues(alpha: 0.2),
+                                    color: AppColors.primaryLight.withOpacity(0.2),
                                     borderRadius: BorderRadius.circular(8),
                                     border: Border.all(
-                                      color: AppColors.primaryLight.withValues(alpha: 0.4),
+                                      color: AppColors.primaryLight.withOpacity(0.4),
                                     ),
                                   ),
                                   child: Row(
@@ -560,10 +560,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                                 decoration: BoxDecoration(
-                                  color: AppColors.error.withValues(alpha: 0.15),
+                                  color: AppColors.error.withOpacity(0.15),
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
-                                    color: AppColors.error.withValues(alpha: 0.3),
+                                    color: AppColors.error.withOpacity(0.3),
                                   ),
                                 ),
                                 child: Row(
@@ -610,8 +610,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       ),
       decoration: BoxDecoration(
         color: isDark
-            ? AppColors.darkCard.withValues(alpha: 0.96)
-            : Colors.white.withValues(alpha: 0.55),
+            ? AppColors.darkCard.withOpacity(0.96)
+            : Colors.white.withOpacity(0.55),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: borderColor),
       ),

@@ -168,16 +168,16 @@ ThemeData buildAppTheme({bool dark = false}) {
 
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: dark ? Colors.white.withValues(alpha: 0.15) : Colors.black.withValues(alpha: 0.05),
+      fillColor: dark ? Colors.white.withOpacity(0.15) : Colors.black.withOpacity(0.05),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide(color: dark ? Colors.white.withValues(alpha: 0.3) : Colors.black.withValues(alpha: 0.15)),
+        borderSide: BorderSide(color: dark ? Colors.white.withOpacity(0.3) : Colors.black.withOpacity(0.15)),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
         borderSide: BorderSide(
-          color: dark ? Colors.white.withValues(alpha: 0.2) : Colors.black.withValues(alpha: 0.1),
+          color: dark ? Colors.white.withOpacity(0.2) : Colors.black.withOpacity(0.1),
         ),
       ),
       focusedBorder: OutlineInputBorder(
@@ -195,14 +195,14 @@ ThemeData buildAppTheme({bool dark = false}) {
     ),
 
     chipTheme: ChipThemeData(
-      backgroundColor: Colors.white.withValues(alpha: 0.15),
-      selectedColor: Colors.white.withValues(alpha: 0.3),
+      backgroundColor: Colors.white.withOpacity(0.15),
+      selectedColor: Colors.white.withOpacity(0.3),
       labelStyle: const TextStyle(fontFamily: 'Poppins', fontSize: 13, color: Colors.white),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     ),
 
     cardTheme: CardThemeData(
-      color: Colors.white.withValues(alpha: 0.15),
+      color: Colors.white.withOpacity(0.15),
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
     ),

@@ -169,16 +169,16 @@ class _ChoiceScreenState extends ConsumerState<ChoiceScreen> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final cardColor = isDark
-        ? AppColors.darkCard.withValues(alpha: 0.96)
-        : Colors.white.withValues(alpha: 0.56);
+        ? AppColors.darkCard.withOpacity(0.96)
+        : Colors.white.withOpacity(0.56);
     final borderColor = isDark
-        ? Colors.white.withValues(alpha: 0.12)
-        : Colors.white.withValues(alpha: 0.8);
+        ? Colors.white.withOpacity(0.12)
+        : Colors.white.withOpacity(0.8);
     final textColor = isDark ? Colors.white : AppColors.textDark;
     final subColor = isDark ? Colors.white70 : AppColors.textMuted;
     final iconBg = isDark
-        ? AppColors.darkCard.withValues(alpha: 0.96)
-        : Colors.white.withValues(alpha: 0.56);
+        ? AppColors.darkCard.withOpacity(0.96)
+        : Colors.white.withOpacity(0.56);
 
     // Green color for icons inside cards
     const cardIconColor = Color(0xFF2E7D32); // deep green
@@ -474,7 +474,7 @@ class _ChoiceScreenState extends ConsumerState<ChoiceScreen> {
       decoration: BoxDecoration(
         color: bg,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
+        border: Border.all(color: Colors.white.withOpacity(0.3)),
       ),
       child: IconButton(
         icon: Icon(icon, color: color, size: 20),
@@ -501,7 +501,7 @@ class _ChoiceScreenState extends ConsumerState<ChoiceScreen> {
         border: Border.all(color: borderColor, width: 1.2),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.05),
+            color: AppColors.primary.withOpacity(0.05),
             blurRadius: 8,
             offset: const Offset(0, 4),
           )
@@ -517,7 +517,7 @@ class _ChoiceScreenState extends ConsumerState<ChoiceScreen> {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.06),
+                  color: Colors.black.withOpacity(0.06),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: iconColor, size: 28), // ← green icon
@@ -585,7 +585,7 @@ class _ChoiceScreenState extends ConsumerState<ChoiceScreen> {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.06),
+                  color: Colors.black.withOpacity(0.06),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Icon(icon, color: iconColor, size: 20), // ← green icon

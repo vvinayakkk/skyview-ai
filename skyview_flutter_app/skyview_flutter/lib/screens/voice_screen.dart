@@ -325,10 +325,10 @@ class _VoiceScreenState extends ConsumerState<VoiceScreen>
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: isDark ? 0.18 : 0.1),
+                    color: AppColors.primary.withOpacity(isDark ? 0.18 : 0.1),
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(
-                      color: AppColors.primary.withValues(alpha: 0.4),
+                      color: AppColors.primary.withOpacity(0.4),
                     ),
                   ),
                   child: Row(
@@ -403,17 +403,17 @@ class _VoiceOrb extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                orbColor.withValues(alpha: 0.8),
-                orbColor.withValues(alpha: 0.4),
+                orbColor.withOpacity(0.8),
+                orbColor.withOpacity(0.4),
               ],
             ),
             border: Border.all(
-              color: orbColor.withValues(alpha: 0.6),
+              color: orbColor.withOpacity(0.6),
               width: 2.0,
             ),
             boxShadow: [
               BoxShadow(
-                color: orbColor.withValues(alpha: 0.35),
+                color: orbColor.withOpacity(0.35),
                 blurRadius: 30,
                 spreadRadius: 2,
               ),
@@ -458,7 +458,7 @@ class _RipplePainter extends CustomPainter {
         center,
         radius,
         Paint()
-          ..color = color.withValues(alpha: opacity)
+          ..color = color.withOpacity(opacity)
           ..style = PaintingStyle.stroke
           ..strokeWidth = 2.5,
       );
@@ -492,10 +492,10 @@ class _TranscriptCard extends StatelessWidget {
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: isDark
-            ? Colors.white.withValues(alpha: 0.06)
-            : Colors.white.withValues(alpha: 0.85),
+            ? Colors.white.withOpacity(0.06)
+            : Colors.white.withOpacity(0.85),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: color.withValues(alpha: 0.25)),
+        border: Border.all(color: color.withOpacity(0.25)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -558,7 +558,7 @@ class _TranscriptCard extends StatelessWidget {
               fontFamily: 'Poppins',
               fontSize: 14,
               height: 1.5,
-              color: isDark ? Colors.white.withValues(alpha: 0.87) : AppColors.textDark,
+              color: isDark ? Colors.white.withOpacity(0.87) : AppColors.textDark,
             ),
           ),
         ],
@@ -581,11 +581,11 @@ class _StepLog extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: isDark
-            ? AppColors.primary.withValues(alpha: 0.08)
-            : AppColors.primarySurface.withValues(alpha: 0.8),
+            ? AppColors.primary.withOpacity(0.08)
+            : AppColors.primarySurface.withOpacity(0.8),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-            color: AppColors.primary.withValues(alpha: 0.2)),
+            color: AppColors.primary.withOpacity(0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -656,9 +656,9 @@ class _StatusLabel extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
-        color: entry.color.withValues(alpha: 0.12),
+        color: entry.color.withOpacity(0.12),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: entry.color.withValues(alpha: 0.3)),
+        border: Border.all(color: entry.color.withOpacity(0.3)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

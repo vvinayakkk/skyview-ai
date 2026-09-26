@@ -345,10 +345,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     final subColor =
         isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary;
     final surface = isDark
-        ? AppColors.darkCard.withValues(alpha: 0.96)
-        : Colors.white.withValues(alpha: 0.62);
+        ? AppColors.darkCard.withOpacity(0.96)
+        : Colors.white.withOpacity(0.62);
     final borderColor =
-        isDark ? AppColors.darkBorder : Colors.white.withValues(alpha: 0.75);
+        isDark ? AppColors.darkBorder : Colors.white.withOpacity(0.75);
 
     return Scaffold(
       body: Stack(
@@ -433,7 +433,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         boxShadow: [
                           BoxShadow(
                             color:
-                                AppColors.primaryDark.withValues(alpha: 0.12),
+                                AppColors.primaryDark.withOpacity(0.12),
                             blurRadius: 30,
                             spreadRadius: 1,
                           ),
@@ -577,11 +577,11 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                                     horizontal: 10, vertical: 6),
                                 decoration: BoxDecoration(
                                   color: AppColors.primaryLight
-                                      .withValues(alpha: 0.2),
+                                      .withOpacity(0.2),
                                   borderRadius: BorderRadius.circular(8),
                                   border: Border.all(
                                     color: AppColors.primaryLight
-                                        .withValues(alpha: 0.4),
+                                        .withOpacity(0.4),
                                   ),
                                 ),
                                 child: Row(
@@ -707,11 +707,11 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 10),
                               decoration: BoxDecoration(
-                                color: AppColors.error.withValues(alpha: 0.15),
+                                color: AppColors.error.withOpacity(0.15),
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
                                   color:
-                                      AppColors.error.withValues(alpha: 0.3),
+                                      AppColors.error.withOpacity(0.3),
                                 ),
                               ),
                               child: Row(
@@ -752,8 +752,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     final subColor =
         isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary;
     final fillColor = isDark
-        ? AppColors.darkCard.withValues(alpha: 0.96)
-        : Colors.white.withValues(alpha: 0.55);
+        ? AppColors.darkCard.withOpacity(0.96)
+        : Colors.white.withOpacity(0.55);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -775,8 +775,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: _isRecording
-                    ? AppColors.error.withValues(alpha: 0.15)
-                    : AppColors.primary.withValues(alpha: 0.12),
+                    ? AppColors.error.withOpacity(0.15)
+                    : AppColors.primary.withOpacity(0.12),
                 border: Border.all(
                   color: _isRecording ? AppColors.error : AppColors.primary,
                   width: 1.5,
@@ -845,8 +845,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             size: 20),
         filled: true,
         fillColor: isDark
-            ? AppColors.darkCard.withValues(alpha: 0.96)
-            : Colors.white.withValues(alpha: 0.55),
+            ? AppColors.darkCard.withOpacity(0.96)
+            : Colors.white.withOpacity(0.55),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: borderColor),
@@ -877,8 +877,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
               color: isDark
-                  ? AppColors.darkCard.withValues(alpha: 0.96)
-                  : Colors.white.withValues(alpha: 0.55),
+                  ? AppColors.darkCard.withOpacity(0.96)
+                  : Colors.white.withOpacity(0.55),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: borderColor),
             ),
@@ -910,8 +910,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               hintText: 'login.phone_hint'.tr(),
               filled: true,
               fillColor: isDark
-                  ? AppColors.darkCard.withValues(alpha: 0.96)
-                  : Colors.white.withValues(alpha: 0.55),
+                  ? AppColors.darkCard.withOpacity(0.96)
+                  : Colors.white.withOpacity(0.55),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(color: borderColor),
@@ -947,8 +947,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       ),
       decoration: BoxDecoration(
         color: isDark
-            ? AppColors.darkCard.withValues(alpha: 0.96)
-            : Colors.white.withValues(alpha: 0.55),
+            ? AppColors.darkCard.withOpacity(0.96)
+            : Colors.white.withOpacity(0.55),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: borderColor),
       ),

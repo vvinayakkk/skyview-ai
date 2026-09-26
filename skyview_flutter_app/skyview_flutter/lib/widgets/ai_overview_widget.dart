@@ -231,10 +231,10 @@ class _AiOverviewWidgetState extends State<AiOverviewWidget> {
     final config = _configs[widget.page];
     final isDark = widget.isDark;
     final primary = AppColors.primary;
-    final borderColorUniform = isDark ? Colors.white.withValues(alpha: 0.12) : Colors.white.withValues(alpha: 0.8);
-    final cardBgUniform = isDark ? AppColors.darkCard.withValues(alpha: 0.96) : Colors.white.withValues(alpha: 0.56);
-    final textColor = isDark ? Colors.white.withValues(alpha: 0.82) : const Color(0xFF1A2E1A);
-    final mutedColor = isDark ? Colors.white.withValues(alpha: 0.38) : Colors.black.withValues(alpha: 0.42);
+    final borderColorUniform = isDark ? Colors.white.withOpacity(0.12) : Colors.white.withOpacity(0.8);
+    final cardBgUniform = isDark ? AppColors.darkCard.withOpacity(0.96) : Colors.white.withOpacity(0.56);
+    final textColor = isDark ? Colors.white.withOpacity(0.82) : const Color(0xFF1A2E1A);
+    final mutedColor = isDark ? Colors.white.withOpacity(0.38) : Colors.black.withOpacity(0.42);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -244,7 +244,7 @@ class _AiOverviewWidgetState extends State<AiOverviewWidget> {
         border: Border.all(color: borderColorUniform, width: 1.2),
         boxShadow: [
           BoxShadow(
-            color: primary.withValues(alpha: isDark ? 0.08 : 0.06),
+            color: primary.withOpacity(isDark ? 0.08 : 0.06),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
@@ -286,9 +286,9 @@ class _AiOverviewWidgetState extends State<AiOverviewWidget> {
           Container(
             width: 26, height: 26,
             decoration: BoxDecoration(
-              color: primary.withValues(alpha: 0.12),
+              color: primary.withOpacity(0.12),
               borderRadius: BorderRadius.circular(7),
-              border: Border.all(color: primary.withValues(alpha: 0.2), width: 0.5),
+              border: Border.all(color: primary.withOpacity(0.2), width: 0.5),
             ),
             child: Icon(Icons.auto_awesome_rounded, size: 14, color: primary),
           ),
@@ -307,9 +307,9 @@ class _AiOverviewWidgetState extends State<AiOverviewWidget> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
             decoration: BoxDecoration(
-              color: isDark ? Colors.white.withValues(alpha: 0.06) : Colors.black.withValues(alpha: 0.05),
+              color: isDark ? Colors.white.withOpacity(0.06) : Colors.black.withOpacity(0.05),
               borderRadius: BorderRadius.circular(4),
-              border: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.08) : Colors.black.withValues(alpha: 0.08), width: 0.5),
+              border: Border.all(color: isDark ? Colors.white.withOpacity(0.08) : Colors.black.withOpacity(0.08), width: 0.5),
             ),
             child: Text('EN', style: TextStyle(fontSize: 9, fontWeight: FontWeight.w500, color: mutedColor, fontFamily: 'Poppins')),
           ),
@@ -344,7 +344,7 @@ class _AiOverviewWidgetState extends State<AiOverviewWidget> {
               height: 14,
               width: MediaQuery.sizeOf(context).width * w / 100,
               decoration: BoxDecoration(
-                color: isDark ? Colors.white.withValues(alpha: 0.06) : Colors.black.withValues(alpha: 0.05),
+                color: isDark ? Colors.white.withOpacity(0.06) : Colors.black.withOpacity(0.05),
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
@@ -385,8 +385,8 @@ class _AiOverviewWidgetState extends State<AiOverviewWidget> {
                       gradient: LinearGradient(
                         begin: Alignment.topCenter, end: Alignment.bottomCenter,
                         colors: [
-                          (isDark ? AppColors.darkCard : Colors.white).withValues(alpha: 0.0),
-                          isDark ? AppColors.darkCard.withValues(alpha: 0.96) : Colors.white.withValues(alpha: 0.56),
+                          (isDark ? AppColors.darkCard : Colors.white).withOpacity(0.0),
+                          isDark ? AppColors.darkCard.withOpacity(0.96) : Colors.white.withOpacity(0.56),
                         ],
                       ),
                     ),
@@ -427,7 +427,7 @@ class _AiOverviewWidgetState extends State<AiOverviewWidget> {
                       margin: const EdgeInsets.only(right: 10),
                       padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
                       decoration: BoxDecoration(
-                        color: isDark ? Colors.white.withValues(alpha: 0.03) : const Color(0xFFFAFAFA),
+                        color: isDark ? Colors.white.withOpacity(0.03) : const Color(0xFFFAFAFA),
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: borderColor, width: 0.5),
                       ),
@@ -478,9 +478,9 @@ class _AiOverviewWidgetState extends State<AiOverviewWidget> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 5),
                       decoration: BoxDecoration(
-                        color: primary.withValues(alpha: isDark ? 0.12 : 0.07),
+                        color: primary.withOpacity(isDark ? 0.12 : 0.07),
                         borderRadius: BorderRadius.circular(6),
-                        border: Border.all(color: primary.withValues(alpha: isDark ? 0.22 : 0.18), width: 0.5),
+                        border: Border.all(color: primary.withOpacity(isDark ? 0.22 : 0.18), width: 0.5),
                       ),
                       child: Text(chip, style: TextStyle(
                         fontFamily: 'Poppins', fontSize: 11, fontWeight: FontWeight.w500,
@@ -496,7 +496,7 @@ class _AiOverviewWidgetState extends State<AiOverviewWidget> {
                 Container(
                   height: 200,
                   decoration: BoxDecoration(
-                    color: isDark ? Colors.black.withValues(alpha: 0.12) : Colors.black.withValues(alpha: 0.02),
+                    color: isDark ? Colors.black.withOpacity(0.12) : Colors.black.withOpacity(0.02),
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(color: borderColor, width: 0.5),
                   ),
@@ -515,9 +515,9 @@ class _AiOverviewWidgetState extends State<AiOverviewWidget> {
                                 width: 22, height: 22,
                                 margin: const EdgeInsets.only(right: 6, top: 2),
                                 decoration: BoxDecoration(
-                                  color: primary.withValues(alpha: 0.12),
+                                  color: primary.withOpacity(0.12),
                                   shape: BoxShape.circle,
-                                  border: Border.all(color: primary.withValues(alpha: 0.22), width: 0.5),
+                                  border: Border.all(color: primary.withOpacity(0.22), width: 0.5),
                                 ),
                                 child: Icon(Icons.smart_toy_rounded, size: 12, color: primary),
                               ),
@@ -527,8 +527,8 @@ class _AiOverviewWidgetState extends State<AiOverviewWidget> {
                                 padding: const EdgeInsets.fromLTRB(10, 7, 10, 7),
                                 decoration: BoxDecoration(
                                   color: msg.isUser
-                                      ? (isDark ? Colors.white.withValues(alpha: 0.08) : Colors.black.withValues(alpha: 0.06))
-                                      : (isDark ? Colors.white.withValues(alpha: 0.03) : Colors.black.withValues(alpha: 0.02)),
+                                      ? (isDark ? Colors.white.withOpacity(0.08) : Colors.black.withOpacity(0.06))
+                                      : (isDark ? Colors.white.withOpacity(0.03) : Colors.black.withOpacity(0.02)),
                                   borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(msg.isUser ? 8 : 2),
                                     topRight: Radius.circular(msg.isUser ? 2 : 8),
@@ -553,7 +553,7 @@ class _AiOverviewWidgetState extends State<AiOverviewWidget> {
                                 width: 22, height: 22,
                                 margin: const EdgeInsets.only(left: 6, top: 2),
                                 decoration: BoxDecoration(
-                                  color: isDark ? Colors.white.withValues(alpha: 0.07) : Colors.black.withValues(alpha: 0.05),
+                                  color: isDark ? Colors.white.withOpacity(0.07) : Colors.black.withOpacity(0.05),
                                   shape: BoxShape.circle,
                                   border: Border.all(color: borderColor, width: 0.5),
                                 ),
@@ -583,7 +583,7 @@ class _AiOverviewWidgetState extends State<AiOverviewWidget> {
               // Chat input
               Container(
                 decoration: BoxDecoration(
-                  color: isDark ? Colors.white.withValues(alpha: 0.04) : Colors.white,
+                  color: isDark ? Colors.white.withOpacity(0.04) : Colors.white,
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(color: borderColor, width: 0.5),
                 ),
@@ -641,7 +641,7 @@ class _AiOverviewWidgetState extends State<AiOverviewWidget> {
         padding: const EdgeInsets.symmetric(vertical: 8),
         decoration: BoxDecoration(
           border: Border(top: BorderSide(
-            color: isDark ? Colors.white.withValues(alpha: 0.06) : Colors.black.withValues(alpha: 0.06),
+            color: isDark ? Colors.white.withOpacity(0.06) : Colors.black.withOpacity(0.06),
             width: 0.5,
           )),
         ),

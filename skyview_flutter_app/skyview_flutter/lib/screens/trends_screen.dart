@@ -132,11 +132,11 @@ class _TrendsScreenState extends ConsumerState<TrendsScreen> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final cardColor = isDark
-        ? AppColors.darkCard.withValues(alpha: 0.96)
-        : Colors.white.withValues(alpha: 0.56);
+        ? AppColors.darkCard.withOpacity(0.96)
+        : Colors.white.withOpacity(0.56);
     final borderColor = isDark
-        ? Colors.white.withValues(alpha: 0.12)
-        : Colors.white.withValues(alpha: 0.8);
+        ? Colors.white.withOpacity(0.12)
+        : Colors.white.withOpacity(0.8);
     final textColor = isDark ? Colors.white : AppColors.textDark;
 
     final temp = _val('temperature', fallback: 29.2);
@@ -323,9 +323,9 @@ class _TrendsScreenState extends ConsumerState<TrendsScreen> {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: isDark ? AppColors.darkCard.withValues(alpha: 0.9) : Colors.white.withValues(alpha: 0.8),
+        color: isDark ? AppColors.darkCard.withOpacity(0.9) : Colors.white.withOpacity(0.8),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: statusColor.withValues(alpha: 0.3)),
+        border: Border.all(color: statusColor.withOpacity(0.3)),
       ),
       child: Row(
         children: [
@@ -385,13 +385,13 @@ class _TrendsScreenState extends ConsumerState<TrendsScreen> {
             Container(
               width: 32, height: 32,
               decoration: BoxDecoration(
-                color: accent.withValues(alpha: 0.12),
+                color: accent.withOpacity(0.12),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(icon, color: accent, size: 16),
             ),
             const Spacer(),
-            Icon(Icons.trending_up_rounded, size: 14, color: accent.withValues(alpha: 0.6)),
+            Icon(Icons.trending_up_rounded, size: 14, color: accent.withOpacity(0.6)),
           ]),
           const Spacer(),
           Text(value, style: TextStyle(
@@ -557,7 +557,7 @@ class _ChartPainter extends CustomPainter {
 
     // Y-axis grid lines + labels
     final gridPaint = Paint()
-      ..color = isDark ? Colors.white10 : Colors.black.withValues(alpha: 0.06)
+      ..color = isDark ? Colors.white10 : Colors.black.withOpacity(0.06)
       ..strokeWidth = 0.8;
     final yLabelStyle = TextStyle(
       fontFamily: 'Poppins', fontSize: 8.5,
@@ -596,7 +596,7 @@ class _ChartPainter extends CustomPainter {
       fillPath,
       Paint()..shader = LinearGradient(
         begin: Alignment.topCenter, end: Alignment.bottomCenter,
-        colors: [lineColor.withValues(alpha: 0.2), lineColor.withValues(alpha: 0.0)],
+        colors: [lineColor.withOpacity(0.2), lineColor.withOpacity(0.0)],
       ).createShader(Rect.fromLTWH(0, 0, size.width, size.height)),
     );
 
@@ -678,7 +678,7 @@ class _ChartPainter extends CustomPainter {
         pt.dx + tp.width / 2 + 6, pt.dy - 10,
         const Radius.circular(5),
       );
-      canvas.drawRRect(bgRect, Paint()..color = lineColor.withValues(alpha: 0.9));
+      canvas.drawRRect(bgRect, Paint()..color = lineColor.withOpacity(0.9));
       tp.paint(canvas, Offset(pt.dx - tp.width / 2, pt.dy - tp.height - 15));
     }
   }

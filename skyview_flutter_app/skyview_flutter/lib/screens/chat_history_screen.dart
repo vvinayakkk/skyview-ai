@@ -82,21 +82,21 @@ class ChatHistoryScreen extends ConsumerWidget {
                     return Card(
                       margin: const EdgeInsets.only(bottom: 12),
                       color: isDark
-                          ? Colors.white.withValues(alpha: 0.05)
-                          : Colors.white.withValues(alpha: 0.75),
+                          ? Colors.white.withOpacity(0.05)
+                          : Colors.white.withOpacity(0.75),
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
                         side: BorderSide(
                           color: isDark
-                              ? Colors.white.withValues(alpha: 0.1)
-                              : Colors.black.withValues(alpha: 0.05),
+                              ? Colors.white.withOpacity(0.1)
+                              : Colors.black.withOpacity(0.05),
                         ),
                       ),
                       child: ListTile(
                         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         leading: CircleAvatar(
-                          backgroundColor: AppColors.primary.withValues(alpha: 0.12),
+                          backgroundColor: AppColors.primary.withOpacity(0.12),
                           child: Icon(Icons.chat_bubble_outline_rounded, color: AppColors.primary, size: 20),
                         ),
                         title: Text(

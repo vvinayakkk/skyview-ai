@@ -316,11 +316,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final cardColor = isDark
-        ? AppColors.darkCard.withValues(alpha: 0.96)
-        : Colors.white.withValues(alpha: 0.56);
+        ? AppColors.darkCard.withOpacity(0.96)
+        : Colors.white.withOpacity(0.56);
     final borderColor = isDark
-        ? Colors.white.withValues(alpha: 0.12)
-        : Colors.white.withValues(alpha: 0.8);
+        ? Colors.white.withOpacity(0.12)
+        : Colors.white.withOpacity(0.8);
     final textColor = isDark ? Colors.white : AppColors.textDark;
 
     final profileMap = _profile ?? {};
@@ -415,9 +415,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           margin: const EdgeInsets.only(bottom: 16, top: 8),
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                           decoration: BoxDecoration(
-                            color: AppColors.warning.withValues(alpha: 0.15),
+                            color: AppColors.warning.withOpacity(0.15),
                             borderRadius: BorderRadius.circular(14),
-                            border: Border.all(color: AppColors.warning.withValues(alpha: 0.4)),
+                            border: Border.all(color: AppColors.warning.withOpacity(0.4)),
                           ),
                           child: Row(
                             children: [
@@ -430,7 +430,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                     fontFamily: 'Poppins',
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500,
-                                    color: isDark ? Colors.white.withValues(alpha: 0.87) : AppColors.textDark,
+                                    color: isDark ? Colors.white.withOpacity(0.87) : AppColors.textDark,
                                   ),
                                 ),
                               ),
@@ -452,7 +452,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           children: [
                             CircleAvatar(
                               radius: 40,
-                              backgroundColor: AppColors.primary.withValues(alpha: 0.12),
+                              backgroundColor: AppColors.primary.withOpacity(0.12),
                               child: const Icon(Icons.person_rounded, color: AppColors.primary, size: 40),
                             ),
                             const SizedBox(height: 16),
@@ -536,7 +536,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                     child: Container(
                                       padding: const EdgeInsets.all(12),
                                       decoration: BoxDecoration(
-                                        color: isDark ? Colors.white.withValues(alpha: 0.04) : Colors.black.withValues(alpha: 0.02),
+                                        color: isDark ? Colors.white.withOpacity(0.04) : Colors.black.withOpacity(0.02),
                                         borderRadius: BorderRadius.circular(12),
                                         border: Border.all(color: isDark ? Colors.white10 : Colors.black12),
                                       ),

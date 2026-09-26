@@ -147,11 +147,11 @@ class _MandiRatesScreenState extends ConsumerState<MandiRatesScreen> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final cardColor = isDark
-        ? AppColors.darkCard.withValues(alpha: 0.96)
-        : Colors.white.withValues(alpha: 0.56);
+        ? AppColors.darkCard.withOpacity(0.96)
+        : Colors.white.withOpacity(0.56);
     final borderColor = isDark
-        ? Colors.white.withValues(alpha: 0.12)
-        : Colors.white.withValues(alpha: 0.8);
+        ? Colors.white.withOpacity(0.12)
+        : Colors.white.withOpacity(0.8);
     final textColor = isDark ? Colors.white : AppColors.textDark;
     final mutedColor = isDark ? Colors.white54 : AppColors.textMuted;
 
@@ -363,10 +363,10 @@ class _MandiRatesScreenState extends ConsumerState<MandiRatesScreen> {
         margin: const EdgeInsets.only(right: 8),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
         decoration: BoxDecoration(
-          color: selected ? AppColors.primary : (isDark ? Colors.white.withValues(alpha: 0.07) : Colors.white),
+          color: selected ? AppColors.primary : (isDark ? Colors.white.withOpacity(0.07) : Colors.white),
           borderRadius: BorderRadius.circular(18),
           border: Border.all(
-            color: selected ? AppColors.primary : AppColors.primary.withValues(alpha: 0.25),
+            color: selected ? AppColors.primary : AppColors.primary.withOpacity(0.25),
           ),
         ),
         child: Text(label, style: TextStyle(
@@ -458,7 +458,7 @@ class _MandiRatesScreenState extends ConsumerState<MandiRatesScreen> {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: DataTable(
-              headingRowColor: WidgetStateProperty.all(AppColors.primary.withValues(alpha: 0.08)),
+              headingRowColor: WidgetStateProperty.all(AppColors.primary.withOpacity(0.08)),
               dataRowMinHeight: 44,
               dataRowMaxHeight: 56,
               columnSpacing: 20,
@@ -496,9 +496,9 @@ class _MandiRatesScreenState extends ConsumerState<MandiRatesScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
                       color: isHigh
-                          ? const Color(0xFF10B981).withValues(alpha: 0.15)
+                          ? const Color(0xFF10B981).withOpacity(0.15)
                           : isLow
-                              ? const Color(0xFFEF4444).withValues(alpha: 0.12)
+                              ? const Color(0xFFEF4444).withOpacity(0.12)
                               : Colors.transparent,
                       borderRadius: BorderRadius.circular(6),
                     ),

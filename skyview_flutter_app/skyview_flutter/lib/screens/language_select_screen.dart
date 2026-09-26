@@ -59,8 +59,8 @@ class _LanguageSelectScreenState extends ConsumerState<LanguageSelectScreen> {
     final subColor =
         isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary;
     final surface = isDark
-        ? AppColors.darkCard.withValues(alpha: 0.96)
-        : Colors.white.withValues(alpha: 0.55);
+        ? AppColors.darkCard.withOpacity(0.96)
+        : Colors.white.withOpacity(0.55);
 
     return Scaffold(
       body: Container(
@@ -171,17 +171,17 @@ class _LanguageSelectScreenState extends ConsumerState<LanguageSelectScreen> {
                               ),
                               decoration: BoxDecoration(
                                 color: selected
-                                    ? AppColors.primary.withValues(alpha: 0.22)
+                                    ? AppColors.primary.withOpacity(0.22)
                                     : (isDark
-                                          ? Colors.white.withValues(alpha: 0.05)
-                                          : Colors.white.withValues(alpha: 0.6)),
+                                          ? Colors.white.withOpacity(0.05)
+                                          : Colors.white.withOpacity(0.6)),
                                 borderRadius: BorderRadius.circular(16),
                                 border: Border.all(
                                   color: selected
                                       ? AppColors.primary
                                       : (isDark
-                                          ? Colors.white.withValues(alpha: 0.1)
-                                          : Colors.white.withValues(alpha: 0.8)),
+                                          ? Colors.white.withOpacity(0.1)
+                                          : Colors.white.withOpacity(0.8)),
                                   width: selected ? 1.8 : 1.0,
                                 ),
                               ),

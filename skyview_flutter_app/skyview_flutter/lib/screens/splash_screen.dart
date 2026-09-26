@@ -47,7 +47,7 @@ class SplashScreen extends ConsumerWidget {
                   style: IconButton.styleFrom(
                     backgroundColor: isDark
                         ? Colors.transparent
-                        : Colors.white.withValues(alpha: 0.6),
+                        : Colors.white.withOpacity(0.6),
                     side: isDark
                         ? null
                         : const BorderSide(color: Colors.white),

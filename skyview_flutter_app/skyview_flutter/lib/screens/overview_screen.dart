@@ -105,17 +105,17 @@ class _OverviewScreenState extends ConsumerState<OverviewScreen> {
       onTap: () => context.push(route),
       child: Container(
         decoration: BoxDecoration(
-          color: isDark ? AppColors.darkCard.withValues(alpha: 0.96) : Colors.white.withValues(alpha: 0.85),
+          color: isDark ? AppColors.darkCard.withOpacity(0.96) : Colors.white.withOpacity(0.85),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: color.withValues(alpha: 0.25)),
-          boxShadow: [BoxShadow(color: color.withValues(alpha: 0.08), blurRadius: 8, offset: const Offset(0, 3))],
+          border: Border.all(color: color.withOpacity(0.25)),
+          boxShadow: [BoxShadow(color: color.withOpacity(0.08), blurRadius: 8, offset: const Offset(0, 3))],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               width: 40, height: 40,
-              decoration: BoxDecoration(color: color.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(10)),
+              decoration: BoxDecoration(color: color.withOpacity(0.12), borderRadius: BorderRadius.circular(10)),
               child: Icon(icon, color: color, size: 20),
             ),
             const SizedBox(height: 8),

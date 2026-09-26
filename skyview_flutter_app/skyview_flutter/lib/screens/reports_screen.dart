@@ -294,11 +294,11 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final cardColor = isDark
-        ? AppColors.darkCard.withValues(alpha: 0.96)
-        : Colors.white.withValues(alpha: 0.56);
+        ? AppColors.darkCard.withOpacity(0.96)
+        : Colors.white.withOpacity(0.56);
     final borderColor = isDark
-        ? Colors.white.withValues(alpha: 0.12)
-        : Colors.white.withValues(alpha: 0.8);
+        ? Colors.white.withOpacity(0.12)
+        : Colors.white.withOpacity(0.8);
     final textColor = isDark ? Colors.white : AppColors.textDark;
     final mutedColor = isDark ? Colors.white54 : AppColors.textMuted;
 
@@ -411,7 +411,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                       icon: Icon(Icons.auto_awesome_rounded, size: 18, color: isDark ? Colors.white : AppColors.textDark),
                       label: Text('Generate Report', style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700, fontSize: 15, color: isDark ? Colors.white : AppColors.textDark)),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: isDark ? Colors.white.withValues(alpha: 0.05) : Colors.white,
+                        backgroundColor: isDark ? Colors.white.withOpacity(0.05) : Colors.white,
                         foregroundColor: isDark ? Colors.white : AppColors.textDark,
                         shadowColor: Colors.transparent,
                         side: const BorderSide(color: AppColors.primary, width: 1.5),
@@ -454,7 +454,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                                 width: 18, height: 18,
                                 margin: const EdgeInsets.only(right: 10, top: 1),
                                 decoration: BoxDecoration(
-                                  color: AppColors.primary.withValues(alpha: 0.12),
+                                  color: AppColors.primary.withOpacity(0.12),
                                   shape: BoxShape.circle,
                                 ),
                                 child: Icon(Icons.check_rounded, size: 11, color: AppColors.primary),
@@ -495,7 +495,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                         tableBorder: TableBorder.all(color: borderColor, width: 0.5),
                         tableHead: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700, fontSize: 11.5, color: AppColors.primary),
                         tableBody: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: textColor),
-                        tableCellsDecoration: BoxDecoration(color: isDark ? Colors.white.withValues(alpha: 0.03) : const Color(0xFFF8FFF8)),
+                        tableCellsDecoration: BoxDecoration(color: isDark ? Colors.white.withOpacity(0.03) : const Color(0xFFF8FFF8)),
                       ),
                     ),
                   ),
@@ -507,7 +507,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                       icon: Icon(Icons.add_rounded, size: 18, color: isDark ? Colors.white : AppColors.textDark),
                       label: Text('Generate Another Report', style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700, fontSize: 14, color: isDark ? Colors.white : AppColors.textDark)),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: isDark ? Colors.white.withValues(alpha: 0.05) : Colors.white,
+                        backgroundColor: isDark ? Colors.white.withOpacity(0.05) : Colors.white,
                         foregroundColor: isDark ? Colors.white : AppColors.textDark,
                         shadowColor: Colors.transparent,
                         side: const BorderSide(color: AppColors.primary, width: 1.5),
@@ -540,7 +540,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
           decoration: BoxDecoration(
             color: selected ? AppColors.primary : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: selected ? AppColors.primary : AppColors.primary.withValues(alpha: 0.3)),
+            border: Border.all(color: selected ? AppColors.primary : AppColors.primary.withOpacity(0.3)),
           ),
           child: Text(label, textAlign: TextAlign.center, style: TextStyle(
             fontFamily: 'Poppins', fontSize: 12, fontWeight: FontWeight.w600,
@@ -574,7 +574,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
+          border: Border.all(color: AppColors.primary.withOpacity(0.4)),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(mainAxisSize: MainAxisSize.min, children: [

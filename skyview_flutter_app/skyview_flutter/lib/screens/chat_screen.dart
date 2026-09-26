@@ -124,9 +124,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
-                  color: isDark ? AppColors.primary.withValues(alpha: 0.15) : AppColors.primarySurface,
+                  color: isDark ? AppColors.primary.withOpacity(0.15) : AppColors.primarySurface,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
+                  border: Border.all(color: AppColors.primary.withOpacity(0.3)),
                 ),
                 child: Row(
                   children: [
@@ -650,11 +650,11 @@ class _ThinkingPanelState extends State<_ThinkingPanel>
   Widget build(BuildContext context) {
     final isDark = widget.isDark;
     final cardColor = isDark
-        ? Colors.white.withValues(alpha: 0.06)
-        : AppColors.primarySurface.withValues(alpha: 0.8);
+        ? Colors.white.withOpacity(0.06)
+        : AppColors.primarySurface.withOpacity(0.8);
     final borderColor = isDark
-        ? Colors.white.withValues(alpha: 0.12)
-        : AppColors.primary.withValues(alpha: 0.2);
+        ? Colors.white.withOpacity(0.12)
+        : AppColors.primary.withOpacity(0.2);
 
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 4, 16, 4),
@@ -810,8 +810,8 @@ class _ChatBubbleState extends State<_ChatBubble>
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
           color: widget.isDark
-              ? Colors.white.withValues(alpha: 0.08)
-              : Colors.white.withValues(alpha: 0.7),
+              ? Colors.white.withOpacity(0.08)
+              : Colors.white.withOpacity(0.7),
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(18),
             topRight: Radius.circular(18),
@@ -819,8 +819,8 @@ class _ChatBubbleState extends State<_ChatBubble>
           ),
           border: Border.all(
             color: widget.isDark
-                ? Colors.white.withValues(alpha: 0.12)
-                : AppColors.primary.withValues(alpha: 0.15),
+                ? Colors.white.withOpacity(0.12)
+                : AppColors.primary.withOpacity(0.15),
           ),
         ),
         child: AnimatedBuilder(
@@ -860,14 +860,14 @@ class _ChatBubbleState extends State<_ChatBubble>
         decoration: BoxDecoration(
           color: widget.isDark
               ? const Color(0xFF1A3D20)
-              : AppColors.primary.withValues(alpha: 0.12),
+              : AppColors.primary.withOpacity(0.12),
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(18),
             topRight: Radius.circular(18),
             bottomLeft: Radius.circular(18),
           ),
           border: Border.all(
-            color: AppColors.primary.withValues(alpha: 0.3),
+            color: AppColors.primary.withOpacity(0.3),
           ),
         ),
         child: Text(
@@ -893,8 +893,8 @@ class _ChatBubbleState extends State<_ChatBubble>
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           color: widget.isDark
-              ? Colors.white.withValues(alpha: 0.07)
-              : Colors.white.withValues(alpha: 0.85),
+              ? Colors.white.withOpacity(0.07)
+              : Colors.white.withOpacity(0.85),
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(18),
             topRight: Radius.circular(18),
@@ -902,8 +902,8 @@ class _ChatBubbleState extends State<_ChatBubble>
           ),
           border: Border.all(
             color: widget.isDark
-                ? Colors.white.withValues(alpha: 0.12)
-                : AppColors.primary.withValues(alpha: 0.15),
+                ? Colors.white.withOpacity(0.12)
+                : AppColors.primary.withOpacity(0.15),
           ),
         ),
         child: Column(
@@ -916,7 +916,7 @@ class _ChatBubbleState extends State<_ChatBubble>
                   fontFamily: 'Poppins',
                   fontSize: 14,
                   height: 1.6,
-                  color: widget.isDark ? Colors.white.withValues(alpha: 0.87) : AppColors.textDark,
+                  color: widget.isDark ? Colors.white.withOpacity(0.87) : AppColors.textDark,
                 ),
                 strong: TextStyle(
                   fontWeight: FontWeight.w700,
@@ -964,10 +964,10 @@ class _ChatBubbleState extends State<_ChatBubble>
                             fontFamily: 'Poppins', fontSize: 12)),
                     onPressed: () => widget.onSuggestion?.call(s),
                     backgroundColor: widget.isDark
-                        ? AppColors.primary.withValues(alpha: 0.15)
+                        ? AppColors.primary.withOpacity(0.15)
                         : AppColors.primarySurface,
                     side: BorderSide(
-                        color: AppColors.primary.withValues(alpha: 0.3)),
+                        color: AppColors.primary.withOpacity(0.3)),
                   );
                 }).toList(),
               ),
@@ -1020,10 +1020,10 @@ class _ChatBubbleState extends State<_ChatBubble>
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: widget.isDark ? 0.18 : 0.1),
+                    color: AppColors.primary.withOpacity(widget.isDark ? 0.18 : 0.1),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: AppColors.primary.withValues(alpha: 0.35),
+                      color: AppColors.primary.withOpacity(0.35),
                     ),
                   ),
                   child: Row(
@@ -1087,17 +1087,17 @@ class _InputBar extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             color: isDark
-                ? Colors.white.withValues(alpha: 0.08)
-                : Colors.white.withValues(alpha: 0.92),
+                ? Colors.white.withOpacity(0.08)
+                : Colors.white.withOpacity(0.92),
             borderRadius: BorderRadius.circular(26),
             border: Border.all(
               color: isDark
-                  ? Colors.white.withValues(alpha: 0.14)
-                  : AppColors.primary.withValues(alpha: 0.25),
+                  ? Colors.white.withOpacity(0.14)
+                  : AppColors.primary.withOpacity(0.25),
             ),
             boxShadow: [
               BoxShadow(
-                color: AppColors.primary.withValues(alpha: 0.08),
+                color: AppColors.primary.withOpacity(0.08),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
@@ -1158,7 +1158,7 @@ class _InputBar extends StatelessWidget {
                         color: AppColors.primary,
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.primary.withValues(alpha: 0.4),
+                            color: AppColors.primary.withOpacity(0.4),
                             blurRadius: 8,
                           ),
                         ],
