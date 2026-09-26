@@ -213,5 +213,6 @@
     "updating": "Updating profile...",
     "complete_onboarding_warning": "Please fill up your details for a smooth experience and accurate AI recommendations."
   },
-  "accelerator_title": "AI Accelerator"
+  "accelerator_title": "AI Accelerator",
+  "crop_doctor_title": "Crop Doctor"
 }

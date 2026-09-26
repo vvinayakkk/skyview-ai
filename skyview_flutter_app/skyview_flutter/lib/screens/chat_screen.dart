@@ -306,6 +306,13 @@ class _EmptyHint extends StatelessWidget {
         isLanguage: false,
       ),
       (
+        label: 'Crop Doctor',
+        icon: Icons.healing_rounded,
+        color: const Color(0xFF10B981),
+        onTap: () => context.push('/crop_doctor'),
+        isLanguage: false,
+      ),
+      (
         label: 'mandi.title'.tr(),
         icon: Icons.storefront_outlined,
         color: const Color(0xFFF59E0B),
@@ -978,6 +985,8 @@ class _ChatBubbleState extends State<_ChatBubble>
     final cards = <({String label, IconData icon, String route})>[];
     if (lower.contains('mandi') || lower.contains('price') || lower.contains('market price'))
       cards.add((label: 'mandi.title'.tr(), icon: Icons.storefront_outlined, route: '/mandi_rates'));
+    if (lower.contains('disease') || lower.contains('crop doctor') || lower.contains('leaf') || lower.contains('pest') || lower.contains('blight') || lower.contains('fungus') || lower.contains('spot'))
+      cards.add((label: 'Crop Doctor', icon: Icons.healing_rounded, route: '/crop_doctor'));
     if (lower.contains('market') || lower.contains('barter') || lower.contains('buy') || lower.contains('sell'))
       cards.add((label: 'marketplace.title'.tr(), icon: Icons.shopping_bag_outlined, route: '/marketplace'));
     if (lower.contains('trend') || lower.contains('moisture') || lower.contains('sensor') || lower.contains('temperature') || lower.contains('humidity'))

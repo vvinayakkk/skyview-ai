@@ -419,6 +419,40 @@ class _ChoiceScreenState extends ConsumerState<ChoiceScreen> {
                   ],
                 ),
 
+                const SizedBox(height: 12),
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: _quickCard(
+                        icon: Icons.health_and_safety_outlined,
+                        iconColor: cardIconColor,
+                        title: 'Crop Doctor / फसल निदान',
+                        subtitle: 'Visual AI plant pathology & treatment',
+                        onTap: () => context.push('/crop_doctor'),
+                        cardColor: cardColor,
+                        borderColor: borderColor,
+                        textColor: textColor,
+                        subColor: subColor,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: _quickCard(
+                        icon: Icons.memory_rounded,
+                        iconColor: cardIconColor,
+                        title: 'FPGA Accelerator',
+                        subtitle: 'Hardware edge intelligence telemetry',
+                        onTap: () => context.push('/accelerator'),
+                        cardColor: cardColor,
+                        borderColor: borderColor,
+                        textColor: textColor,
+                        subColor: subColor,
+                      ),
+                    ),
+                  ],
+                ),
+
                 const SizedBox(height: 32),
               ],
             ),

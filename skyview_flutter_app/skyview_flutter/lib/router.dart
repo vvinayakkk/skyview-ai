@@ -17,6 +17,7 @@ import 'screens/marketplace_screen.dart';
 import 'screens/reports_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/accelerator_screen.dart';
+import 'screens/crop_doctor_screen.dart';
 import 'services/auth_service.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -103,6 +104,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/accelerator',
         pageBuilder: (_, state) => _fade(state, const AcceleratorScreen()),
+      ),
+      GoRoute(
+        path: '/crop_doctor',
+        pageBuilder: (_, state) => _fade(state, const CropDoctorScreen()),
       ),
     ],
   );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// Base URL of your SkyView FastAPI backend.
-const String kBaseUrl = 'https://skyview-backend-rdpx.onrender.com';
+const String kBaseUrl = 'https://brics-agrin-backend.onrender.com';
 
 /// Auth token storage keys
 const String kTokenKey = 'skyview_token';
