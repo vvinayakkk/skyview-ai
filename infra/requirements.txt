@@ -1,0 +1,44 @@
+# SkyView Backend Requirements
+# Install: pip install -r infra/requirements.txt
+
+# ── Web framework ──────────────────────────────────────────
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+python-multipart==0.0.12
+
+# ── Database ───────────────────────────────────────────────
+sqlalchemy==2.0.36
+psycopg2-binary>=2.9.10        # PostgreSQL driver
+
+# ── Config / env ──────────────────────────────────────────
+python-dotenv==1.0.1
+
+# ── HTTP client ────────────────────────────────────────────
+httpx==0.28.1
+requests==2.32.3
+
+# ── LLM / AI ──────────────────────────────────────────────
+groq>=0.37.1
+langchain-groq>=1.1.2
+
+# ── MQTT ──────────────────────────────────────────────────
+paho-mqtt==2.1.0
+
+# ── Validation ────────────────────────────────────────────
+pydantic>=2.10.3
+email-validator==2.2.0
+
+# ── Twilio (WhatsApp / SMS) ────────────────────────────────
+twilio==9.4.0
+
+# ── Sarvam AI (TTS + Translation) ────────────────────────
+# No official package — called via requests (already included)
+
+# ── Utilities ─────────────────────────────────────────────
+python-dateutil==2.9.0
+pytz==2024.2
+
+# ── Testing ───────────────────────────────────────────────
+pytest==8.3.4
+pytest-asyncio==0.24.0
+httpx==0.28.1                  # reused for test client
