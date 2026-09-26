@@ -54,9 +54,6 @@ dependencies:
   sqlite3_flutter_libs: ^0.5.24
   connectivity_plus: ^6.0.3
 
-  # Offline Local LLM (Gemma)
-  flutter_gemma: ^0.1.2
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
