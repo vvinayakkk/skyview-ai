@@ -222,6 +222,15 @@ async def analyze_crop_image(image_bytes: bytes) -> Dict[str, Any]:
 
                         data = json.loads(raw_json)
                         result = DiseaseDetection(**data)
+                        # Sanitize and clamp bounding boxes strictly to image boundaries (0-100%)
+                        clamped_boxes = []
+                        for box in result.bounding_boxes:
+                            x = max(0.0, min(94.0, float(box.x)))
+                            y = max(0.0, min(94.0, float(box.y)))
+                            w = max(4.0, min(100.0 - x, float(box.width)))
+                            h = max(4.0, min(100.0 - y, float(box.height)))
+                            clamped_boxes.append(BoundingBox(x=x, y=y, width=w, height=h))
+                        result.bounding_boxes = clamped_boxes
                         logger.info("Crop disease diagnostic succeeded with %s (Confidence: %.1f%%)", candidate, result.confidence)
                         return result.model_dump()
 
