@@ -1,0 +1,4 @@
+project_id = "fjmnycnnxnzivpbsumez"
+
+[functions.weather-insight]
+verify_jwt = false
