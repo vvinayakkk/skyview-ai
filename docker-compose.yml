@@ -1,0 +1,89 @@
+version: "3.9"
+
+services:
+  # ==============================
+  # 🗄️ PostgreSQL Database
+  # ==============================
+  db:
+    image: postgres:16-alpine
+    container_name: skyview_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: skyview
+      POSTGRES_USER: skyview_user
+      POSTGRES_PASSWORD: skyview_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - skyview_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U skyview_user -d skyview"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ==============================
+  # 📡 MQTT Broker (Mosquitto)
+  # ==============================
+  mqtt:
+    image: eclipse-mosquitto:2
+    container_name: skyview_mqtt
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./infra/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+    healthcheck:
+      test: ["CMD", "mosquitto_sub", "-h", "localhost", "-t", "$$SYS/broker/version", "-C", "1", "-W", "3"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ==============================
+  # 🧠 Backend API (SkyView)
+  # ==============================
+  backend:
+    build:
+      context: .
+      dockerfile: infra/Dockerfile.backend
+    container_name: skyview_backend
+    depends_on:
+      db:
+        condition: service_healthy
+      mqtt:
+        condition: service_healthy
+    env_file:
+      - skyview/.env
+    environment:
+      DATABASE_URL: postgresql://skyview_user:skyview_pass@db:5432/skyview
+      MQTT_BROKER: mqtt
+      MQTT_PORT: 1883
+      API_HOST: 0.0.0.0
+      API_PORT: 8000
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  # ==============================
+  # 🌐 Frontend (Vite + React)
+  # ==============================
+  # Uncomment to run frontend in Docker
+  # frontend:
+  #   build:
+  #     context: .
+  #     dockerfile: infra/Dockerfile.frontend
+  #   container_name: skyview_frontend
+  #   ports:
+  #     - "5173:80"
+  #   depends_on:
+  #     - backend
+  #   restart: unless-stopped
+
+volumes:
+  skyview_pgdata:
