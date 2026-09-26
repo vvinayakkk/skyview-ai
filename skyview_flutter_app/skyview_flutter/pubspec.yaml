@@ -79,6 +79,7 @@ flutter:
 dependency_overrides:
   record_platform_interface: 1.0.0
   geolocator_android: 4.6.1
+  package_info_plus: 8.0.2
 
 
 
