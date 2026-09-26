@@ -1,0 +1,86 @@
+name: skyview_app
+description: SkyView Smart Agriculture – Mobile App
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # HTTP & networking
+  http: ^1.2.2
+  dio: ^5.7.0
+  http_parser: ^4.0.2
+
+  # State management
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
+
+  # Navigation
+  go_router: ^14.2.7
+
+  # Local storage
+  shared_preferences: ^2.3.2
+  flutter_secure_storage: ^9.2.2
+
+  # Audio – TTS/STT
+  audioplayers: ^6.1.0
+  record: ^5.1.2
+  permission_handler: ^11.3.1
+  path_provider: ^2.1.4
+
+  # UI helpers
+  flutter_markdown: ^0.7.4
+  pinput: ^3.0.1           # OTP input
+  lottie: ^3.1.2
+  shimmer: ^3.0.0
+  google_fonts: ^6.2.1
+
+  # Localization
+  easy_localization: ^3.0.7+1
+
+  cupertino_icons: ^1.0.8
+  geolocator: ^14.0.2
+  geocoding: ^4.0.0
+  pdf: ^3.12.0
+  share_plus: ^12.0.2
+  url_launcher: ^6.3.2
+
+  # Offline database & Sync
+  powersync: ^1.6.0
+  sqlite3_flutter_libs: ^0.5.24
+  connectivity_plus: ^6.0.3
+
+  # Offline Local LLM (Gemma)
+  flutter_gemma: ^0.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  build_runner: ^2.4.12
+  riverpod_generator: ^2.4.3
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: "ic_launcher"
+  ios: true
+  image_path: "assets/logo_light.png"
+  adaptive_icon_background: "#00000000"  # fully transparent
+  adaptive_icon_foreground: "assets/logo_light.png"
+  min_sdk_android: 21
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+    - assets/lottie/
+    - assets/translations/
+dependency_overrides:
+  record_platform_interface: 1.0.0
+
+
+
