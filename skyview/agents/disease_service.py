@@ -199,15 +199,18 @@ async def analyze_crop_image(image_bytes: bytes) -> Dict[str, Any]:
             for candidate in ["gemini-2.5-flash", "gemini-2.0-flash"]:
                 try:
                     model = genai.GenerativeModel(candidate)
-                    response = await model.generate_content_async(
-                        [
-                            SYSTEM_PROMPT,
-                            {"mime_type": "image/jpeg", "data": optimized_jpeg},
-                        ],
-                        generation_config={
-                            "response_mime_type": "application/json",
-                            "temperature": 0.2,
-                        },
+                    response = await asyncio.wait_for(
+                        model.generate_content_async(
+                            [
+                                SYSTEM_PROMPT,
+                                {"mime_type": "image/jpeg", "data": optimized_jpeg},
+                            ],
+                            generation_config={
+                                "response_mime_type": "application/json",
+                                "temperature": 0.2,
+                            },
+                        ),
+                        timeout=8.0,
                     )
 
                     if response and response.text:
