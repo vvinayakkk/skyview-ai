@@ -23,15 +23,17 @@ open class FlutterStub {
 }
 
 subprojects {
-    plugins.whenPluginAdded {
-        if (name.startsWith("com.android")) {
-            val android = project.extensions.findByName("android")
-            if (android is org.gradle.api.plugins.ExtensionAware) {
-                if (android.extensions.findByName("flutter") == null) {
-                    android.extensions.create("flutter", FlutterStub::class.java)
-                }
+    plugins.withId("com.android.library") {
+        val android = project.extensions.findByName("android")
+        if (android is org.gradle.api.plugins.ExtensionAware) {
+            if (android.extensions.findByName("flutter") == null) {
+                android.extensions.create("flutter", FlutterStub::class.java)
             }
         }
+        try {
+            val method = android?.javaClass?.getMethod("compileSdkVersion", Int::class.javaPrimitiveType)
+            method?.invoke(android, 35)
+        } catch (_: Exception) {}
     }
 }
 
