@@ -74,7 +74,6 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
-    - assets/lottie/
     - assets/translations/
 dependency_overrides:
   record_platform_interface: 1.0.0
