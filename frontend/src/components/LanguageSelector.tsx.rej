@@ -1,0 +1,30 @@
+diff a/frontend/src/components/LanguageSelector.tsx b/frontend/src/components/LanguageSelector.tsx	(rejected hunks)
+@@ -10,15 +10,24 @@ import { Globe } from 'lucide-react';
+ 
+ const languages = [
+   { code: 'en', label: 'English' },
+-  { code: 'hi', label: 'αñ╣αñ┐αñ¿αÑìαñªαÑÇ' },
+-  { code: 'te', label: 'α░ñα▒åα░▓α▒üα░ùα▒ü' },
+-] as const;
++  { code: 'hi-IN', label: 'αñ╣αñ┐αñ¿αÑìαñªαÑÇ (Hindi)' },
++  { code: 'te-IN', label: 'α░ñα▒åα░▓α▒üα░ùα▒ü (Telugu)' },
++  { code: 'ta-IN', label: 'α«ñα««α«┐α«┤α»ì (Tamil)' },
++  { code: 'mr-IN', label: 'αñ«αñ░αñ╛αñáαÑÇ (Marathi)' },
++  { code: 'gu-IN', label: 'α¬ùα½üα¬£α¬░α¬╛α¬ñα½Ç (Gujarati)' },
++  { code: 'bn-IN', label: 'αª¼αª╛αªéαª▓αª╛ (Bengali)' },
++  { code: 'kn-IN', label: 'α▓òα▓¿α│ìα▓¿α▓í (Kannada)' },
++  { code: 'ml-IN', label: 'α┤«α┤▓α┤»α┤╛α┤│α┤é (Malayalam)' },
++  { code: 'pa-IN', label: 'α¿¬α⌐░α¿£α¿╛α¿¼α⌐Ç (Punjabi)' },
++  { code: 'or-IN', label: 'α¼ôα¼íα¼╝α¼┐α¼å (Odia)' },
++  { code: 'as-IN', label: 'αªàαª╕αª«αºÇαª»αª╝αª╛ (Assamese)' }
++];
+ 
+ export function LanguageSelector() {
+   const { language, setLanguage } = useLanguage();
+ 
+   return (
+-    <Select value={language} onValueChange={(value) => setLanguage(value as 'en' | 'hi' | 'te')}>
++    <Select value={language} onValueChange={(value) => setLanguage(value)}>
+       <SelectTrigger className="w-[130px] bg-card border-border">
+         <Globe className="w-4 h-4 mr-2 text-muted-foreground" />
+         <SelectValue />
