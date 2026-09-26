@@ -15,6 +15,8 @@
 ---
 
 [![Production Web App](https://img.shields.io/badge/Production%20Web%20App-Vercel%20Live-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://frontend-woad-seven-93.vercel.app)
+[![Download Android APK](https://img.shields.io/badge/Download%20APK-v1.0.0%20Release-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://github.com/vvinayakkk/skyview-ai/releases/download/v1.0.0/skyview-v1.0.0-release.apk)
+[![GitHub Release](https://img.shields.io/badge/Release-v1.0.0-blue?style=for-the-badge&logo=github&logoColor=white)](https://github.com/vvinayakkk/skyview-ai/releases/tag/v1.0.0)
 [![FastAPI Backend](https://img.shields.io/badge/FastAPI%20Backend-Render%20Live-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://brics-agrin-backend.onrender.com)
 [![Interactive OpenAPI Docs](https://img.shields.io/badge/OpenAPI%20Docs-Swagger%20UI-02569B?style=for-the-badge&logo=fastapi&logoColor=white)](https://brics-agrin-backend.onrender.com/docs)
 [![Mobile App](https://img.shields.io/badge/Flutter%203.24-Android%20%2F%20iOS-02569B?style=for-the-badge&logo=flutter&logoColor=white)](skyview_flutter_app/)
