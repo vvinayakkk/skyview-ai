@@ -1,0 +1,112 @@
+================================================================================
+                    SKYVIEW SMART COOPERATIVE MARKETPLACE
+                         Pitch Deck & Technical Guide
+================================================================================
+
+1. EXECUTIVE SUMMARY & VALUE PROPOSITION
+--------------------------------------------------------------------------------
+The SkyView sharing marketplace is a high-performance, agentic, resource-sharing
+platform tailored for smallholder farmers. In emerging agricultural markets,
+heavy machinery (tractors, seeders, harvesters) is expensive to purchase, and 
+cash liquidity is often constrained. 
+
+Our marketplace solves this by replacing cash-heavy transactions with optimized,
+localized barter systems. By utilizing advanced spatial matching algorithms,
+directed graph cycle-solving, and AI negotiation agents, the platform unlocks
+unprecedented resource efficiency at near-zero transaction cost.
+
+---
+
+2. THREE CORE MATCHING PARADIGMS
+--------------------------------------------------------------------------------
+
+[A] 2-Party (Bilateral) Matching
+---------------------------------
+- Visual Flow:
+  [Farmer A (Lends Tractor)] <=======================> [Farmer B (Lends Labor)]
+- How it works:
+  Finds pairs of nearby farmers with perfectly complementary needs (A has excess X
+  and needs Y; B has excess Y and needs X).
+- Pitch Point:
+  It features an interactive "AI Deal Broker Modal". Rather than just showing a
+  dry list, farmers can launch a simulated negotiation broker. The AI agent 
+  calculates distances (using great-circle math), applies machinery transit 
+  offsets (₹15/km), queries live commodity Mandi prices from data.gov.in, and 
+  calculates a recommended fair net cash offset to balance the value. It even 
+  provides a direct WhatsApp link to close the agreement terms instantly.
+
+[B] 3-Party (Circular) Barter Loops
+------------------------------------
+- Visual Flow:
+  [Farmer A] ---> (Lends Tractor) ---> [Farmer B] ---> (Lends Harvester) 
+     ^                                                      |
+     |================== (Lends Labor) <====================[Farmer C]
+- How it works:
+  Many matching requirements cannot be solved bilaterally (e.g., Rajesh has a tractor
+  and needs a harvester; Dinesh has a harvester and needs labor; Anil has labor and 
+  needs a tractor). 
+  Our system solves this by running a directed cyclic graph traversal algorithm 
+  to detect loops of three farmers where resource flows flow circularly.
+- Pitch Point:
+  The algorithm generates an automated weekly sharing schedule using our LLM
+  so that all three farmers get what they need without spending money on rentals.
+
+[C] Regional Pooling & Geographical Optimization
+-------------------------------------------------
+- Visual Flow:
+  [Farmers] ---> (Group by State/District) ---> [Resource Pool] ---> [AI Plan]
+- How it works:
+  Clusters farmers based on their location (State and District). It aggregates all
+  surplus equipment and required machinery, compiling a regional inventory dashboard
+  for cooperative sharing.
+- Pitch Point:
+  An AI agent automatically processes the aggregated regional data and outputs
+  a step-by-step cooperative action plan (e.g. centralized pooling, staggered sowing
+  schedules to share equipment, and route optimization).
+
+---
+
+3. THE ALGORITHM & DATA ARCHITECTURE (Under the Hood)
+--------------------------------------------------------------------------------
+- Proximity Calculations (Haversine Formula):
+  All matches are sorted by Great-Circle distance (using latitude/longitude coordinates)
+  to ensure equipment sharing occurs within a feasible travel distance.
+- Directed Loop Traversal Solver:
+  Builds a directed adjacency list of compatible trades. It runs a cycle-detection
+  routine restricted to a path length of exactly 3 to establish multi-party barter networks.
+- Live Mandi Rate Agent:
+  Connects to official government data portals (data.gov.in) to retrieve up-to-date
+  market prices of crops to ground the financial suggestions in real-world valuation.
+
+---
+
+4. HIGH-PERFORMANCE OPTIMIZATION & CACHING LAYER
+--------------------------------------------------------------------------------
+To keep the page lightning-fast (low latency) and protect against excessive API costs,
+we built a multi-layered optimization engine:
+- In-Memory Cache (`_llm_cache`):
+  Caches responses for barter schedules, negotiations, and pooling optimization plans.
+  Subsequent queries load instantly.
+- Top-N Filtering & Gating:
+  In circular barter, over 200 possible combinations might exist. We sort and filter
+  loops by proximity, showing the top 8. We then only run expensive LLM scheduling 
+  calls for the top 3 loops, and dynamically apply a smart local fallback schedule 
+  template to the remaining ones. This reduces LLM usage by over 95%.
+
+---
+
+5. PREMIUM FRONT-END UI/UX EXPERIENCE
+--------------------------------------------------------------------------------
+- Interactive Node Diagrams:
+  At the top of each tab, custom node-connection cards visually illustrate how 
+  bilateral matching, 3-party loops, and regional clustering work.
+- Typewriter Streaming Effect:
+  The AI scheduling and broker responses stream live (character-by-character) onto
+  the screen, creating a clean, modern, and engaging user experience.
+- Clean Formatting:
+  Automated parsers strip raw markdown `**` bold styling and render beautifully 
+  formatted interfaces.
+- One-Click Closing:
+  Direct integration with WhatsApp API, allowing farmers to quickly click and message
+  pre-filled deal broker terms to finalize transactions.
+================================================================================
