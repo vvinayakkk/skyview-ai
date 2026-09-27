@@ -616,12 +616,22 @@ export default function AIHardwareAccelerator() {
 
         <AIOverview page="growth" />
 
-        {/* Graph panel */}
-        <div style={{ borderRadius: 16, border: `1.5px solid ${isDark ? "rgba(46,204,113,0.25)" : "rgba(30,100,50,0.22)"}`, background: "transparent", padding: "1.25rem 1.5rem 1rem", marginBottom: "1.5rem", overflow: "hidden" }}>
+        {/* Graph panel with frosted glass card background */}
+        <div style={{
+          borderRadius: 20,
+          border: isDark ? "1px solid rgba(255,255,255,0.12)" : "1px solid rgba(255,255,255,0.8)",
+          background: isDark ? "rgba(20, 20, 25, 0.75)" : "rgba(255, 255, 255, 0.85)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          boxShadow: isDark ? "0 10px 30px rgba(0,0,0,0.3)" : "0 10px 30px rgba(0,0,0,0.06)",
+          padding: "1.35rem 1.5rem 1.25rem",
+          marginBottom: "1.75rem",
+          overflow: "hidden"
+        }}>
 
           <ColLegend isDark={isDark} />
 
-          <p style={{ margin: "0 0 0.75rem", fontSize: "0.67rem", color: isDark ? "#444" : "#CCC", textAlign: "right" }}>
+          <p style={{ margin: "0 0 0.75rem", fontSize: "0.67rem", color: isDark ? "#A3B8A8" : "#5A7A60", textAlign: "right" }}>
             Hover over any node for details · Edges animate live data flow
           </p>
 
