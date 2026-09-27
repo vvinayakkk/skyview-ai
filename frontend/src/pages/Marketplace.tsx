@@ -14,6 +14,7 @@ import {
   Layers, ArrowRight, HelpCircle, Check, Sparkles, User
 } from "lucide-react";
 import { CircularBarterLoopCard } from "@/components/marketplace/CircularBarterLoopCard";
+import { getSecureRandomInt } from "@/lib/secureRandom";
 
 const API_URL = import.meta.env.VITE_API_URL || '';
 
@@ -212,7 +213,7 @@ export default function Marketplace() {
     setTimeout(() => {
       setVoiceSearchActive(false);
       const mockPhrases = ["tractor", "harvester", "labor", "water pump"];
-      const parsed = mockPhrases[Math.floor(Math.random() * mockPhrases.length)];
+      const parsed = mockPhrases[getSecureRandomInt(0, mockPhrases.length - 1)];
       setSearchQuery(parsed);
       toast({ title: "Voice input received", description: `Searching for "${parsed}"...` });
     }, 2500);

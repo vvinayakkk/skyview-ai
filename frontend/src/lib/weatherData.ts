@@ -1,4 +1,5 @@
 // Weather data integration with FastAPI backend
+import { getSecureRandom } from '@/lib/secureRandom';
 // Connects to the configured backend API at /api/sensors/
 
 const HOST_URL = import.meta.env.VITE_API_URL || '';
@@ -253,12 +254,12 @@ export async function getHistoricalData(hours: number = 24): Promise<{ time: str
       const hour = time.getHours();
       
       const baseTemp = 25 + 8 * Math.sin((hour - 6) * Math.PI / 12);
-      const temperature = baseTemp + (Math.random() - 0.5) * 2;
+      const temperature = baseTemp + (getSecureRandom() - 0.5) * 2;
       
       const baseHumidity = 70 - 15 * Math.sin((hour - 6) * Math.PI / 12);
-      const humidity = Math.max(30, Math.min(95, baseHumidity + (Math.random() - 0.5) * 10));
+      const humidity = Math.max(30, Math.min(95, baseHumidity + (getSecureRandom() - 0.5) * 10));
       
-      const rainfall = Math.random() > 0.85 ? Math.random() * 5 : 0;
+      const rainfall = getSecureRandom() > 0.85 ? getSecureRandom() * 5 : 0;
       
       chartData.push({
         time: `${hour.toString().padStart(2, '0')}:00`,

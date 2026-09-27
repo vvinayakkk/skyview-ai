@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { getSecureRandomInt } from "@/lib/secureRandom";
 import {
   X,
   CheckCircle2,
@@ -84,8 +85,8 @@ export function HardwareCheckoutModal({
     setStep("processing");
 
     setTimeout(() => {
-      const orderId = "SKY-ORD-" + Math.floor(100000 + Math.random() * 900000);
-      const serialNumber = "WS01-REV3-" + Math.floor(1000 + Math.random() * 9000);
+      const orderId = "SKY-ORD-" + getSecureRandomInt(100000, 999999);
+      const serialNumber = "WS01-REV3-" + getSecureRandomInt(1000, 9999);
       const today = new Date();
       const deliveryDate = new Date();
       deliveryDate.setDate(today.getDate() + 3);
@@ -109,7 +110,7 @@ export function HardwareCheckoutModal({
         },
         courier: {
           partner: "India Post Kisan Priority Express",
-          trackingNumber: "INP-MH-" + Math.floor(100000 + Math.random() * 900000),
+          trackingNumber: "INP-MH-" + getSecureRandomInt(100000, 999999),
         },
       };
 

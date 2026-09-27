@@ -1,6 +1,7 @@
 /**
  * Report Generator - Creates various weather and system reports
  */
+import { getSecureId } from '@/lib/secureRandom';
 
 export interface ReportData {
   title: string;
@@ -426,7 +427,7 @@ export const generateHTMLContent = (report: ReportData): string => {
     <div class="footer">
       <p><strong>&copy; ${new Date().getFullYear()} Weather Monitoring System</strong></p>
       <p>This report is automatically generated and contains precision environmental data.</p>
-      <p style="font-size: 11px; margin-top: 15px; opacity: 0.6;">Document ID: ${Math.random().toString(36).substr(2, 9).toUpperCase()}</p>
+      <p style="font-size: 11px; margin-top: 15px; opacity: 0.6;">Document ID: ${getSecureId('DOC', 9)}</p>
     </div>
   </div>
 </body>

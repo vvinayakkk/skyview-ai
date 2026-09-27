@@ -4,6 +4,7 @@ import { FarmBackground, GlassSection, GlassCard } from '@/components/FarmTheme'
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useQuery } from '@tanstack/react-query';
+import { getSecureId } from '@/lib/secureRandom';
 import {
   FileText, Thermometer, Droplets, Wind, Sun,
   Sprout, CloudRain, AlertTriangle, CheckCircle, Leaf,
@@ -877,7 +878,7 @@ p,span,div,strong{color:#222!important}
               }}>
                 <p style={{ margin: '3px 0' }}><strong>© {new Date().getFullYear()} AgriSense AI Farm Intelligence Platform</strong></p>
                 <p style={{ margin: '3px 0' }}>Report compiled from live edge telemetry nodes & Neon database records explorer.</p>
-                <p style={{ margin: '3px 0', opacity: 0.6 }}>Report ID: RPT-{Math.random().toString(36).substr(2, 8).toUpperCase()}</p>
+                <p style={{ margin: '3px 0', opacity: 0.6 }}>Report ID: {getSecureId('RPT', 8)}</p>
               </div>
 
             </div>

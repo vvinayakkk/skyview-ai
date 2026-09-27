@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { useTheme } from 'next-themes';
+import { getSecureRandomInt } from '@/lib/secureRandom';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
 
@@ -86,7 +87,7 @@ export function AuthProvider({ children }: { readonly children: React.ReactNode 
     } catch {
       // Offline fallback for signup
       if (isSignup) {
-        const fallbackOtp = Math.floor(100000 + Math.random() * 900000).toString();
+        const fallbackOtp = getSecureRandomInt(100000, 999999).toString();
         localStorage.setItem(`saved_user_otp_${phone}`, fallbackOtp);
         await sendDirectFast2SMS(phone, fallbackOtp);
         return { success: true, otp: fallbackOtp };

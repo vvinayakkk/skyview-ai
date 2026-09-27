@@ -79,11 +79,13 @@ export default function Signup() {
         });
       } catch { /* backend unavailable, continue */ }
 
-      const cleanStr = (val: string) => encodeURIComponent(val.trim());
-      localStorage.setItem('user_name', cleanStr(name));
-      if (landSize) localStorage.setItem('user_land_size', cleanStr(landSize));
-      if (location) localStorage.setItem('user_location', cleanStr(location));
-      if (crops)    localStorage.setItem('user_crops', cleanStr(crops));
+      const sanitizeStorage = (val: string) => val.replace(/[^a-zA-Z0-9\s,.-]/g, '').trim().slice(0, 100);
+      if (typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.setItem('user_name', sanitizeStorage(name));
+        if (landSize) window.localStorage.setItem('user_land_size', sanitizeStorage(landSize));
+        if (location) window.localStorage.setItem('user_location', sanitizeStorage(location));
+        if (crops)    window.localStorage.setItem('user_crops', sanitizeStorage(crops));
+      }
 
       const success = await login(fp, otp);
       if (success) {

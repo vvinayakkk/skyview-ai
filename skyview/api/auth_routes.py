@@ -1,6 +1,7 @@
 import os
+import re
 import secrets
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 import requests
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
@@ -15,6 +16,14 @@ logger = get_logger(__name__)
 _otp_store: Dict[str, str] = {}  # phone → current active OTP
 
 
+def _sanitize_for_log(val: Any) -> str:
+    """Sanitize strings for secure logging (prevents SonarCloud S5145 log injection)."""
+    if val is None:
+        return ""
+    cleaned = re.sub(r'[\r\n\t]', ' ', str(val))
+    return re.sub(r'[^a-zA-Z0-9+_ -]', '', cleaned)[:32]
+
+
 def _get_api_keys() -> List[str]:
     raw = os.getenv("FAST2SMS_API_KEY", "")
     return [k.strip() for k in raw.split(",") if k.strip()]
@@ -27,9 +36,10 @@ def send_fast2sms_otp(phone: str, otp: str) -> bool:
         logger.info("Fast2SMS API key not set; skipping live SMS dispatch.")
         return False
 
+    safe_phone = _sanitize_for_log(phone)
     clean_digits = phone.replace("+91", "").replace(" ", "").replace("-", "")
     if len(clean_digits) != 10 or not clean_digits.isdigit():
-        logger.warning("Phone %s is not a 10-digit Indian number for Fast2SMS.", phone)
+        logger.warning("Phone %s is not a 10-digit Indian number for Fast2SMS.", safe_phone)
         return False
 
     for idx, key in enumerate(keys):
@@ -45,7 +55,7 @@ def send_fast2sms_otp(phone: str, otp: str) -> bool:
             if resp.status_code == 200:
                 data = resp.json()
                 if data.get("return") is True:
-                    logger.info("Fast2SMS delivered OTP to %s via key #%d", clean_digits, idx + 1)
+                    logger.info("Fast2SMS delivered OTP to %s via key #%d", safe_phone, idx + 1)
                     return True
                 logger.warning("Fast2SMS key #%d error: %s", idx + 1, data.get("message"))
             else:
@@ -53,7 +63,7 @@ def send_fast2sms_otp(phone: str, otp: str) -> bool:
         except Exception as exc:
             logger.error("Fast2SMS error on key #%d: %s", idx + 1, exc)
 
-    logger.error("All %d Fast2SMS API keys failed to deliver SMS to %s.", len(keys), clean_digits)
+    logger.error("All %d Fast2SMS API keys failed to deliver SMS to %s.", len(keys), safe_phone)
     return False
 
 
@@ -113,7 +123,8 @@ async def send_otp(req: SendOtpReq):
             finally:
                 db.close()
 
-        logger.info("Signup OTP for %s: %s (SMS sent: %s)", req.phone, otp, sms_sent)
+        safe_phone = _sanitize_for_log(req.phone)
+        logger.info("Signup OTP dispatched for %s (SMS sent: %s)", safe_phone, sms_sent)
         return {
             "status": "success",
             "message": f"OTP sent to {_mask_phone(req.phone)}",
@@ -142,7 +153,8 @@ async def send_otp(req: SendOtpReq):
                 db.close()
 
         _otp_store[req.phone] = saved_otp
-        logger.info("Login OTP for %s using saved profile OTP (0 SMS credits used)", req.phone)
+        safe_phone = _sanitize_for_log(req.phone)
+        logger.info("Login OTP accessed for %s using saved profile OTP (0 SMS credits used)", safe_phone)
         return {
             "status": "success",
             "message": f"OTP sent to {_mask_phone(req.phone)}",
