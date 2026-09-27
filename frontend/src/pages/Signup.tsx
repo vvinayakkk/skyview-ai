@@ -283,11 +283,18 @@ export default function Signup() {
                   onClick={otpSent ? handleSignup : handleSendOtp}
                   disabled={isLoading || (!otpSent && (!name.trim() || !phone.trim())) || (otpSent && otp.length < 6)}
                   style={{
-                    width: '100%', height: '46px', borderRadius: '12px', border: 'none',
-                    background: 'linear-gradient(135deg, #10B981, #059669)',
-                    color: 'white', fontSize: '14px', fontWeight: 700,
-                    cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                    boxShadow: '0 4px 20px rgba(16,185,129,0.35)',
+                    width: '100%', height: '46px', borderRadius: '12px',
+                    background: 'transparent',
+                    border: ((!otpSent && (!name.trim() || !phone.trim())) || (otpSent && otp.length < 6))
+                      ? (isDark ? '1.5px solid rgba(255,255,255,0.12)' : '1.5px solid rgba(15,23,42,0.15)')
+                      : '1.5px solid #10B981',
+                    color: ((!otpSent && (!name.trim() || !phone.trim())) || (otpSent && otp.length < 6))
+                      ? textMuted
+                      : '#10B981',
+                    fontSize: '14px', fontWeight: 700,
+                    cursor: ((!otpSent && (!name.trim() || !phone.trim())) || (otpSent && otp.length < 6)) ? 'not-allowed' : 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                    boxShadow: 'none',
                     transition: 'all 0.2s', opacity: isLoading ? 0.8 : 1,
                   }}
                 >

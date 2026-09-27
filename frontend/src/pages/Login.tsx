@@ -189,12 +189,15 @@ export default function Login() {
               type="button" onClick={handleSendOtp} disabled={isLoading || !phone.trim()}
               style={{
                 width: '100%', height: '48px', borderRadius: '12px',
-                background: !phone.trim() ? (isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)') : 'linear-gradient(135deg, #10B981, #059669)',
-                color: !phone.trim() ? textMuted : 'white',
-                fontSize: '14px', fontWeight: 700, border: 'none',
+                background: 'transparent',
+                border: !phone.trim()
+                  ? (isDark ? '1.5px solid rgba(255,255,255,0.12)' : '1.5px solid rgba(15,23,42,0.15)')
+                  : '1.5px solid #10B981',
+                color: !phone.trim() ? textMuted : '#10B981',
+                fontSize: '14px', fontWeight: 700,
                 cursor: !phone.trim() ? 'not-allowed' : 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                boxShadow: phone.trim() ? '0 4px 20px rgba(16,185,129,0.35)' : 'none',
+                boxShadow: 'none',
                 transition: 'all 0.2s', marginTop: '4px',
               }}
             >
@@ -207,12 +210,15 @@ export default function Login() {
                 type="button" onClick={handleLogin} disabled={isLoading || otp.length < 6}
                 style={{
                   width: '100%', height: '48px', borderRadius: '12px',
-                  background: otp.length < 6 ? (isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)') : 'linear-gradient(135deg, #10B981, #059669)',
-                  color: otp.length < 6 ? textMuted : 'white',
-                  fontSize: '14px', fontWeight: 700, border: 'none',
+                  background: 'transparent',
+                  border: otp.length < 6
+                    ? (isDark ? '1.5px solid rgba(255,255,255,0.12)' : '1.5px solid rgba(15,23,42,0.15)')
+                    : '1.5px solid #10B981',
+                  color: otp.length < 6 ? textMuted : '#10B981',
+                  fontSize: '14px', fontWeight: 700,
                   cursor: otp.length < 6 ? 'not-allowed' : 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                  boxShadow: otp.length >= 6 ? '0 4px 20px rgba(16,185,129,0.35)' : 'none',
+                  boxShadow: 'none',
                   transition: 'all 0.2s',
                 }}
               >
