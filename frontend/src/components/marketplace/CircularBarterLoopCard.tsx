@@ -59,6 +59,20 @@ interface ParsedScheduleRow {
   notes?: string;
 }
 
+function parseAdviceToBulletins(notes: string): string[] {
+  if (!notes) return [];
+  const rawBullets = notes
+    .split(/(?:(?:\r?\n)+|(?<=[.!?])\s+(?=[A-Z0-9])|(?=(?:^|\s)\d+[\.\)]?\s+[A-Z]))/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 5);
+
+  const cleaned = rawBullets
+    .map((b) => b.replace(/^(?:\d+[\.\)]?\s*|[•\-\*]\s*)/, "").trim())
+    .filter(Boolean);
+
+  return cleaned.length > 0 ? cleaned : [notes];
+}
+
 export function CircularBarterLoopCard({
   loop,
   loopIndex,
@@ -211,15 +225,11 @@ export function CircularBarterLoopCard({
         borderRadius: "20px",
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
-        background: isDark ? "rgba(12, 20, 16, 0.88)" : "rgba(255, 255, 255, 0.94)",
-        border: containsMe
-          ? "2px solid #3B82F6"
-          : isDark
-          ? "1.5px solid rgba(255, 255, 255, 0.08)"
-          : "1.5px solid rgba(15, 23, 42, 0.09)",
-        boxShadow: containsMe
-          ? "0 8px 32px rgba(59, 130, 246, 0.18)"
-          : isDark
+        background: isDark ? "rgba(14, 22, 18, 0.92)" : "rgba(255, 255, 255, 0.96)",
+        border: isDark
+          ? "1.5px solid rgba(255, 255, 255, 0.09)"
+          : "1.5px solid rgba(15, 23, 42, 0.08)",
+        boxShadow: isDark
           ? "0 8px 28px rgba(0,0,0,0.3)"
           : "0 8px 24px rgba(15,23,42,0.05)",
         overflow: "hidden",
@@ -266,7 +276,7 @@ export function CircularBarterLoopCard({
                 }}
               >
                 Loop #{loopIndex + 1}:{" "}
-                <span style={{ color: "#3B82F6" }}>
+                <span style={{ color: "#10B981" }}>
                   {loop.farmers.map((f) => f.name.split(" ")[0]).join(" ➔ ")}
                 </span>
               </h3>
@@ -277,9 +287,9 @@ export function CircularBarterLoopCard({
                     fontWeight: 800,
                     padding: "2px 8px",
                     borderRadius: "20px",
-                    border: "1px solid #3B82F6",
+                    border: "1px solid #10B981",
                     background: "transparent",
-                    color: "#3B82F6",
+                    color: "#10B981",
                     textTransform: "uppercase",
                   }}
                 >
@@ -652,15 +662,15 @@ export function CircularBarterLoopCard({
         </div>
 
         {/* ========================================================================= */}
-        {/* REFORMED WEEKLY HANDOVER ROTA (REPLACING TACKY AI TAG & UNFORMATTED DUMP) */}
+        {/* REFORMED WEEKLY HANDOVER ROTA (CALENDAR-KIND VIEW & BULLETINS) */}
         {/* ========================================================================= */}
         <div
           style={{
             marginTop: "24px",
             padding: "20px 22px",
             borderRadius: "16px",
-            border: isDark ? "1.5px solid rgba(59, 130, 246, 0.25)" : "1.5px solid rgba(59, 130, 246, 0.2)",
-            background: "transparent",
+            border: isDark ? "1px solid rgba(255, 255, 255, 0.08)" : "1px solid rgba(16, 185, 129, 0.2)",
+            background: isDark ? "rgba(16, 185, 129, 0.03)" : "rgba(240, 253, 244, 0.65)",
           }}
         >
           {/* Header of Schedule: Clean, Professional, Authentic */}
@@ -680,12 +690,12 @@ export function CircularBarterLoopCard({
                   width: "28px",
                   height: "28px",
                   borderRadius: "8px",
-                  border: "1px solid rgba(59, 130, 246, 0.5)",
+                  border: "1px solid rgba(16, 185, 129, 0.4)",
                   background: "transparent",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  color: "#3B82F6",
+                  color: "#10B981",
                 }}
               >
                 <Calendar size={15} />
@@ -696,7 +706,7 @@ export function CircularBarterLoopCard({
                     fontSize: "13px",
                     fontWeight: 800,
                     margin: 0,
-                    color: isDark ? "#93C5FD" : "#1E40AF",
+                    color: isDark ? "#A7F3D0" : "#065F46",
                     letterSpacing: "0.2px",
                     textTransform: "uppercase",
                   }}
@@ -707,10 +717,10 @@ export function CircularBarterLoopCard({
                   style={{
                     fontSize: "11px",
                     margin: "1px 0 0",
-                    color: isDark ? "rgba(255,255,255,0.45)" : "rgba(15,23,42,0.45)",
+                    color: isDark ? "rgba(255,255,255,0.5)" : "rgba(15,23,42,0.5)",
                   }}
                 >
-                  Synchronized schedule ensuring equitable asset rotation with zero downtime
+                  Synchronized weekly schedule ensuring equitable asset rotation with zero downtime
                 </p>
               </div>
             </div>
@@ -734,99 +744,171 @@ export function CircularBarterLoopCard({
             </div>
           </div>
 
-          {/* Structured Day-by-Day Rota Cards (Transparent backgrounds, crisp borders only) */}
+          {/* Calendar-Kind Weekly Grid */}
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))",
-              gap: "12px",
-              marginBottom: scheduleNotes ? "14px" : "0",
+              gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))",
+              gap: "10px",
+              marginBottom: scheduleNotes ? "16px" : "0",
             }}
           >
-            {scheduleRows.map((item, rIdx) => (
-              <div
-                key={rIdx}
-                style={{
-                  /* STRICT USER CONSTRAINT: NO BACKGROUND COLOR ON SMALL CARDS */
-                  background: "transparent",
-                  border: isDark ? "1px solid rgba(255, 255, 255, 0.08)" : "1px solid rgba(15, 23, 42, 0.09)",
-                  borderRadius: "12px",
-                  padding: "12px 14px",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "6px",
-                  transition: "all 0.2s ease",
-                }}
-              >
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <span
-                    style={{
-                      fontSize: "10px",
-                      fontWeight: 800,
-                      padding: "2px 8px",
-                      borderRadius: "6px",
-                      border: "1px solid rgba(59, 130, 246, 0.45)",
-                      background: "transparent",
-                      color: "#3B82F6",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    {item.day}
-                  </span>
+            {[
+              { full: "Monday", short: "MON" },
+              { full: "Tuesday", short: "TUE" },
+              { full: "Wednesday", short: "WED" },
+              { full: "Thursday", short: "THU" },
+              { full: "Friday", short: "FRI" },
+              { full: "Saturday", short: "SAT" },
+              { full: "Sunday", short: "SUN" },
+            ].map((dayDef) => {
+              const dayHandovers = scheduleRows.filter((r) =>
+                r.day.toLowerCase().includes(dayDef.full.toLowerCase()) ||
+                r.day.toLowerCase().includes(dayDef.short.toLowerCase())
+              );
 
-                  <span
+              const hasEvents = dayHandovers.length > 0;
+
+              return (
+                <div
+                  key={dayDef.short}
+                  style={{
+                    background: "transparent",
+                    border: hasEvents
+                      ? (isDark ? "1px solid rgba(16, 185, 129, 0.3)" : "1px solid rgba(16, 185, 129, 0.28)")
+                      : (isDark ? "1px solid rgba(255, 255, 255, 0.05)" : "1px solid rgba(0, 0, 0, 0.06)"),
+                    borderRadius: "12px",
+                    padding: "10px 10px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "8px",
+                    minHeight: "125px",
+                  }}
+                >
+                  {/* Calendar Day Header */}
+                  <div
                     style={{
-                      fontSize: "10px",
-                      fontWeight: 700,
-                      color: "#10B981",
                       display: "flex",
                       alignItems: "center",
-                      gap: "3px",
+                      justifyContent: "space-between",
+                      borderBottom: isDark ? "1px solid rgba(255,255,255,0.06)" : "1px solid rgba(0,0,0,0.05)",
+                      paddingBottom: "6px",
                     }}
                   >
-                    <CheckCircle2 size={11} /> Handover
-                  </span>
-                </div>
+                    <span
+                      style={{
+                        fontSize: "11px",
+                        fontWeight: 800,
+                        padding: "2px 6px",
+                        borderRadius: "6px",
+                        border: hasEvents ? "1px solid #10B981" : "1px solid transparent",
+                        color: hasEvents
+                          ? (isDark ? "#A7F3D0" : "#065F46")
+                          : (isDark ? "rgba(255,255,255,0.3)" : "rgba(15,23,42,0.35)"),
+                        background: "transparent",
+                      }}
+                    >
+                      {dayDef.short}
+                    </span>
+                    {hasEvents && (
+                      <span style={{ fontSize: "9.5px", fontWeight: 700, color: "#10B981" }}>
+                        {dayHandovers.length} slot{dayHandovers.length > 1 ? "s" : ""}
+                      </span>
+                    )}
+                  </div>
 
-                <div style={{ fontSize: "12px", lineHeight: "1.4", marginTop: "4px" }}>
-                  <span style={{ fontWeight: 800, color: isDark ? "#F8FAFC" : "#0F172A" }}>
-                    {item.giver}
-                  </span>{" "}
-                  <span style={{ color: isDark ? "rgba(255,255,255,0.5)" : "rgba(15,23,42,0.5)" }}>
-                    delivers
-                  </span>{" "}
-                  <span style={{ fontWeight: 800, color: "#3B82F6" }}>{item.item}</span>{" "}
-                  <span style={{ color: isDark ? "rgba(255,255,255,0.5)" : "rgba(15,23,42,0.5)" }}>
-                    to
-                  </span>{" "}
-                  <span style={{ fontWeight: 800, color: isDark ? "#F8FAFC" : "#0F172A" }}>
-                    {item.receiver}
-                  </span>
+                  {/* Day Events */}
+                  {hasEvents ? (
+                    <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                      {dayHandovers.map((item, idx) => (
+                        <div
+                          key={idx}
+                          style={{
+                            border: isDark ? "1px solid rgba(255, 255, 255, 0.08)" : "1px solid rgba(15, 23, 42, 0.08)",
+                            borderRadius: "8px",
+                            padding: "6px 8px",
+                            background: "transparent",
+                            fontSize: "11px",
+                            lineHeight: "1.35",
+                          }}
+                        >
+                          <div style={{ fontWeight: 800, color: isDark ? "#F8FAFC" : "#0F172A", marginBottom: "2px" }}>
+                            {item.giver.split(" ")[0]} <span style={{ color: "#10B981" }}>➔</span> {item.receiver.split(" ")[0]}
+                          </div>
+                          <div style={{ fontSize: "10px", color: isDark ? "rgba(255,255,255,0.6)" : "rgba(15,23,42,0.6)" }}>
+                            {item.item}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div
+                      style={{
+                        flex: 1,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: isDark ? "rgba(255,255,255,0.2)" : "rgba(15,23,42,0.25)",
+                        fontSize: "10px",
+                        fontStyle: "italic",
+                      }}
+                    >
+                      Buffer / Ops
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
-          {/* Clean Guidance Note (No raw markdown table or pipes) */}
+          {/* Structured Operational Bulletins (Replacing raw unformatted dump) */}
           {scheduleNotes && (
             <div
               style={{
-                display: "flex",
-                alignItems: "flex-start",
-                gap: "8px",
-                padding: "10px 14px",
-                borderRadius: "10px",
-                border: isDark ? "1px solid rgba(255, 255, 255, 0.05)" : "1px solid rgba(0, 0, 0, 0.05)",
-                background: "transparent",
-                fontSize: "11.5px",
-                color: isDark ? "rgba(255,255,255,0.6)" : "rgba(15,23,42,0.6)",
-                lineHeight: "1.5",
+                marginTop: "16px",
+                padding: "16px 18px",
+                borderRadius: "14px",
+                border: isDark ? "1.5px solid rgba(16, 185, 129, 0.3)" : "1.5px solid rgba(16, 185, 129, 0.25)",
+                background: isDark ? "rgba(16, 185, 129, 0.04)" : "rgba(240, 253, 244, 0.75)",
               }}
             >
-              <Info size={14} style={{ color: "#3B82F6", flexShrink: 0, marginTop: "2px" }} />
-              <div>
-                <strong style={{ color: isDark ? "#93C5FD" : "#1E40AF" }}>Cooperative Advice: </strong>
-                {scheduleNotes}
+              <h5
+                style={{
+                  fontSize: "12px",
+                  fontWeight: 800,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.5px",
+                  color: isDark ? "#A7F3D0" : "#065F46",
+                  margin: "0 0 10px 0",
+                }}
+              >
+                Cooperative Action Bulletins & Operational Protocol
+              </h5>
+
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "10px" }}>
+                {parseAdviceToBulletins(scheduleNotes).map((bullet, idx) => (
+                  <div key={idx} style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
+                    <div
+                      style={{
+                        width: "6px",
+                        height: "6px",
+                        borderRadius: "50%",
+                        background: "#10B981",
+                        marginTop: "6px",
+                        flexShrink: 0,
+                      }}
+                    />
+                    <span
+                      style={{
+                        fontSize: "12px",
+                        color: isDark ? "rgba(255,255,255,0.75)" : "rgba(15,23,42,0.8)",
+                        lineHeight: "1.45",
+                      }}
+                    >
+                      {bullet}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
           )}

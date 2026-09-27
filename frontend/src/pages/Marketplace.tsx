@@ -56,6 +56,20 @@ function TypewriterText({ text, speed = 8, onComplete }: { text: string; speed?:
   return <>{renderFormattedText(displayedText)}</>;
 }
 
+function parseToBulletins(text: string): string[] {
+  if (!text) return [];
+  const rawSegments = text
+    .split(/(?:(?:\r?\n)+|(?<=[.!?])\s+(?=[A-Z0-9])|(?=(?:^|\s)\d+[\.\)]?\s+[A-Z]))/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 5);
+
+  const cleaned = rawSegments
+    .map((item) => item.replace(/^(?:\d+[\.\)]?\s*|[•\-\*]\s*)/, "").trim())
+    .filter(Boolean);
+
+  return cleaned.length > 0 ? cleaned : [text];
+}
+
 export default function Marketplace() {
   const { theme } = useTheme();
   const isDark = theme === "dark";
@@ -457,7 +471,7 @@ export default function Marketplace() {
               </div>
             </GlassSection>
 
-            {/* AI Advisory Box with Typewriter Live Streaming */}
+            {/* AI Advisory Box formatted into clean bulletins with visible border and no icon */}
             {aiAdvisory && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
@@ -465,17 +479,25 @@ export default function Marketplace() {
                 style={{
                   padding: "1.2rem 1.5rem",
                   borderRadius: "14px",
-                  background: isDark ? "rgba(16,185,129,0.05)" : "rgba(16,185,129,0.03)",
-                  border: `1px solid ${isDark ? "rgba(16,185,129,0.15)" : "rgba(16,185,129,0.12)"}`,
+                  background: isDark ? "rgba(16, 185, 129, 0.08)" : "rgba(240, 253, 244, 0.85)",
+                  border: isDark ? "1.5px solid rgba(16, 185, 129, 0.40)" : "1.5px solid rgba(16, 185, 129, 0.35)",
+                  boxShadow: isDark ? "0 4px 20px rgba(0,0,0,0.25)" : "0 4px 18px rgba(16, 185, 129, 0.08)",
                   marginBottom: "2rem",
                 }}
               >
-                <h4 className="text-sm font-bold text-emerald-800 dark:text-emerald-400 flex items-center gap-2">
-                  <Sparkles size={16} className="text-emerald-500 animate-pulse" /> Kisan Mitra Matching Insights
+                <h4 className="text-sm font-extrabold text-emerald-800 dark:text-emerald-400 uppercase tracking-wide m-0">
+                  Kisan Mitra Matching Insights
                 </h4>
-                <p className="text-sm leading-relaxed text-gray-700 dark:text-gray-300 mt-2 font-sans">
-                  <TypewriterText text={aiAdvisory} speed={5} />
-                </p>
+                <div className="mt-3 flex flex-col gap-2.5">
+                  {parseToBulletins(aiAdvisory).map((bulletin, bIdx) => (
+                    <div key={bIdx} className="flex items-start gap-2.5 text-sm leading-relaxed text-gray-700 dark:text-gray-200 font-sans">
+                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-2 shrink-0" />
+                      <p className="m-0 flex-1">
+                        <TypewriterText text={bulletin} speed={4} />
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </motion.div>
             )}
 
