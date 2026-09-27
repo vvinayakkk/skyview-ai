@@ -244,8 +244,8 @@ export default function Signup() {
                 </div>
               </div>
 
-              {/* Demo OTP display */}
-              {otpSent && demoOtp && (
+              {/* SMS Dispatched confirmation */}
+              {otpSent && (
                 <div style={{
                   padding: '12px 16px', borderRadius: '12px',
                   background: 'rgba(16,185,129,0.08)', border: '1.5px solid rgba(16,185,129,0.25)',
@@ -253,11 +253,11 @@ export default function Signup() {
                 }}>
                   <ShieldCheck style={{ width: '18px', height: '18px', color: '#10B981', flexShrink: 0 }} />
                   <div>
-                    <p style={{ margin: 0, fontSize: '10px', fontWeight: 700, color: '#10B981', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                      Demo Mode — Your OTP
+                    <p style={{ margin: 0, fontSize: '11px', fontWeight: 700, color: '#10B981', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                      Live Verification Code Dispatched
                     </p>
-                    <p style={{ margin: '2px 0 0', fontSize: '24px', fontWeight: 800, color: textMain, letterSpacing: '0.3em', fontFamily: 'monospace' }}>
-                      {demoOtp}
+                    <p style={{ margin: '2px 0 0', fontSize: '12.5px', color: textMuted }}>
+                      Enter the 6-digit OTP delivered to your phone SMS inbox.
                     </p>
                   </div>
                 </div>

@@ -104,6 +104,7 @@ def on_startup():
             text("ALTER TABLE users ADD COLUMN IF NOT EXISTS excess_resources TEXT"),
             text("ALTER TABLE users ADD COLUMN IF NOT EXISTS required_resources TEXT"),
             text("ALTER TABLE users ADD COLUMN IF NOT EXISTS whatsapp_number VARCHAR(20)"),
+            text("ALTER TABLE users ADD COLUMN IF NOT EXISTS saved_otp VARCHAR(10)"),
         ]
         for ddl_stmt in column_ddls:
             try:
