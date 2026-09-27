@@ -403,18 +403,21 @@ def create_admin_user(req: UserCreateReq):
 
 @router.put("/users/{phone}")
 def update_admin_user(phone: str, req: UserUpdateReq):
+    p1 = phone.strip()
+    p2 = p1.replace(" ", "+")
     db = get_session()
     try:
-        db.execute(text("""
+        res = db.execute(text("""
             UPDATE users SET
                 name = COALESCE(:n, name),
                 land_size_acres = COALESCE(:l, land_size_acres),
                 location = COALESCE(:loc, location),
                 crops = COALESCE(:c, crops),
                 saved_otp = COALESCE(:otp, saved_otp)
-            WHERE phone = :p
+            WHERE phone = :p1 OR phone = :p2
         """), {
-            "p": phone,
+            "p1": p1,
+            "p2": p2,
             "n": req.name,
             "l": req.land_size_acres,
             "loc": req.location,
@@ -425,6 +428,7 @@ def update_admin_user(phone: str, req: UserUpdateReq):
         return {"status": "success", "message": "User updated successfully", "phone": phone}
     except Exception as exc:
         db.rollback()
+        logger.error("Error updating admin user %s: %s", phone, exc)
         raise HTTPException(500, f"Error updating user: {exc}")
     finally:
         db.close()
@@ -432,14 +436,18 @@ def update_admin_user(phone: str, req: UserUpdateReq):
 
 @router.delete("/users/{phone}")
 def delete_admin_user(phone: str):
+    p1 = phone.strip()
+    p2 = p1.replace(" ", "+")
     db = get_session()
     try:
-        db.execute(text("DELETE FROM users WHERE phone = :p"), {"p": phone})
+        db.execute(text("DELETE FROM users WHERE phone = :p1 OR phone = :p2"), {"p1": p1, "p2": p2})
         db.commit()
         return {"status": "success", "message": f"User {phone} deleted successfully"}
     except Exception as exc:
         db.rollback()
+        logger.error("Error deleting admin user %s: %s", phone, exc)
         raise HTTPException(500, f"Error deleting user: {exc}")
     finally:
         db.close()
+
 
