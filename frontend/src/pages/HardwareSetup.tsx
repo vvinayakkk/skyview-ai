@@ -27,9 +27,10 @@ export default function HardwareSetup() {
     navigate('/dashboard');
   };
 
-  const textPrimary = isDark ? '#A8D89A' : '#1B3A20';
-  const cardBg = isDark ? 'rgba(20, 20, 25, 0.7)' : 'rgba(255, 255, 255, 0.75)';
-  const cardBorder = isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.8)';
+  const textPrimary   = isDark ? '#A8D89A' : '#1B3A20';
+  const textSecondary = isDark ? 'rgba(255,255,255,0.45)' : 'rgba(15,23,42,0.55)';
+  const cardBg        = isDark ? 'rgba(20, 20, 25, 0.7)' : 'rgba(255, 255, 255, 0.75)';
+  const cardBorder    = isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.8)';
 
   return (
     <div style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden' }}>
