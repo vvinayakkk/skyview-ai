@@ -10,7 +10,8 @@ import { Label } from '@/components/ui/label';
 import { LanguageSelector } from '@/components/LanguageSelector';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
-import { Cloud, Lock, User, AlertCircle } from 'lucide-react';
+import { Lock, User, AlertCircle } from 'lucide-react';
+import { SkyViewLogo } from '@/components/SkyViewLogo';
 
 export default function Login() {
   const [phone, setPhone] = useState('');
@@ -108,14 +109,8 @@ export default function Login() {
         }}>
           {/* Header */}
           <div style={{ textAlign: 'center', marginBottom: '28px' }}>
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-              width: '56px', height: '56px', borderRadius: '16px',
-              background: 'linear-gradient(135deg, #2ECC71, #1a9e52)',
-              marginBottom: '16px',
-              boxShadow: '0 4px 14px rgba(46,204,113,0.35)',
-            }}>
-              <Cloud style={{ color: 'white', width: '28px', height: '28px' }} />
+            <div style={{ display: 'inline-flex', marginBottom: '16px' }}>
+              <SkyViewLogo size={58} isDark={isDark} />
             </div>
             <h1 style={{
               fontSize: '26px', fontWeight: 800,

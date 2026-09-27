@@ -22,6 +22,7 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { useTheme } from 'next-themes';
 import { ultraCache } from '@/lib/ultraCache';
+import { SkyViewLogo } from '@/components/SkyViewLogo';
 
 interface DashboardHeaderProps {
   lastUpdateSeconds: number;
@@ -170,37 +171,11 @@ export function DashboardHeader({
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '8px',
               textDecoration: 'none',
               flexShrink: 0,
             }}
           >
-            <div
-              style={{
-                width: '30px',
-                height: '30px',
-                borderRadius: '8px',
-                background: '#10B981',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#ffffff',
-              }}
-            >
-              <Cloud size={16} fill="#ffffff" strokeWidth={0} />
-            </div>
-            <span
-              style={{
-                fontSize: '14px',
-                fontWeight: 800,
-                color: isDark ? '#ffffff' : '#0f172a',
-                letterSpacing: '-0.02em',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              SkyView{' '}
-              <span style={{ color: '#10B981', fontWeight: 800 }}>AI</span>
-            </span>
+            <SkyViewLogo size={32} showText={true} isDark={isDark} />
           </Link>
 
           <nav
