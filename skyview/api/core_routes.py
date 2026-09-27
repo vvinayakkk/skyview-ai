@@ -1,6 +1,6 @@
 """Core routes: root, health, LLM pool status."""
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 from fastapi import APIRouter
 
@@ -24,7 +24,7 @@ def root():
 def health():
     return {
         "status": "healthy",
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "database": "✅" if health_check() else "❌",
         "llm_pool": pool_status(),
     }

@@ -86,8 +86,13 @@ class Settings:
 
         # ==================== FRONTEND ====================
         self.FRONTEND_URL: str = os.getenv("FRONTEND_URL", "http://localhost:5173")
-        _cors_raw = os.getenv("CORS_ORIGINS", "http://localhost:5173,http://localhost:3000")
-        self.CORS_ORIGINS: List[str] = [o.strip() for o in _cors_raw.split(",") if o.strip()] + ["*"]
+        _cors_raw = os.getenv(
+            "CORS_ORIGINS",
+            "http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173,http://127.0.0.1:3000,https://vvinayakkk.github.io"
+        )
+        self.CORS_ORIGINS: List[str] = [
+            o.strip() for o in _cors_raw.split(",") if o.strip() and o.strip() != "*"
+        ]
 
         # ==================== LOGGING ====================
         self.LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")

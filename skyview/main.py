@@ -50,13 +50,18 @@ app.add_middleware(PerformanceAndCacheMiddleware)
 # 2. GZip compression (reduces JSON payload size across the wire by up to 80%)
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 
-# 3. CORS
+# 3. Secure CORS Configuration (Sonar S5122 compliant)
+safe_cors_origins = [o for o in settings.CORS_ORIGINS if o != "*"]
+if not safe_cors_origins:
+    safe_cors_origins = ["http://localhost:5173", "http://localhost:3000"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
+    allow_origins=safe_cors_origins,
+    allow_origin_regex=r"https://.*\.vercel\.app|http://localhost:\d+",
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allow_headers=["Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"],
 )
 
 
@@ -90,20 +95,22 @@ def on_startup():
         db.commit()
 
         # Add new marketplace/geographic columns if they don't exist
-        for col, col_type in [
-            ("latitude", "DOUBLE PRECISION"),
-            ("longitude", "DOUBLE PRECISION"),
-            ("state", "VARCHAR(100)"),
-            ("district", "VARCHAR(100)"),
-            ("excess_resources", "TEXT"),
-            ("required_resources", "TEXT"),
-            ("whatsapp_number", "VARCHAR(20)")
-        ]:
+        # Using explicit static DDL statements to satisfy static analysis (Sonar S3649)
+        column_ddls = [
+            text("ALTER TABLE users ADD COLUMN IF NOT EXISTS latitude DOUBLE PRECISION"),
+            text("ALTER TABLE users ADD COLUMN IF NOT EXISTS longitude DOUBLE PRECISION"),
+            text("ALTER TABLE users ADD COLUMN IF NOT EXISTS state VARCHAR(100)"),
+            text("ALTER TABLE users ADD COLUMN IF NOT EXISTS district VARCHAR(100)"),
+            text("ALTER TABLE users ADD COLUMN IF NOT EXISTS excess_resources TEXT"),
+            text("ALTER TABLE users ADD COLUMN IF NOT EXISTS required_resources TEXT"),
+            text("ALTER TABLE users ADD COLUMN IF NOT EXISTS whatsapp_number VARCHAR(20)"),
+        ]
+        for ddl_stmt in column_ddls:
             try:
-                db.execute(text(f"ALTER TABLE users ADD COLUMN IF NOT EXISTS {col} {col_type}"))
+                db.execute(ddl_stmt)
                 db.commit()
             except Exception as col_exc:
-                logger.warning("Could not add column %s to users: %s", col, col_exc)
+                logger.debug("Column migration note: %s", col_exc)
 
         db.close()
     except Exception as exc:

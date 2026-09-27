@@ -5,7 +5,7 @@ POST /api/auth/verify-otp
 POST /api/auth/signup
 """
 
-import random
+import secrets
 from typing import Dict, Optional
 
 from fastapi import APIRouter, HTTPException
@@ -49,7 +49,8 @@ async def send_otp(req: SendOtpReq):
         if not user:
             raise HTTPException(404, "Phone not registered. Please sign up first.")
 
-    otp = str(random.randint(100000, 999999))
+    # Cryptographically secure 6-digit OTP generator (Sonar S2245 compliant)
+    otp = f"{secrets.randbelow(900000) + 100000}"
     _otp_store[req.phone] = otp
     logger.info("OTP for %s: %s", req.phone, otp)  # console — no real SMS in dev
     return {"status": "success", "message": "OTP sent.", "otp": otp}

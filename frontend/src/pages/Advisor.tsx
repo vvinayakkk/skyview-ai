@@ -737,25 +737,31 @@ export default function Advisor() {
         </div>
 
         {/* ─── Responsive Grid ─── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
           {/* ─── LEFT COLUMN: Telemetry + AI Crop advice overview (span 5) ─── */}
-          <div className="lg:col-span-5 flex flex-col gap-6">
+          <div className="lg:col-span-5 flex flex-col gap-4" style={{
+            height: "calc(100vh - 120px)",
+            maxHeight: "820px",
+            minHeight: "540px",
+            position: "sticky",
+            top: "84px",
+          }}>
 
             {/* Live Weather Stats (Telemetry placed ABOVE advisor advice) */}
-            <div style={{ ...cardStyle, padding: "20px" }}>
-              <h3 style={{ fontSize: 12, fontWeight: 800, textTransform: "uppercase", letterSpacing: '0.06em', color: isDark ? "#A8D89A" : "#1B3A20", marginBottom: 14, textAlign: "left" }}>
+            <div style={{ ...cardStyle, padding: "16px 20px", flexShrink: 0 }}>
+              <h3 style={{ fontSize: 12, fontWeight: 800, textTransform: "uppercase", letterSpacing: '0.06em', color: isDark ? "#A8D89A" : "#1B3A20", marginBottom: 12, textAlign: "left" }}>
                 Live Sensor Telemetry
               </h3>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12 }}>
-                {weatherStats.map((stat, i) => (
-                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, background: "transparent", border: `1.5px solid ${borderCol}`, padding: "10px 12px", borderRadius: 12 }}>
-                    <div style={{ padding: 6, borderRadius: 8, background: "transparent", border: `1px solid ${stat.color}`, color: stat.color }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10 }}>
+                {weatherStats.map((stat) => (
+                  <div key={stat.label} style={{ display: "flex", alignItems: "center", gap: 8, background: "transparent", border: `1.5px solid ${borderCol}`, padding: "8px 10px", borderRadius: 10 }}>
+                    <div style={{ padding: 5, borderRadius: 8, background: "transparent", border: `1px solid ${stat.color}`, color: stat.color }}>
                       {stat.icon}
                     </div>
                     <div style={{ textAlign: "left" }}>
                       <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", color: isDark ? "#5A7A5A" : "#8A9A8C", margin: 0 }}>{stat.label}</p>
-                       <p style={{ fontSize: 15, fontWeight: 900, color: isDark ? "#C8E8C8" : "#1B3A20", margin: 0, fontVariantNumeric: "tabular-nums" }}>{stat.value}</p>
+                       <p style={{ fontSize: 14, fontWeight: 900, color: isDark ? "#C8E8C8" : "#1B3A20", margin: 0, fontVariantNumeric: "tabular-nums" }}>{stat.value}</p>
                     </div>
                   </div>
                 ))}
@@ -763,7 +769,15 @@ export default function Advisor() {
             </div>
 
             {/* AI Advisor Overview */}
-            <div style={{ ...cardStyle, padding: "20px", textAlign: "left" }}>
+            <div style={{
+              ...cardStyle,
+              padding: "16px 20px",
+              flex: 1,
+              minHeight: 0,
+              overflowY: "auto",
+              scrollbarWidth: "thin",
+              textAlign: "left"
+            }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18, borderBottom: `1px solid ${borderCol}`, paddingBottom: 12 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#2ECC71", boxShadow: "0 0 8px #2ECC71" }} />
@@ -817,7 +831,7 @@ export default function Advisor() {
                           </h3>
                           <div style={{ display: "grid", gap: 8 }}>
                             {parsedOverview.focus_points.map((point: string, i: number) => (
-                              <div key={i} style={{ display: "flex", gap: 10, padding: "10px", borderRadius: 10, background: "transparent", border: `1.5px solid ${borderCol}` }}>
+                              <div key={`focus-${i}-${point.slice(0, 15)}`} style={{ display: "flex", gap: 10, padding: "10px", borderRadius: 10, background: "transparent", border: `1.5px solid ${borderCol}` }}>
                                 <CheckCircle2 style={{ width: 15, height: 15, color: "#2ECC71", flexShrink: 0, marginTop: '2px' }} />
                                 <p style={{ fontSize: 12, color: isDark ? "#A8D89A" : "#333", margin: 0, lineHeight: 1.4 }}>{point}</p>
                               </div>
@@ -839,9 +853,9 @@ export default function Advisor() {
 
           {/* ─── RIGHT COLUMN: Interactive Agentic Chatbot (span 7) ─── */}
           <div className="lg:col-span-7 flex flex-col" style={{
-            height: "calc(100vh - 140px)",
-            maxHeight: "750px",
-            minHeight: "520px",
+            height: "calc(100vh - 120px)",
+            maxHeight: "820px",
+            minHeight: "540px",
             position: "sticky",
             top: "84px",
           }}>
@@ -1105,9 +1119,9 @@ export default function Advisor() {
                   borderTop: `1.5px solid ${borderCol}`, scrollbarWidth: "none",
                   background: "transparent"
                 }}>
-                  {activeSuggestChips.map((chip, idx) => (
+                  {activeSuggestChips.map((chip) => (
                     <button
-                      key={idx}
+                      key={chip.text}
                       onClick={() => handleSendMessage(chip.text)}
                       style={{
                         padding: "6px 12px", borderRadius: 12, fontSize: 11,
