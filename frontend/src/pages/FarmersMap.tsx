@@ -81,10 +81,11 @@ export default function FarmersMap() {
     const map = window.L.map(mapContainerRef.current).setView([22.9734, 78.6569], 5);
     mapRef.current = map;
 
-    // Apply CartoDB tiles with global English language labels (No native Urdu/Arabic script clutter)
+    // Apply CartoDB tiles with global English language labels (Authenticated with CARTO API Key)
+    const cartoKey = import.meta.env.VITE_CARTO_API_KEY || "cb1_4027_1_e44dbe2716879040d24e7d61";
     const tileUrl = isDark
-      ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-      : "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png";
+      ? `https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=${cartoKey}`
+      : `https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=${cartoKey}`;
 
     window.L.tileLayer(tileUrl, {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -180,9 +181,10 @@ export default function FarmersMap() {
       }
     });
 
+    const cartoKey = import.meta.env.VITE_CARTO_API_KEY || "cb1_4027_1_e44dbe2716879040d24e7d61";
     const tileUrl = isDark
-      ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-      : "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png";
+      ? `https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=${cartoKey}`
+      : `https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=${cartoKey}`;
 
     window.L.tileLayer(tileUrl, {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
