@@ -179,7 +179,6 @@ function SchemeCard({ scheme, isMatch, index, isDark }: {
         padding: '22px 24px',
         position: 'relative',
         overflow: 'hidden',
-        background: 'transparent',
       }}>
         {/* Local match ribbon */}
         {isMatch && (

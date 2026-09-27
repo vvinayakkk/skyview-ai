@@ -3,20 +3,17 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from 'next-themes';
-import { FarmBackground } from '@/components/FarmTheme';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { LanguageSelector } from '@/components/LanguageSelector';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
-import { Lock, User, AlertCircle } from 'lucide-react';
+import { AlertCircle, Phone, ArrowRight, Leaf, RefreshCw, ShieldCheck, Sparkles } from 'lucide-react';
 import { SkyViewLogo } from '@/components/SkyViewLogo';
 
 export default function Login() {
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState('');
   const [otpSent, setOtpSent] = useState(false);
+  const [demoOtp, setDemoOtp] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -26,31 +23,21 @@ export default function Login() {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
 
-  const getFriendlyError = (msg: string) => {
-    if (msg.includes('invalid-phone-number')) return 'Invalid phone number. Use format: +91XXXXXXXXXX';
-    if (msg.includes('too-many-requests')) return 'Too many attempts. Please wait a few minutes.';
-    if (msg.includes('invalid-verification-code')) return 'Wrong OTP. Please check and try again.';
-    if (msg.includes('code-expired')) return 'OTP has expired. Please request a new one.';
-    return 'Something went wrong. Please try again.';
-  };
-
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!phone) {
-      setError('Please enter a valid phone number with country code (e.g. +91XXXXXXXXXX)');
+    const cleanPhone = phone.trim().startsWith('+') ? phone.trim() : `+91${phone.trim()}`;
+    if (!phone.trim()) {
+      setError('Please enter your phone number');
       return;
     }
     setError('');
     setIsLoading(true);
-
-    const result = await sendOtp(phone);
+    const result = await sendOtp(cleanPhone);
     if (result.success) {
       setOtpSent(true);
-      if (result.otp) {
-        alert(`Your AgriHub Login OTP is: ${result.otp}`);
-      }
+      if (result.otp) setDemoOtp(result.otp); // demo mode – show inline
     } else {
-      setError(result.message || 'Failed to send OTP. Check the number format (+91XXXXXXXXXX) or try again.');
+      setError(result.message || 'Phone not registered. Please sign up first.');
     }
     setIsLoading(false);
   };
@@ -59,189 +46,239 @@ export default function Login() {
     e.preventDefault();
     setError('');
     setIsLoading(true);
-
-    const success = await login(phone, otp);
-
+    const cleanPhone = phone.trim().startsWith('+') ? phone.trim() : `+91${phone.trim()}`;
+    const success = await login(cleanPhone, otp);
     if (success) {
       navigate(hardwareConnected ? '/dashboard' : '/hardware-setup');
     } else {
-      setError(getFriendlyError('invalid-verification-code'));
+      setError('Wrong OTP. Please try again.');
     }
-
     setIsLoading(false);
   };
 
-  return (
-    <div style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden' }}>
-      <div
-        style={{
-          position: 'absolute', inset: 0,
-          backgroundImage: 'url(/frames/ezgif-frame-284.jpg)',
-          backgroundSize: '100% 100%',
-          backgroundPosition: 'center',
-          filter: 'brightness(0.7)'
-        }}
-      />
+  const cardBg    = isDark ? 'rgba(10,12,10,0.90)'  : 'rgba(255,255,255,0.94)';
+  const cardBorder= isDark ? '1.5px solid rgba(16,185,129,0.18)' : '1.5px solid rgba(16,185,129,0.22)';
+  const inputBg   = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.03)';
+  const inputBorder=isDark ? '1.5px solid rgba(255,255,255,0.10)' : '1.5px solid rgba(15,23,42,0.12)';
+  const textMain  = isDark ? '#f0fdf4' : '#0f172a';
+  const textMuted = isDark ? 'rgba(255,255,255,0.45)' : 'rgba(15,23,42,0.50)';
 
-      {/* Top controls */}
-      <div style={{ position: 'absolute', top: '16px', right: '16px', zIndex: 50, display: 'flex', gap: '8px' }}>
+  return (
+    <div style={{ minHeight: '100vh', position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      {/* Background */}
+      <div style={{
+        position: 'absolute', inset: 0,
+        backgroundImage: 'url(/frames/ezgif-frame-284.jpg)',
+        backgroundSize: 'cover', backgroundPosition: 'center',
+        filter: isDark ? 'brightness(0.35) saturate(0.8)' : 'brightness(0.55) saturate(0.9)',
+      }} />
+
+      {/* Emerald gradient overlay */}
+      <div style={{
+        position: 'absolute', inset: 0,
+        background: isDark
+          ? 'radial-gradient(ellipse at 30% 60%, rgba(16,185,129,0.12) 0%, transparent 60%), radial-gradient(ellipse at 70% 20%, rgba(5,150,105,0.08) 0%, transparent 50%)'
+          : 'radial-gradient(ellipse at 30% 60%, rgba(16,185,129,0.08) 0%, transparent 60%)',
+      }} />
+
+      {/* Top-right controls */}
+      <div style={{ position: 'fixed', top: '16px', right: '16px', zIndex: 100, display: 'flex', gap: '8px' }}>
         <ThemeToggle />
         <LanguageSelector />
       </div>
 
-      {/* Centered Login Card */}
+      {/* Card */}
       <div style={{
-        position: 'relative', zIndex: 10, minHeight: '100vh',
-        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px',
+        position: 'relative', zIndex: 10, width: '100%', maxWidth: '420px',
+        margin: '24px',
+        background: cardBg,
+        backdropFilter: 'blur(32px)', WebkitBackdropFilter: 'blur(32px)',
+        borderRadius: '24px',
+        border: cardBorder,
+        boxShadow: isDark
+          ? '0 32px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(16,185,129,0.06), inset 0 1px 0 rgba(255,255,255,0.05)'
+          : '0 24px 64px rgba(0,0,0,0.12), 0 0 0 1px rgba(16,185,129,0.08)',
+        padding: '40px 36px 36px',
       }}>
-        <div style={{
-          width: '100%', maxWidth: '420px',
-          background: isDark ? 'rgba(15, 25, 15, 0.88)' : 'rgba(255, 255, 255, 0.92)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
-          borderRadius: '18px',
-          padding: '40px 36px',
-          boxShadow: isDark
-            ? '0 12px 48px rgba(0,0,0,0.35), 0 2px 12px rgba(0,0,0,0.2)'
-            : '0 12px 48px rgba(0,0,0,0.15), 0 2px 12px rgba(0,0,0,0.08)',
-          border: isDark ? '1px solid rgba(46,204,113,0.12)' : '1px solid rgba(255,255,255,0.6)',
-          transition: 'all 0.4s ease',
-        }}>
-          {/* Header */}
-          <div style={{ textAlign: 'center', marginBottom: '28px' }}>
-            <div style={{ display: 'inline-flex', marginBottom: '16px' }}>
-              <SkyViewLogo size={58} isDark={isDark} />
-            </div>
-            <h1 style={{
-              fontSize: '26px', fontWeight: 800,
-              color: isDark ? '#A8D89A' : '#1B3A20',
-              marginBottom: '6px',
-              fontFamily: "'Fredoka One', 'Nunito', sans-serif",
-              transition: 'color 0.4s ease',
-            }}>
-              {t('login_title')}
-            </h1>
-            <p style={{
-              fontSize: '14px',
-              color: isDark ? '#6A8A6A' : '#5A7A60',
-              fontFamily: "'Nunito', sans-serif",
-            }}>
-              {t('system_subtitle')}
-            </p>
+
+        {/* Logo */}
+        <div style={{ textAlign: 'center', marginBottom: '28px' }}>
+          <div style={{ display: 'inline-flex', marginBottom: '14px' }}>
+            <SkyViewLogo size={52} isDark={isDark} showText={false} />
           </div>
-
-          {/* Form */}
-          <form style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
-            {error && (
-              <div style={{
-                display: 'flex', alignItems: 'center', gap: '8px',
-                fontSize: '13px', color: '#E53935',
-                background: isDark ? 'rgba(229,57,53,0.1)' : 'rgba(211,47,47,0.08)',
-                padding: '10px 14px', borderRadius: '10px',
-              }}>
-                <AlertCircle style={{ width: '16px', height: '16px', flexShrink: 0 }} />
-                <span>{error}</span>
-              </div>
-            )}
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <Label htmlFor="phone" style={{ fontSize: '14px', fontWeight: 600, color: isDark ? '#A8D89A' : '#2D4A30' }}>
-                {t('phone_number')}
-              </Label>
-              <div style={{ position: 'relative' }}>
-                <User style={{
-                  position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)',
-                  width: '16px', height: '16px', color: isDark ? '#5A7A5A' : '#8A9A8C',
-                  pointerEvents: 'none', zIndex: 1,
-                }} />
-                <input
-                  id="phone"
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="+91XXXXXXXXXX (with country code)"
-                  disabled={otpSent}
-                  required
-                  style={{
-                    width: '100%', paddingLeft: '38px', height: '44px', borderRadius: '10px',
-                    border: isDark ? '1.5px solid rgba(46,204,113,0.2)' : '1.5px solid #D0DCD2',
-                    background: isDark ? 'rgba(20,35,20,0.6)' : 'white',
-                    fontSize: '14px', color: isDark ? '#C8E8C8' : '#1B3A20',
-                    outline: 'none', boxSizing: 'border-box',
-                  }}
-                />
-              </div>
-            </div>
-
-            {otpSent && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <Label htmlFor="otp" style={{ fontSize: '14px', fontWeight: 600, color: isDark ? '#A8D89A' : '#2D4A30' }}>
-                  {t('otp_label')}
-                </Label>
-                <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
-                  <InputOTP maxLength={6} value={otp} onChange={setOtp}>
-                    <InputOTPGroup>
-                      <InputOTPSlot index={0} className="h-11 w-11 border-2 border-border" />
-                      <InputOTPSlot index={1} className="h-11 w-11 border-2 border-border" />
-                      <InputOTPSlot index={2} className="h-11 w-11 border-2 border-border" />
-                      <InputOTPSlot index={3} className="h-11 w-11 border-2 border-border" />
-                      <InputOTPSlot index={4} className="h-11 w-11 border-2 border-border" />
-                      <InputOTPSlot index={5} className="h-11 w-11 border-2 border-border" />
-                    </InputOTPGroup>
-                  </InputOTP>
-                </div>
-              </div>
-            )}
-
-            {!otpSent ? (
-              <Button
-                type="button" onClick={handleSendOtp} disabled={isLoading || !phone}
-                style={{
-                  width: '100%', height: '48px', borderRadius: '10px',
-                  background: 'linear-gradient(135deg, #2ECC71, #1a9e52)',
-                  color: 'white', fontSize: '15px', fontWeight: 700,
-                  fontFamily: "'Nunito', sans-serif",
-                  border: 'none', cursor: 'pointer',
-                  boxShadow: '0 4px 16px rgba(46,204,113,0.35)',
-                  marginTop: '4px',
-                }}
-              >
-                {isLoading ? t('sending_otp') : t('send_otp')}
-              </Button>
-            ) : (
-              <Button
-                type="button" onClick={handleLogin} disabled={isLoading || !otp}
-                style={{
-                  width: '100%', height: '48px', borderRadius: '10px',
-                  background: 'linear-gradient(135deg, #2ECC71, #1a9e52)',
-                  color: 'white', fontSize: '15px', fontWeight: 700,
-                  fontFamily: "'Nunito', sans-serif",
-                  border: 'none', cursor: 'pointer',
-                  boxShadow: '0 4px 16px rgba(46,204,113,0.35)',
-                  marginTop: '4px',
-                }}
-              >
-                {isLoading ? t('verifying') : t('login_securely')}
-              </Button>
-            )}
-
-          </form>
-
-          {/* Signup link */}
-          <p style={{
-            textAlign: 'center', fontSize: '13px',
-            color: isDark ? '#5A7A5A' : '#5A7A60',
-            marginTop: '20px', fontFamily: "'Nunito', sans-serif",
-          }}>
-            {t('no_account')}{' '}
-            <Link to="/signup" style={{
-              color: '#2ECC71', fontWeight: 700, textDecoration: 'underline',
-            }}>
-              {t('sign_up')}
-            </Link>
+          <h1 style={{ margin: 0, fontSize: '24px', fontWeight: 800, color: textMain, letterSpacing: '-0.02em' }}>
+            Welcome back
+          </h1>
+          <p style={{ margin: '6px 0 0', fontSize: '13.5px', color: textMuted }}>
+            Sign in to your SkyView account
           </p>
         </div>
+
+        {/* Error */}
+        {error && (
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px',
+            padding: '10px 14px', borderRadius: '12px', fontSize: '13px', color: '#f87171',
+            background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.20)',
+          }}>
+            <AlertCircle style={{ width: '15px', height: '15px', flexShrink: 0 }} />
+            <span>{error}</span>
+          </div>
+        )}
+
+        <form style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          {/* Phone input */}
+          <div>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: textMuted, marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+              Phone Number
+            </label>
+            <div style={{ position: 'relative' }}>
+              <Phone style={{
+                position: 'absolute', left: '13px', top: '50%', transform: 'translateY(-50%)',
+                width: '15px', height: '15px', color: '#10B981', pointerEvents: 'none',
+              }} />
+              <input
+                type="tel"
+                value={phone}
+                onChange={e => setPhone(e.target.value)}
+                placeholder="+91XXXXXXXXXX or 10-digit"
+                disabled={otpSent}
+                style={{
+                  width: '100%', paddingLeft: '40px', height: '46px', borderRadius: '12px',
+                  border: inputBorder, background: inputBg,
+                  fontSize: '14px', color: textMain, outline: 'none',
+                  boxSizing: 'border-box', fontFamily: 'inherit',
+                  transition: 'border 0.2s',
+                  opacity: otpSent ? 0.6 : 1,
+                }}
+                onFocus={e => e.target.style.borderColor = '#10B981'}
+                onBlur={e => e.target.style.borderColor = isDark ? 'rgba(255,255,255,0.10)' : 'rgba(15,23,42,0.12)'}
+              />
+            </div>
+          </div>
+
+          {/* Demo OTP display */}
+          {otpSent && demoOtp && (
+            <div style={{
+              padding: '12px 16px', borderRadius: '12px',
+              background: 'rgba(16,185,129,0.08)',
+              border: '1.5px solid rgba(16,185,129,0.25)',
+              display: 'flex', alignItems: 'center', gap: '10px',
+            }}>
+              <ShieldCheck style={{ width: '16px', height: '16px', color: '#10B981', flexShrink: 0 }} />
+              <div>
+                <p style={{ margin: 0, fontSize: '11px', fontWeight: 700, color: '#10B981', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                  Demo Mode — Your OTP
+                </p>
+                <p style={{ margin: '2px 0 0', fontSize: '22px', fontWeight: 800, color: textMain, letterSpacing: '0.25em', fontFamily: 'monospace' }}>
+                  {demoOtp}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* OTP slots */}
+          {otpSent && (
+            <div>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: textMuted, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                Enter OTP
+              </label>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <InputOTP maxLength={6} value={otp} onChange={setOtp}>
+                  <InputOTPGroup>
+                    {[0,1,2,3,4,5].map(i => (
+                      <InputOTPSlot key={i} index={i} className="h-12 w-12 text-lg border-2 border-border rounded-xl" />
+                    ))}
+                  </InputOTPGroup>
+                </InputOTP>
+              </div>
+            </div>
+          )}
+
+          {/* Action button */}
+          {!otpSent ? (
+            <button
+              type="button" onClick={handleSendOtp} disabled={isLoading || !phone.trim()}
+              style={{
+                width: '100%', height: '48px', borderRadius: '12px',
+                background: !phone.trim() ? (isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)') : 'linear-gradient(135deg, #10B981, #059669)',
+                color: !phone.trim() ? textMuted : 'white',
+                fontSize: '14px', fontWeight: 700, border: 'none',
+                cursor: !phone.trim() ? 'not-allowed' : 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                boxShadow: phone.trim() ? '0 4px 20px rgba(16,185,129,0.35)' : 'none',
+                transition: 'all 0.2s', marginTop: '4px',
+              }}
+            >
+              {isLoading ? <><RefreshCw style={{ width: '15px', height: '15px', animation: 'spin 1s linear infinite' }} /> Sending OTP...</>
+                         : <>{t('send_otp')} <ArrowRight style={{ width: '15px', height: '15px' }} /></>}
+            </button>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '4px' }}>
+              <button
+                type="button" onClick={handleLogin} disabled={isLoading || otp.length < 6}
+                style={{
+                  width: '100%', height: '48px', borderRadius: '12px',
+                  background: otp.length < 6 ? (isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)') : 'linear-gradient(135deg, #10B981, #059669)',
+                  color: otp.length < 6 ? textMuted : 'white',
+                  fontSize: '14px', fontWeight: 700, border: 'none',
+                  cursor: otp.length < 6 ? 'not-allowed' : 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                  boxShadow: otp.length >= 6 ? '0 4px 20px rgba(16,185,129,0.35)' : 'none',
+                  transition: 'all 0.2s',
+                }}
+              >
+                {isLoading ? <><RefreshCw style={{ width: '15px', height: '15px', animation: 'spin 1s linear infinite' }} /> Verifying...</>
+                           : <><ShieldCheck style={{ width: '15px', height: '15px' }} /> {t('login_securely')}</>}
+              </button>
+              <button
+                type="button"
+                onClick={() => { setOtpSent(false); setOtp(''); setDemoOtp(''); }}
+                style={{
+                  background: 'none', border: 'none', cursor: 'pointer', padding: '4px',
+                  fontSize: '12px', color: textMuted, textDecoration: 'underline',
+                  textUnderlineOffset: '2px',
+                }}
+              >
+                Change phone number
+              </button>
+            </div>
+          )}
+        </form>
+
+        {/* Divider */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', margin: '20px 0' }}>
+          <div style={{ flex: 1, height: '1px', background: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)' }} />
+          <span style={{ fontSize: '12px', color: textMuted }}>New to SkyView?</span>
+          <div style={{ flex: 1, height: '1px', background: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)' }} />
+        </div>
+
+        <Link to="/signup" style={{ textDecoration: 'none' }}>
+          <div style={{
+            width: '100%', height: '44px', borderRadius: '12px',
+            border: isDark ? '1.5px solid rgba(16,185,129,0.25)' : '1.5px solid rgba(16,185,129,0.30)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+            fontSize: '14px', fontWeight: 600,
+            color: '#10B981', cursor: 'pointer',
+            transition: 'all 0.2s',
+            background: 'transparent',
+            boxSizing: 'border-box',
+          }}>
+            <Leaf style={{ width: '14px', height: '14px' }} />
+            Create farmer account
+          </div>
+        </Link>
+
+        {/* Footer */}
+        <p style={{ textAlign: 'center', margin: '16px 0 0', fontSize: '11px', color: textMuted }}>
+          Powered by SkyView · FPGA AI Platform
+        </p>
       </div>
+
+      <style>{`
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        input::placeholder { color: ${textMuted}; }
+      `}</style>
     </div>
   );
 }
