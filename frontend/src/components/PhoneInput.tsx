@@ -72,10 +72,15 @@ export const COUNTRIES: Country[] = [
 ];
 
 interface PhoneInputProps {
-  value: string;
-  onChange: (phone: string, dialCode: string) => void;
-  disabled?: boolean;
-  isDark: boolean;
+  readonly value: string;
+  readonly onChange: (phone: string, dialCode: string) => void;
+  readonly disabled?: boolean;
+  readonly isDark: boolean;
+}
+
+function matchesCountry(c: Country, query: string): boolean {
+  const q = query.toLowerCase();
+  return c.name.toLowerCase().includes(q) || c.code.includes(q) || c.iso.toLowerCase().includes(q);
 }
 
 export function PhoneInput({ value, onChange, disabled, isDark }: PhoneInputProps) {
@@ -105,13 +110,7 @@ export function PhoneInput({ value, onChange, disabled, isDark }: PhoneInputProp
     }
   }, [open]);
 
-  const filtered = search.trim()
-    ? COUNTRIES.filter(c =>
-        c.name.toLowerCase().includes(search.toLowerCase()) ||
-        c.code.includes(search) ||
-        c.iso.toLowerCase().includes(search.toLowerCase())
-      )
-    : COUNTRIES;
+  const filtered = search.trim() ? COUNTRIES.filter(c => matchesCountry(c, search)) : COUNTRIES;
 
   const handleCountrySelect = (c: Country) => {
     setSelected(c);
@@ -121,7 +120,7 @@ export function PhoneInput({ value, onChange, disabled, isDark }: PhoneInputProp
   };
 
   const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = e.target.value.replace(/[^\d\s\-]/g, '');
+    const raw = e.target.value.replace(/[^\d\s-]/g, '');
     setNumber(raw);
     onChange(raw, selected.code);
   };

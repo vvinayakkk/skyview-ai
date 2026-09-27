@@ -26,7 +26,7 @@ export default function Login() {
   const isDark = theme === 'dark';
 
   const fullPhone = () => {
-    const num = phone.trim().replace(/[\s\-]/g, '');
+    const num = phone.trim().replace(/[\s-]/g, '');
     return `${dialCode}${num}`;
   };
 
@@ -63,10 +63,12 @@ export default function Login() {
 
   const cardBg    = isDark ? 'rgba(10,12,10,0.90)'  : 'rgba(255,255,255,0.94)';
   const cardBorder= isDark ? '1.5px solid rgba(16,185,129,0.18)' : '1.5px solid rgba(16,185,129,0.22)';
-  const inputBg   = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.03)';
-  const inputBorder=isDark ? '1.5px solid rgba(255,255,255,0.10)' : '1.5px solid rgba(15,23,42,0.12)';
   const textMain  = isDark ? '#f0fdf4' : '#0f172a';
   const textMuted = isDark ? 'rgba(255,255,255,0.45)' : 'rgba(15,23,42,0.50)';
+  const disabledBtnBorder = isDark ? '1.5px solid rgba(255,255,255,0.12)' : '1.5px solid rgba(15,23,42,0.15)';
+  const activeBtnBorder = '1.5px solid #10B981';
+  const sendOtpBtnBorder = !phone.trim() ? disabledBtnBorder : activeBtnBorder;
+  const loginBtnBorder = otp.length < 6 ? disabledBtnBorder : activeBtnBorder;
 
   return (
     <div style={{ minHeight: '100vh', position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -134,15 +136,17 @@ export default function Login() {
         <form style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           {/* Phone input */}
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: textMuted, marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            <label htmlFor="login-phone-input" style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: textMuted, marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
               Phone Number
             </label>
-            <PhoneInput
-              value={phone}
-              onChange={(num, code) => { setPhone(num); setDialCode(code); }}
-              disabled={otpSent}
-              isDark={isDark}
-            />
+            <div id="login-phone-input">
+              <PhoneInput
+                value={phone}
+                onChange={(num, code) => { setPhone(num); setDialCode(code); }}
+                disabled={otpSent}
+                isDark={isDark}
+              />
+            </div>
           </div>
 
           {/* Demo OTP display */}
@@ -168,10 +172,10 @@ export default function Login() {
           {/* OTP slots */}
           {otpSent && (
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: textMuted, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+              <label htmlFor="login-otp-input" style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: textMuted, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                 Enter OTP
               </label>
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <div id="login-otp-input" style={{ display: 'flex', justifyContent: 'center' }}>
                 <InputOTP maxLength={6} value={otp} onChange={setOtp}>
                   <InputOTPGroup>
                     {[0,1,2,3,4,5].map(i => (
@@ -190,9 +194,7 @@ export default function Login() {
               style={{
                 width: '100%', height: '48px', borderRadius: '12px',
                 background: 'transparent',
-                border: !phone.trim()
-                  ? (isDark ? '1.5px solid rgba(255,255,255,0.12)' : '1.5px solid rgba(15,23,42,0.15)')
-                  : '1.5px solid #10B981',
+                border: sendOtpBtnBorder,
                 color: !phone.trim() ? textMuted : '#10B981',
                 fontSize: '14px', fontWeight: 700,
                 cursor: !phone.trim() ? 'not-allowed' : 'pointer',
@@ -211,9 +213,7 @@ export default function Login() {
                 style={{
                   width: '100%', height: '48px', borderRadius: '12px',
                   background: 'transparent',
-                  border: otp.length < 6
-                    ? (isDark ? '1.5px solid rgba(255,255,255,0.12)' : '1.5px solid rgba(15,23,42,0.15)')
-                    : '1.5px solid #10B981',
+                  border: loginBtnBorder,
                   color: otp.length < 6 ? textMuted : '#10B981',
                   fontSize: '14px', fontWeight: 700,
                   cursor: otp.length < 6 ? 'not-allowed' : 'pointer',

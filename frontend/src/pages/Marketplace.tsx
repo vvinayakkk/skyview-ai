@@ -59,12 +59,12 @@ function TypewriterText({ text, speed = 8, onComplete }: { text: string; speed?:
 function parseToBulletins(text: string): string[] {
   if (!text) return [];
   const rawSegments = text
-    .split(/(?:(?:\r?\n)+|(?<=[.!?])\s+(?=[A-Z0-9])|(?=(?:^|\s)\d+[\.\)]?\s+[A-Z]))/)
+    .split(/\r?\n|(?<=[.!?])\s+/)
     .map((s) => s.trim())
     .filter((s) => s.length > 5);
 
   const cleaned = rawSegments
-    .map((item) => item.replace(/^(?:\d+[\.\)]?\s*|[•\-\*]\s*)/, "").trim())
+    .map((item) => item.replace(/^(\d+[.)]?\s*|[•\-*]\s*)/, "").trim())
     .filter(Boolean);
 
   return cleaned.length > 0 ? cleaned : [text];

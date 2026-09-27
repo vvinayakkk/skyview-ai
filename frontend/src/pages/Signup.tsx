@@ -41,13 +41,13 @@ export default function Signup() {
     if (data.crops) setCrops(Array.isArray(data.crops) ? data.crops.join(', ') : data.crops);
   };
 
-  const fullPhone = () => `${dialCode}${phone.trim().replace(/[\s\-]/g, '')}`;
+  const fullPhone = () => `${dialCode}${phone.trim().replace(/[\s-]/g, '')}`;
 
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !phone.trim()) { setError('Name and phone are required.'); return; }
     if (name.trim().length < 2) { setError('Please provide a valid name.'); return; }
-    const digits = phone.trim().replace(/[\s\-]/g, '');
+    const digits = phone.trim().replace(/[\s-]/g, '');
     if (!/^\d{7,15}$/.test(digits)) { setError('Enter a valid phone number.'); return; }
 
     setError(''); setIsLoading(true);
@@ -79,10 +79,11 @@ export default function Signup() {
         });
       } catch { /* backend unavailable, continue */ }
 
-      localStorage.setItem('user_name', name);
-      if (landSize) localStorage.setItem('user_land_size', landSize);
-      if (location) localStorage.setItem('user_location', location);
-      if (crops)    localStorage.setItem('user_crops', crops);
+      const cleanStr = (val: string) => encodeURIComponent(val.trim());
+      localStorage.setItem('user_name', cleanStr(name));
+      if (landSize) localStorage.setItem('user_land_size', cleanStr(landSize));
+      if (location) localStorage.setItem('user_location', cleanStr(location));
+      if (crops)    localStorage.setItem('user_crops', cleanStr(crops));
 
       const success = await login(fp, otp);
       if (success) {
@@ -197,47 +198,49 @@ export default function Signup() {
               {/* Name & Phone row */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 <div>
-                  <label style={labelStyle}>Full Name *</label>
+                  <label htmlFor="signup-name" style={labelStyle}>Full Name *</label>
                   <div style={{ position: 'relative' }}>
                     <User style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', width: '14px', height: '14px', color: '#10B981' }} />
-                    <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Rajesh Kumar" disabled={otpSent} style={inputStyle} />
+                    <input id="signup-name" type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Rajesh Kumar" disabled={otpSent} style={inputStyle} />
                   </div>
                 </div>
                 <div>
-                  <label style={labelStyle}>Phone *</label>
-                  <PhoneInput
-                    value={phone}
-                    onChange={(num, code) => { setPhone(num); setDialCode(code); }}
-                    disabled={otpSent}
-                    isDark={isDark}
-                  />
+                  <label htmlFor="signup-phone-input" style={labelStyle}>Phone *</label>
+                  <div id="signup-phone-input">
+                    <PhoneInput
+                      value={phone}
+                      onChange={(num, code) => { setPhone(num); setDialCode(code); }}
+                      disabled={otpSent}
+                      isDark={isDark}
+                    />
+                  </div>
                 </div>
               </div>
 
               {/* Land & Location row */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 <div>
-                  <label style={labelStyle}>Land Size (acres)</label>
+                  <label htmlFor="signup-land" style={labelStyle}>Land Size (acres)</label>
                   <div style={{ position: 'relative' }}>
                     <Layers style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', width: '14px', height: '14px', color: '#10B981' }} />
-                    <input type="text" value={landSize} onChange={e => setLandSize(e.target.value)} placeholder="e.g. 5.5" disabled={otpSent} style={inputStyle} />
+                    <input id="signup-land" type="text" value={landSize} onChange={e => setLandSize(e.target.value)} placeholder="e.g. 5.5" disabled={otpSent} style={inputStyle} />
                   </div>
                 </div>
                 <div>
-                  <label style={labelStyle}>Location</label>
+                  <label htmlFor="signup-location" style={labelStyle}>Location</label>
                   <div style={{ position: 'relative' }}>
                     <MapPin style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', width: '14px', height: '14px', color: '#10B981' }} />
-                    <input type="text" value={location} onChange={e => setLocation(e.target.value)} placeholder="District, State" disabled={otpSent} style={inputStyle} />
+                    <input id="signup-location" type="text" value={location} onChange={e => setLocation(e.target.value)} placeholder="District, State" disabled={otpSent} style={inputStyle} />
                   </div>
                 </div>
               </div>
 
               {/* Crops */}
               <div>
-                <label style={labelStyle}>Crops Grown</label>
+                <label htmlFor="signup-crops" style={labelStyle}>Crops Grown</label>
                 <div style={{ position: 'relative' }}>
                   <Wheat style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', width: '14px', height: '14px', color: '#10B981' }} />
-                  <input type="text" value={crops} onChange={e => setCrops(e.target.value)} placeholder="Wheat, Rice, Cotton..." disabled={otpSent} style={inputStyle} />
+                  <input id="signup-crops" type="text" value={crops} onChange={e => setCrops(e.target.value)} placeholder="Wheat, Rice, Cotton..." disabled={otpSent} style={inputStyle} />
                 </div>
               </div>
 
@@ -263,8 +266,8 @@ export default function Signup() {
               {/* OTP Entry */}
               {otpSent && (
                 <div>
-                  <label style={labelStyle}>Enter OTP</label>
-                  <div style={{ display: 'flex', justifyContent: 'center', marginTop: '4px' }}>
+                  <label htmlFor="signup-otp-input" style={labelStyle}>Enter OTP</label>
+                  <div id="signup-otp-input" style={{ display: 'flex', justifyContent: 'center', marginTop: '4px' }}>
                     <InputOTP maxLength={6} value={otp} onChange={setOtp}>
                       <InputOTPGroup>
                         {[0,1,2,3,4,5].map(i => (
@@ -278,33 +281,45 @@ export default function Signup() {
 
               {/* Submit */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '4px' }}>
-                <button
-                  type="button"
-                  onClick={otpSent ? handleSignup : handleSendOtp}
-                  disabled={isLoading || (!otpSent && (!name.trim() || !phone.trim())) || (otpSent && otp.length < 6)}
-                  style={{
-                    width: '100%', height: '46px', borderRadius: '12px',
-                    background: 'transparent',
-                    border: ((!otpSent && (!name.trim() || !phone.trim())) || (otpSent && otp.length < 6))
-                      ? (isDark ? '1.5px solid rgba(255,255,255,0.12)' : '1.5px solid rgba(15,23,42,0.15)')
-                      : '1.5px solid #10B981',
-                    color: ((!otpSent && (!name.trim() || !phone.trim())) || (otpSent && otp.length < 6))
-                      ? textMuted
-                      : '#10B981',
-                    fontSize: '14px', fontWeight: 700,
-                    cursor: ((!otpSent && (!name.trim() || !phone.trim())) || (otpSent && otp.length < 6)) ? 'not-allowed' : 'pointer',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                    boxShadow: 'none',
-                    transition: 'all 0.2s', opacity: isLoading ? 0.8 : 1,
-                  }}
-                >
-                  {isLoading
-                    ? <><RefreshCw style={{ width: '15px', height: '15px', animation: 'spin 1s linear infinite' }} /> {otpSent ? 'Creating account...' : 'Sending OTP...'}</>
-                    : otpSent
-                      ? <><ShieldCheck style={{ width: '15px', height: '15px' }} /> Complete Registration</>
-                      : <>{t('signup_send_code')} <ArrowRight style={{ width: '15px', height: '15px' }} /></>
-                  }
-                </button>
+                {(() => {
+                  const isSignupDisabled = isLoading || (!otpSent && (!name.trim() || !phone.trim())) || (otpSent && otp.length < 6);
+                  const disabledBorder = isDark ? '1.5px solid rgba(255,255,255,0.12)' : '1.5px solid rgba(15,23,42,0.15)';
+                  const activeBorder = '1.5px solid #10B981';
+                  const signupBorder = isSignupDisabled ? disabledBorder : activeBorder;
+                  const signupColor = isSignupDisabled ? textMuted : '#10B981';
+
+                  const renderButtonContent = () => {
+                    if (isLoading) {
+                      const msg = otpSent ? 'Creating account...' : 'Sending OTP...';
+                      return <><RefreshCw style={{ width: '15px', height: '15px', animation: 'spin 1s linear infinite' }} /> {msg}</>;
+                    }
+                    if (otpSent) {
+                      return <><ShieldCheck style={{ width: '15px', height: '15px' }} /> Complete Registration</>;
+                    }
+                    return <>{t('signup_send_code')} <ArrowRight style={{ width: '15px', height: '15px' }} /></>;
+                  };
+
+                  return (
+                    <button
+                      type="button"
+                      onClick={otpSent ? handleSignup : handleSendOtp}
+                      disabled={isSignupDisabled}
+                      style={{
+                        width: '100%', height: '46px', borderRadius: '12px',
+                        background: 'transparent',
+                        border: signupBorder,
+                        color: signupColor,
+                        fontSize: '14px', fontWeight: 700,
+                        cursor: isSignupDisabled ? 'not-allowed' : 'pointer',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                        boxShadow: 'none',
+                        transition: 'all 0.2s', opacity: isLoading ? 0.8 : 1,
+                      }}
+                    >
+                      {renderButtonContent()}
+                    </button>
+                  );
+                })()}
                 {otpSent && (
                   <button type="button" onClick={() => { setOtpSent(false); setOtp(''); setDemoOtp(''); }}
                     style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '12px', color: textMuted, textDecoration: 'underline', textUnderlineOffset: '2px' }}>

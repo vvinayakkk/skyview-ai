@@ -1,10 +1,10 @@
 import React from 'react';
 
 interface SkyViewLogoProps {
-  size?: number;
-  showText?: boolean;
-  className?: string;
-  isDark?: boolean;
+  readonly size?: number;
+  readonly showText?: boolean;
+  readonly className?: string;
+  readonly isDark?: boolean;
 }
 
 export function SkyViewLogo({

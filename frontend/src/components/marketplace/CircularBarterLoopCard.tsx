@@ -62,12 +62,12 @@ interface ParsedScheduleRow {
 function parseAdviceToBulletins(notes: string): string[] {
   if (!notes) return [];
   const rawBullets = notes
-    .split(/(?:(?:\r?\n)+|(?<=[.!?])\s+(?=[A-Z0-9])|(?=(?:^|\s)\d+[\.\)]?\s+[A-Z]))/)
+    .split(/\r?\n|(?<=[.!?])\s+/)
     .map((s) => s.trim())
     .filter((s) => s.length > 5);
 
   const cleaned = rawBullets
-    .map((b) => b.replace(/^(?:\d+[\.\)]?\s*|[•\-\*]\s*)/, "").trim())
+    .map((b) => b.replace(/^(\d+[.)]?\s*|[•\-*]\s*)/, "").trim())
     .filter(Boolean);
 
   return cleaned.length > 0 ? cleaned : [notes];

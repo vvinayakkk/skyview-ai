@@ -103,7 +103,7 @@ export function HardwareGate({ children }: HardwareGateProps) {
               style={{
                 width: '100%', padding: '12px 20px',
                 borderRadius: '14px',
-                border: isDark ? '1.5px solid rgba(33,150,243,0.4)' : '1.5px solid rgba(33,150,243,0.4)',
+                border: '1.5px solid rgba(33,150,243,0.4)',
                 background: 'transparent',
                 color: '#2196F3', fontSize: '14px', fontWeight: 700,
                 cursor: 'pointer',

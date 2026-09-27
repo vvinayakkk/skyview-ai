@@ -85,36 +85,29 @@
 
 ## 🏗️ System Architecture
 
-```
-                                 ┌────────────────────────────────────────────────────────┐
-                                 │              Unified Ingestion & Dispatch              │
-                                 │        Web (React 18) • Mobile (Flutter) • Voice       │
-                                 └────────────────────────────────────────────────────────┘
-                                                              │
-                                                              ▼
-                                 ┌────────────────────────────────────────────────────────┐
-                                 │     System-One Typed Decision Router (Jev Architecture)│
-                                 │      Sub-millisecond classification & intent dispatch  │
-                                 └────────────────────────────────────────────────────────┘
-                                                              │
-                     ┌────────────────────────────────────────┼────────────────────────────────────────┐
-                     ▼                                        ▼                                        ▼
-      ┌─────────────────────────────┐          ┌─────────────────────────────┐          ┌─────────────────────────────┐
-      │  Autonomous Agentic Mesh    │          │  Multimodal Vision Engine   │          │  Edge Hardware Pipeline     │
-      │  Groq LPU Distributed Array │          │  Google DeepMind Gemini 2.5 │          │  Xilinx ZC706 FPGA / HLS    │
-      ├─────────────────────────────┤          ├─────────────────────────────┤          ├─────────────────────────────┤
-      │ • openai/gpt-oss-120b       │          │ • gemini-2.5-flash          │          │ • 12.4ms Hardware Anomaly   │
-      │ • qwen/qwen3.8-27b          │          │ • 512x512 ResNet Normalizer │          │ • Fixed-Point Quantization  │
-      │ • openai/gpt-oss-20b        │          │ • SVG Reticle Segmentation  │          │ • Off-Grid Solar Telemetry  │
-      └─────────────────────────────┘          └─────────────────────────────┘          └─────────────────────────────┘
-                     │                                        │                                        │
-                     └────────────────────────────────────────┼────────────────────────────────────────┘
-                                                              │
-                                                              ▼
-                                 ┌────────────────────────────────────────────────────────┐
-                                 │               FastAPI Central Agro-Backend             │
-                                 │       PostgreSQL Neon • Sarvam AI STT/TTS • MyScheme   │
-                                 └────────────────────────────────────────────────────────┘
+```mermaid
+graph TD
+    classDef client fill:#10B98115,stroke:#10B981,stroke-width:2px,color:#10B981;
+    classDef router fill:#3B82F615,stroke:#3B82F6,stroke-width:2px,color:#3B82F6;
+    classDef engine fill:#8B5CF615,stroke:#8B5CF6,stroke-width:1.5px,color:#A78BFA;
+    classDef backend fill:#EC489915,stroke:#EC4899,stroke-width:2px,color:#F472B6;
+
+    A["<b>Unified Ingestion & Dispatch</b><br/>Web (React 18) • Mobile (Flutter) • Voice"]:::client
+    B["<b>System-One Typed Decision Router (Jev Architecture)</b><br/>Sub-millisecond classification & intent dispatch"]:::router
+    
+    C["<b>Autonomous Agentic Mesh</b><br/>Groq LPU Distributed Array<br/>• gpt-oss-120b<br/>• qwen3.8-27b<br/>• gpt-oss-20b"]:::engine
+    D["<b>Multimodal Vision Engine</b><br/>Google DeepMind Gemini 2.5<br/>• 512x512 ResNet Normalizer<br/>• SVG Reticle Segmentation"]:::engine
+    E["<b>Edge Hardware Pipeline</b><br/>Xilinx ZC706 FPGA / Vivado HLS<br/>• 12.4ms Hardware Anomaly<br/>• Solar Telemetry"]:::engine
+    
+    F["<b>FastAPI Central Agro-Backend</b><br/>PostgreSQL Neon • Sarvam AI STT/TTS • MyScheme"]:::backend
+
+    A --> B
+    B -->|Text & Conversational| C
+    B -->|Pathology Images| D
+    B -->|Sensor Fusion & IoT| E
+    C --> F
+    D --> F
+    E --> F
 ```
 
 ---
@@ -123,28 +116,33 @@
 
 Agricultural connectivity in rural and peri-urban regions is characterized by intermittent high latency, packet loss, and constrained bandwidth. SkyView implements **UltraCache™**, an autonomous multi-tier client-side caching engine that guarantees **0ms perceived latency** without requiring any paid cloud infrastructure:
 
-```
-┌──────────────────────────────────────────────────────────────────────────────────┐
-│                           UltraCache™ Architecture                               │
-│                                                                                  │
-│   [User Navigates / Hovers Over Link]                                            │
-│               │                                                                  │
-│               ▼                                                                  │
-│      L1: In-Memory Cache (0ms instant return from active RAM)                    │
-│               │ (miss)                                                           │
-│               ▼                                                                  │
-│      L2: LocalStorage Persistent Cache (<5ms offline-ready storage)              │
-│               │ (stale or background revalidation)                               │
-│               ▼                                                                  │
-│      L3: In-Flight Promise Deduplicator (prevents duplicate simultaneous fetches)│
-│               │                                                                  │
-│               ▼                                                                  │
-│      TanStack Query Layer (staleTime: 5 min, gcTime: 30 min)                     │
-│               │                                                                  │
-│               ▼                                                                  │
-│      Autonomous Background Platform Warmup Engine                                │
-│      (Pre-loads Mandi, Weather, Trends, Barter Loops, Pools, Profiles)           │
-└──────────────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    classDef start fill:#10B98120,stroke:#10B981,stroke-width:2px,color:#10B981;
+    classDef hit fill:#05966925,stroke:#10B981,stroke-width:2px,color:#34D399;
+    classDef tier fill:#1E293B,stroke:#64748B,stroke-width:1.5px,color:#E2E8F0;
+    classDef query fill:#6366F120,stroke:#6366F1,stroke-width:2px,color:#818CF8;
+
+    U["User Navigates or Hovers Link"]:::start
+    L1{"L1: In-Memory Cache<br/>(RAM)"}:::tier
+    HIT1["Instant Return (0ms)"]:::hit
+    L2{"L2: LocalStorage<br/>(Persistent)"}:::tier
+    HIT2["Instant Offline Return (<5ms)"]:::hit
+    L3{"L3: In-Flight Promise<br/>Deduplicator"}:::tier
+    DEDUP["Reuse In-Flight Fetch"]:::hit
+    TQ["TanStack Query Network Layer<br/>(staleTime: 5 min, gcTime: 30 min)"]:::query
+    BG["Autonomous Background Warmup Engine<br/>(Preloads Mandi, Weather, Trends, Loops)"]:::start
+
+    U --> L1
+    L1 -- Cache Hit --> HIT1
+    L1 -- Cache Miss --> L2
+    L2 -- Cache Hit --> HIT2
+    L2 -- Stale / Miss --> L3
+    L3 -- Duplicate --> DEDUP
+    L3 -- Fetch Fresh --> TQ
+    TQ -. Store in .-> L1
+    TQ -. Persist to .-> L2
+    BG -. Pre-warm .-> L1
 ```
 
 1. **L1 In-Memory Cache (0ms):** Frequently accessed agricultural data (mandi commodity lists, sensor thresholds, active barter loops) resides in hot browser memory for instant execution.
