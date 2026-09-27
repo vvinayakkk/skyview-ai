@@ -9,9 +9,11 @@ GET  /admin/analytics/mandi       → mandi price trends
 """
 
 from datetime import datetime
+import time
 from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, HTTPException, Query
+from pydantic import BaseModel
 from sqlalchemy import inspect, text
 
 from skyview.data.db import execute_query, get_session
@@ -286,3 +288,158 @@ def analytics_alerts():
         "total": total,
         "timestamp": datetime.utcnow().isoformat(),
     }
+
+
+# =====================================================================
+# Admin Portal & User Profile Management API
+# =====================================================================
+
+class AdminLoginReq(BaseModel):
+    username: str
+    password: str
+
+
+class UserCreateReq(BaseModel):
+    phone: str
+    name: Optional[str] = None
+    land_size_acres: Optional[float] = None
+    location: Optional[str] = None
+    crops: Optional[str] = None
+    saved_otp: Optional[str] = None
+
+
+class UserUpdateReq(BaseModel):
+    name: Optional[str] = None
+    land_size_acres: Optional[float] = None
+    location: Optional[str] = None
+    crops: Optional[str] = None
+    saved_otp: Optional[str] = None
+
+
+@router.post("/login")
+def admin_login(req: AdminLoginReq):
+    creds = {
+        "admin@skyview.ai": {
+            "pass": "SkyView#Admin2026!",
+            "name": "Chief Agricultural Administrator",
+            "role": "Super Admin"
+        },
+        "officer@skyview.ai": {
+            "pass": "FieldOfficer#2026",
+            "name": "Regional Krishi Officer",
+            "role": "Field Inspector"
+        },
+    }
+    user = creds.get(req.username.strip().lower())
+    if not user or user["pass"] != req.password:
+        raise HTTPException(401, "Invalid administrator credentials")
+
+    return {
+        "status": "success",
+        "token": f"admin_token_{int(time.time())}",
+        "user": {
+            "email": req.username.strip().lower(),
+            "name": user["name"],
+            "role": user["role"]
+        }
+    }
+
+
+@router.get("/users")
+def list_admin_users():
+    db = get_session()
+    try:
+        rows = db.execute(text("""
+            SELECT phone, name, land_size_acres, location, crops, saved_otp, created_at
+            FROM users
+            ORDER BY created_at DESC NULLS LAST
+        """)).fetchall()
+
+        users = []
+        for r in rows:
+            users.append({
+                "phone": r[0],
+                "name": r[1] or "Anonymous Farmer",
+                "land_size_acres": float(r[2]) if r[2] is not None else None,
+                "location": r[3] or "India",
+                "crops": r[4] or "Unspecified",
+                "saved_otp": str(r[5]) if r[5] else None,
+                "created_at": r[6].isoformat() if hasattr(r[6], "isoformat") else str(r[6] or "")
+            })
+        return {"status": "success", "total": len(users), "users": users}
+    finally:
+        db.close()
+
+
+@router.post("/users")
+def create_admin_user(req: UserCreateReq):
+    db = get_session()
+    try:
+        db.execute(text("""
+            INSERT INTO users (phone, name, land_size_acres, location, crops, saved_otp)
+            VALUES (:p, :n, :l, :loc, :c, :otp)
+            ON CONFLICT (phone) DO UPDATE SET
+                name = EXCLUDED.name,
+                land_size_acres = EXCLUDED.land_size_acres,
+                location = EXCLUDED.location,
+                crops = EXCLUDED.crops,
+                saved_otp = COALESCE(EXCLUDED.saved_otp, users.saved_otp)
+        """), {
+            "p": req.phone,
+            "n": req.name,
+            "l": req.land_size_acres,
+            "loc": req.location,
+            "c": req.crops,
+            "otp": req.saved_otp or "123456"
+        })
+        db.commit()
+        return {"status": "success", "message": "User saved successfully", "phone": req.phone}
+    except Exception as exc:
+        db.rollback()
+        raise HTTPException(500, f"Error saving user: {exc}")
+    finally:
+        db.close()
+
+
+@router.put("/users/{phone}")
+def update_admin_user(phone: str, req: UserUpdateReq):
+    db = get_session()
+    try:
+        db.execute(text("""
+            UPDATE users SET
+                name = COALESCE(:n, name),
+                land_size_acres = COALESCE(:l, land_size_acres),
+                location = COALESCE(:loc, location),
+                crops = COALESCE(:c, crops),
+                saved_otp = COALESCE(:otp, saved_otp)
+            WHERE phone = :p
+        """), {
+            "p": phone,
+            "n": req.name,
+            "l": req.land_size_acres,
+            "loc": req.location,
+            "c": req.crops,
+            "otp": req.saved_otp
+        })
+        db.commit()
+        return {"status": "success", "message": "User updated successfully", "phone": phone}
+    except Exception as exc:
+        db.rollback()
+        raise HTTPException(500, f"Error updating user: {exc}")
+    finally:
+        db.close()
+
+
+@router.delete("/users/{phone}")
+def delete_admin_user(phone: str):
+    db = get_session()
+    try:
+        db.execute(text("DELETE FROM users WHERE phone = :p"), {"p": phone})
+        db.commit()
+        return {"status": "success", "message": f"User {phone} deleted successfully"}
+    except Exception as exc:
+        db.rollback()
+        raise HTTPException(500, f"Error deleting user: {exc}")
+    finally:
+        db.close()
+

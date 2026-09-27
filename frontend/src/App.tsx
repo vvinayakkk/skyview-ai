@@ -27,7 +27,6 @@ import BuyHardware from "./pages/BuyHardware";
 import Marketplace from "./pages/Marketplace";
 import FarmersMap from "./pages/FarmersMap";
 import CropDoctor from "./pages/CropDoctor";
-import SmsGateway from "./pages/SmsGateway";
 
 import { ThemeProvider } from "next-themes";
 
@@ -229,8 +228,6 @@ const AppContent = () => {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<LoginRoute />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/sms-gateway" element={<SmsGateway />} />
-        <Route path="/otp-stream" element={<SmsGateway />} />
 
         {/* Hardware onboarding — protected but no HardwareGate */}
         <Route

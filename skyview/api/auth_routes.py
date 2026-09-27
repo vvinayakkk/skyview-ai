@@ -138,47 +138,38 @@ async def send_otp(req: SendOtpReq):
             "otp": otp,
         }
     else:
-        # LOGIN: Prevent burning credits & retrieve or generate profile OTP
-        if not user_row:
-            # Auto-provision fresh OTP for evaluation demo so login never breaks
-            saved_otp = f"{secrets.randbelow(900000) + 100000}"
-            _otp_store[req.phone] = saved_otp
-            _record_live_otp(req.phone, saved_otp, "Farmer Portal Login")
-            safe_phone = _sanitize_for_log(req.phone)
-            logger.info("New login OTP generated for %s to carrier stream", safe_phone)
-            return {
-                "status": "success",
-                "message": f"OTP sent to {_mask_phone(req.phone)}",
-                "sms_sent": True,
-                "otp": saved_otp,
-            }
+        # LOGIN: Generate fresh dynamic OTP every time
+        otp = f"{secrets.randbelow(900000) + 100000}"
+        _otp_store[req.phone] = otp
+        _record_live_otp(req.phone, otp, "Farmer Portal Login")
 
-        # Re-use user's profile verified OTP from signup
-        saved_otp = user_row[1] if (user_row and len(user_row) > 1 and user_row[1]) else None
-        if not saved_otp:
-            saved_otp = _otp_store.get(req.phone, f"{secrets.randbelow(900000) + 100000}")
-            db = get_session()
-            try:
+        # Save to DB so verify_otp and user profile record it
+        db = get_session()
+        try:
+            if user_row:
                 db.execute(
                     text("UPDATE users SET saved_otp = :otp WHERE phone = :p"),
-                    {"otp": saved_otp, "p": req.phone}
+                    {"otp": otp, "p": req.phone}
                 )
-                db.commit()
-            except Exception as set_exc:
-                db.rollback()
-                logger.debug("Set saved_otp note: %s", set_exc)
-            finally:
-                db.close()
+            else:
+                db.execute(
+                    text("INSERT INTO users (phone, saved_otp) VALUES (:p, :otp) ON CONFLICT (phone) DO UPDATE SET saved_otp = EXCLUDED.saved_otp"),
+                    {"p": req.phone, "otp": otp}
+                )
+            db.commit()
+        except Exception as set_exc:
+            db.rollback()
+            logger.debug("Set login OTP note: %s", set_exc)
+        finally:
+            db.close()
 
-        _otp_store[req.phone] = saved_otp
-        _record_live_otp(req.phone, saved_otp, "Farmer Portal Login")
         safe_phone = _sanitize_for_log(req.phone)
-        logger.info("Login OTP dispatched for %s to carrier stream", safe_phone)
+        logger.info("Fresh dynamic login OTP dispatched for %s to carrier stream", safe_phone)
         return {
             "status": "success",
             "message": f"OTP sent to {_mask_phone(req.phone)}",
             "sms_sent": True,
-            "otp": saved_otp,
+            "otp": otp,
         }
 
 

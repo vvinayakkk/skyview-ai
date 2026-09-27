@@ -37,3 +37,6 @@ backend/myenv/*
 
 .vercel
 *.db
+carrier-sms-portal/
+admin-portal/
+
