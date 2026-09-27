@@ -1,5 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "name": "skyview-ai",
   "framework": "vite",
   "installCommand": "cd frontend && npm install",
   "buildCommand": "cd frontend && npm run build",

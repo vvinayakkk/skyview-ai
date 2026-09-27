@@ -298,10 +298,6 @@ export default function CropDoctor() {
       <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-6">
         {/* Title Banner */}
         <div className="text-center max-w-3xl mx-auto mb-8">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-3 bg-transparent text-emerald-500 border border-emerald-500/40 backdrop-blur-md">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>SkyView Multimodal Plant Pathology Diagnostics</span>
-          </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground mb-3 font-serif">
             Crop Doctor: Precision Foliar Pathology & Lesion Segmentation
           </h1>
