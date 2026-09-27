@@ -21,6 +21,7 @@ import { Button } from '@/components/ui/button';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { useTheme } from 'next-themes';
+import { ultraCache } from '@/lib/ultraCache';
 
 interface DashboardHeaderProps {
   lastUpdateSeconds: number;
@@ -222,6 +223,7 @@ export function DashboardHeader({
                   key={item.path}
                   to={item.path}
                   title={item.label}
+                  onMouseEnter={() => ultraCache.prewarmRoute(item.path)}
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -238,25 +240,15 @@ export function DashboardHeader({
                     transition: 'all 0.2s ease',
                     textAlign: 'center',
                     color: isActive
-                      ? isDark
-                        ? '#ffffff'
-                        : '#0f172a'
+                      ? '#10B981'
                       : isDark
-                        ? 'rgba(255,255,255,0.60)'
-                        : 'rgba(15,23,42,0.60)',
-                    background: isActive
-                      ? isDark
-                        ? 'rgba(255,255,255,0.12)'
-                        : '#ffffff'
-                      : 'transparent',
-                    boxShadow: isActive && !isDark
-                      ? '0 2px 8px rgba(0,0,0,0.06)'
-                      : 'none',
+                        ? 'rgba(255,255,255,0.70)'
+                        : 'rgba(15,23,42,0.70)',
+                    background: 'transparent',
+                    boxShadow: 'none',
                     border: isActive
-                      ? isDark
-                        ? '1px solid rgba(255,255,255,0.12)'
-                        : '1px solid rgba(0,0,0,0.06)'
-                      : '1px solid transparent',
+                      ? '1.5px solid #10B981'
+                      : '1.5px solid transparent',
                   }}
                 >
                   <Icon
@@ -297,9 +289,8 @@ export function DashboardHeader({
                   gap: '6px',
                   padding: '4px 10px',
                   borderRadius: '999px',
-                  background: sensorNodeOnline
-                    ? 'rgba(16,185,129,0.12)'
-                    : 'rgba(239,68,68,0.12)',
+                  background: 'transparent',
+                  border: sensorNodeOnline ? '1.5px solid #10B981' : '1.5px solid #EF4444',
                 }}
               >
                 <div
@@ -346,8 +337,10 @@ export function DashboardHeader({
                 width: '34px',
                 height: '34px',
                 borderRadius: '10px',
+                background: 'transparent',
+                border: isDark ? '1px solid rgba(255,255,255,0.12)' : '1px solid rgba(15,23,42,0.12)',
               }}
-              className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+              className="text-muted-foreground hover:text-destructive"
             >
               <LogOut
                 style={{
@@ -362,6 +355,7 @@ export function DashboardHeader({
 
       <Link
         to="/db"
+        onMouseEnter={() => ultraCache.prewarmRoute('/db')}
         style={{
           width: '48px',
           height: '48px',
@@ -371,15 +365,11 @@ export function DashboardHeader({
           justifyContent: 'center',
           backdropFilter: 'blur(24px)',
           WebkitBackdropFilter: 'blur(24px)',
-          background: location.pathname === '/db'
-            ? isDark ? 'rgba(16,185,129,0.18)' : 'rgba(16,185,129,0.12)'
-            : isDark ? 'rgba(10,10,10,0.92)' : 'rgba(255,255,255,0.95)',
+          background: 'transparent',
           border: location.pathname === '/db'
             ? '2px solid #10B981'
-            : isDark ? '1.5px solid rgba(255,255,255,0.07)' : '1.5px solid rgba(15,23,42,0.10)',
-          boxShadow: isDark
-            ? '0 8px 28px rgba(0,0,0,0.35)'
-            : '0 8px 24px rgba(15,23,42,0.07)',
+            : isDark ? '1.5px solid rgba(255,255,255,0.15)' : '1.5px solid rgba(15,23,42,0.15)',
+          boxShadow: 'none',
           transition: 'all 0.25s ease',
           flexShrink: 0,
         }}

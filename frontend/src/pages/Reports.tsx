@@ -346,20 +346,19 @@ p,span,div,strong{color:#222!important}
   };
 
   // Styling Primitives
-  const borderCol = isDark ? 'rgba(46,204,113,0.12)' : 'rgba(30,100,50,0.1)';
-  const surfaceCol = isDark ? 'rgba(15,28,18,0.85)' : 'rgba(255,255,255,0.92)';
+  const borderCol = isDark ? 'rgba(46,204,113,0.25)' : 'rgba(30,100,50,0.22)';
   const cardStyle = {
-    background: surfaceCol,
-    border: `1px solid ${borderCol}`,
+    background: 'transparent',
+    border: `1.5px solid ${borderCol}`,
     borderRadius: '16px',
-    backdropFilter: 'blur(16px)',
+    boxShadow: 'none',
   };
 
   const sectionTitleStyle: React.CSSProperties = {
     fontSize: 13, fontWeight: 800, color: '#2ECC71',
     textTransform: 'uppercase', letterSpacing: '0.06em',
     marginBottom: 14, paddingBottom: 6,
-    borderBottom: `1px solid ${borderCol}`,
+    borderBottom: `1.5px solid ${borderCol}`,
     textAlign: "left"
   };
 
@@ -378,13 +377,13 @@ p,span,div,strong{color:#222!important}
   const btnDefault: React.CSSProperties = {
     ...btnBase,
     background: 'transparent',
-    border: `1px solid ${borderCol}`,
+    border: `1.5px solid ${borderCol}`,
     color: isDark ? '#A8D89A' : '#1B3A20',
   };
 
   const btnPrimary: React.CSSProperties = {
     ...btnBase,
-    border: '1px solid transparent',
+    border: '1.5px solid transparent',
   };
 
   return (
@@ -400,11 +399,12 @@ p,span,div,strong{color:#222!important}
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 28, textAlign: "left" }}>
           <div style={{
             width: 44, height: 44, borderRadius: 12,
-            background: 'linear-gradient(135deg, #2ECC71, #1a9e52)',
+            background: 'transparent',
+            border: '2px solid #2ECC71',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 4px 14px rgba(46,204,113,0.25)',
+            boxShadow: 'none',
           }}>
-            <FileText style={{ color: 'white', width: 22, height: 22 }} />
+            <FileText style={{ color: '#2ECC71', width: 22, height: 22 }} />
           </div>
           <div>
             <h1 style={{ fontSize: 28, fontWeight: 800, color: isDark ? '#A8D89A' : '#1B3A20', margin: 0 }}>
@@ -425,7 +425,8 @@ p,span,div,strong{color:#222!important}
               <div style={{ ...cardStyle, padding: "24px", textAlign: "left" }}>
                 <div style={{
                   width: 52, height: 52, borderRadius: "50%",
-                  background: isDark ? 'rgba(46,204,113,0.08)' : 'rgba(46,204,113,0.04)',
+                  background: 'transparent',
+                  border: '1.5px solid #2ECC71',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 18
                 }}>
                   <Leaf style={{ width: 26, height: 26, color: '#2ECC71' }} />
@@ -439,10 +440,10 @@ p,span,div,strong{color:#222!important}
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                   {['PostgreSQL Logs', 'Live Sensors', 'Mandi indices', 'Welfare Schemes'].map((item, i) => (
                     <span key={i} style={{
-                      fontSize: 11, fontWeight: 700, color: isDark ? '#6A8A6A' : '#5A7A60',
+                      fontSize: 11, fontWeight: 700, color: '#2ECC71',
                       padding: '5px 12px', borderRadius: 20,
-                      background: isDark ? 'rgba(46,204,113,0.06)' : 'rgba(46,204,113,0.03)',
-                      border: `1px solid ${borderCol}`
+                      background: 'transparent',
+                      border: `1.5px solid #2ECC71`
                     }}>
                       {item}
                     </span>
@@ -471,8 +472,8 @@ p,span,div,strong{color:#222!important}
                   ].map((chk, idx) => (
                     <label key={idx} style={{
                       display: "flex", gap: 10, padding: 12, borderRadius: 12, cursor: "pointer",
-                      background: isDark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.015)",
-                      border: `1px solid ${chk.state ? '#2ECC71' : borderCol}`,
+                      background: "transparent",
+                      border: `1.5px solid ${chk.state ? '#2ECC71' : borderCol}`,
                       transition: "all 0.18s"
                     }}>
                       <input
@@ -507,8 +508,8 @@ p,span,div,strong{color:#222!important}
                           onClick={() => setReportFormat(fmt.key as any)}
                           style={{
                             flex: 1, padding: "10px", borderRadius: 10, cursor: "pointer", textAlign: "left",
-                            background: sel ? "rgba(46,204,113,0.12)" : "transparent",
-                            border: `1px solid ${sel ? "#2ECC71" : borderCol}`,
+                            background: "transparent",
+                            border: `1.5px solid ${sel ? "#2ECC71" : borderCol}`,
                             transition: "all 0.15s"
                           }}
                         >
@@ -525,10 +526,11 @@ p,span,div,strong{color:#222!important}
                   onClick={generateReport}
                   style={{
                     width: "100%", display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                    padding: '14px 28px', borderRadius: 12, border: 'none',
-                    background: 'linear-gradient(135deg, #2ECC71, #1a9e52)',
-                    color: 'white', fontSize: 15, fontWeight: 800, cursor: 'pointer',
-                    boxShadow: '0 4px 14px rgba(46,204,113,0.3)',
+                    padding: '14px 28px', borderRadius: 12,
+                    border: '1.5px solid #2ECC71',
+                    background: 'transparent',
+                    color: '#2ECC71', fontSize: 15, fontWeight: 800, cursor: 'pointer',
+                    boxShadow: 'none',
                     marginTop: "auto"
                   }}
                 >
@@ -560,14 +562,14 @@ p,span,div,strong{color:#222!important}
               </div>
 
               {/* Progress Bar */}
-              <div style={{ height: 6, background: isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)", borderRadius: 4, overflow: "hidden", marginBottom: 20 }}>
+              <div style={{ height: 6, background: "transparent", border: `1px solid ${borderCol}`, borderRadius: 4, overflow: "hidden", marginBottom: 20 }}>
                 <div style={{ width: `${genProgress}%`, height: "100%", background: "#2ECC71", borderRadius: 4, transition: "width 0.4s ease-out" }} />
               </div>
 
               {/* Steps logs */}
               <div style={{
-                background: isDark ? "#0d0d0d" : "#fafafa",
-                border: `1px solid ${borderCol}`,
+                background: "transparent",
+                border: `1.5px solid ${borderCol}`,
                 borderRadius: 10, padding: 14,
                 fontFamily: "monospace", fontSize: 11.5,
                 color: isDark ? "#A8D89A" : "#1B3A20",
@@ -638,11 +640,11 @@ p,span,div,strong{color:#222!important}
 
             {/* Document sheet */}
             <div ref={reportRef} style={{
-              background: isDark ? "rgba(10,25,12,0.95)" : "#FFFFFF",
-              border: `1.5px solid ${borderCol}`,
+              background: "transparent",
+              border: `1.5px solid #2ECC71`,
               borderRadius: 16,
               padding: "40px",
-              boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+              boxShadow: "none",
               color: isDark ? "#D4EDDA" : "#111111",
               fontFamily: "'Nunito', sans-serif"
             }}>
@@ -663,7 +665,7 @@ p,span,div,strong{color:#222!important}
                 </p>
                 <span className="rpt-badge" style={{
                   display: 'inline-block', padding: '4px 14px', borderRadius: 20,
-                  background: 'rgba(46,204,113,0.12)', color: '#2E7D32',
+                  background: 'transparent', color: '#2E7D32', border: '1.5px solid #2ECC71',
                   fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 1, marginTop: 8
                 }}>
                   AI-Verified • Live Database Explorer Link
@@ -684,8 +686,8 @@ p,span,div,strong{color:#222!important}
                       { label: 'UV Index', val: sensor.uv_index.toFixed(1), unit: '', status: sensor.uv_index > 8 ? 'danger' : 'good', Icon: Sun },
                     ].map((m) => (
                       <div key={m.label} style={{
-                        background: isDark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.01)",
-                        border: `1px solid ${borderCol}`,
+                        background: "transparent",
+                        border: `1.5px solid ${borderCol}`,
                         borderRadius: 12, padding: 12, textAlign: "center"
                       }}>
                         <m.Icon style={{ width: 16, height: 16, color: statusColor(m.status), margin: "0 auto 6px" }} />
@@ -706,11 +708,11 @@ p,span,div,strong{color:#222!important}
                   <h2 style={sectionTitleStyle}> Soil Moisture &amp; Condition</h2>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
                     <div style={{
-                      background: isDark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.01)",
-                      border: `1px solid ${borderCol}`,
+                      background: "transparent",
+                      border: `1.5px solid ${borderCol}`,
                       borderRadius: 12, padding: 14, display: 'flex', alignItems: 'center', gap: 12
                     }}>
-                      <div style={{ padding: 10, borderRadius: 10, background: `${statusColor(getStatus('soil'))}15` }}>
+                      <div style={{ padding: 10, borderRadius: 10, background: "transparent", border: `1px solid ${statusColor(getStatus('soil'))}` }}>
                         <Sprout style={{ width: 20, height: 20, color: statusColor(getStatus('soil')) }} />
                       </div>
                       <div style={{ textAlign: "left" }}>
@@ -723,11 +725,11 @@ p,span,div,strong{color:#222!important}
                     </div>
                     
                     <div style={{
-                      background: isDark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.01)",
-                      border: `1px solid ${borderCol}`,
+                      background: "transparent",
+                      border: `1.5px solid ${borderCol}`,
                       borderRadius: 12, padding: 14, display: 'flex', alignItems: 'center', gap: 12
                     }}>
-                      <div style={{ padding: 10, borderRadius: 10, background: 'rgba(255,152,0,0.1)' }}>
+                      <div style={{ padding: 10, borderRadius: 10, background: "transparent", border: "1px solid #FF9800" }}>
                         <Sun style={{ width: 20, height: 20, color: '#FF9800' }} />
                       </div>
                       <div style={{ textAlign: "left" }}>
@@ -778,8 +780,8 @@ p,span,div,strong{color:#222!important}
                   <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                     {schemesRecords.slice(0, 3).map((s, i) => (
                       <div key={i} style={{
-                        background: isDark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.01)",
-                        border: `1px solid ${borderCol}`,
+                        background: "transparent",
+                        border: `1.5px solid ${borderCol}`,
                         borderRadius: 12, padding: 14, textAlign: "left"
                       }}>
                         <p style={{ fontSize: 13, fontWeight: 800, color: isDark ? '#C8E8C8' : '#1B3A20', margin: '0 0 2px' }}>{s.scheme_name}</p>
@@ -798,8 +800,8 @@ p,span,div,strong{color:#222!important}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                     {getAlerts().map((alert, idx) => (
                       <div key={idx} style={{
-                        background: isDark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.01)",
-                        border: `1px solid ${borderCol}`,
+                        background: "transparent",
+                        border: `1.5px solid ${borderCol}`,
                         borderLeft: `4px solid ${alert.severity === 'danger' ? '#EF4444' : alert.severity === 'warning' ? '#F59E0B' : '#10B981'}`,
                         borderRadius: "4px 12px 12px 4px", padding: 12, textAlign: "left"
                       }}>
@@ -824,11 +826,11 @@ p,span,div,strong{color:#222!important}
                 <div style={{ marginBottom: 28 }}>
                   <h2 style={sectionTitleStyle}> Kisan Mitra AI Insights</h2>
                   <div style={{
-                    background: isDark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.01)",
-                    border: `1px solid ${borderCol}`,
+                    background: "transparent",
+                    border: `1.5px solid ${borderCol}`,
                     borderRadius: 12, padding: 16, display: 'flex', gap: 12, alignItems: 'flex-start'
                   }}>
-                    <div style={{ padding: 8, borderRadius: 10, background: 'rgba(124,58,237,0.1)', flexShrink: 0 }}>
+                    <div style={{ padding: 8, borderRadius: 10, background: "transparent", border: '1px solid #7C3AED', flexShrink: 0 }}>
                       <Sparkles style={{ width: 18, height: 18, color: '#7C3AED' }} />
                     </div>
                     <div>
@@ -853,8 +855,8 @@ p,span,div,strong{color:#222!important}
                       { time: 'Evening Wrap-Up', task: 'Check local weather forecast data. Synced.' },
                     ].map((item, idx) => (
                       <div key={idx} style={{
-                        background: isDark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.01)",
-                        border: `1px solid ${borderCol}`,
+                        background: "transparent",
+                        border: `1.5px solid ${borderCol}`,
                         borderRadius: 12, padding: 12, textAlign: "left"
                       }}>
                         <p style={{ fontSize: 11, fontWeight: 800, color: '#2ECC71', marginBottom: 4 }}>{item.time}</p>

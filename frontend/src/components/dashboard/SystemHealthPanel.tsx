@@ -17,16 +17,16 @@ export function SystemHealthPanel({ health }: SystemHealthPanelProps) {
   const isDark = theme === 'dark';
 
   const batteryStatusConfig = {
-    healthy: { icon: CheckCircle2, class: 'text-success', bg: 'bg-success/10', label: 'healthy' },
-    low: { icon: AlertTriangle, class: 'text-amber-500', bg: 'bg-amber-500/10', label: 'low' },
-    critical: { icon: XCircle, class: 'text-destructive', bg: 'bg-destructive/10', label: 'critical' },
+    healthy: { icon: CheckCircle2, class: 'text-success', bg: 'bg-transparent', border: 'border-emerald-500/40', label: 'healthy' },
+    low: { icon: AlertTriangle, class: 'text-amber-500', bg: 'bg-transparent', border: 'border-amber-500/40', label: 'low' },
+    critical: { icon: XCircle, class: 'text-destructive', bg: 'bg-transparent', border: 'border-destructive/40', label: 'critical' },
   };
 
   const batteryConfig = batteryStatusConfig[health.batteryStatus];
   const BatteryStatusIcon = batteryConfig.icon;
 
-  const cardBg = isDark ? 'rgba(20, 35, 20, 0.5)' : 'rgba(0,0,0,0.02)';
-  const cardBorder = isDark ? '1px solid rgba(46,204,113,0.08)' : '1px solid rgba(200,220,200,0.3)';
+  const cardBg = 'transparent';
+  const cardBorder = isDark ? '1.5px solid rgba(46,204,113,0.22)' : '1.5px solid rgba(46,204,113,0.25)';
   const labelColor = isDark ? '#6A8A6A' : undefined;
   const valueColor = isDark ? '#C8E8C8' : undefined;
 

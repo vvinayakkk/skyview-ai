@@ -364,7 +364,7 @@ function ColLegend({ isDark }: { isDark: boolean }) {
 // ─── Metric tile ─────────────────────────────────────────────────
 function Tile({ value, unit, label, sub, isDark }: { value: string | number; unit?: string; label: string; sub: string; isDark: boolean }) {
   return (
-    <div style={{ flex: 1, minWidth: 130, padding: "0.9rem 1.1rem", borderRadius: 10, background: isDark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.025)", border: `1px solid ${isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)"}`, borderLeft: "2.5px solid #2ECC71" }}>
+    <div style={{ flex: 1, minWidth: 130, padding: "0.9rem 1.1rem", borderRadius: 10, background: "transparent", border: `1.5px solid ${isDark ? "rgba(46,204,113,0.25)" : "rgba(30,100,50,0.22)"}`, borderLeft: "3px solid #2ECC71" }}>
       <p style={{ fontSize: "0.7rem", color: isDark ? "#666" : "#999", margin: "0 0 0.3rem", fontWeight: 500 }}>{label}</p>
       <p style={{ fontSize: "1.55rem", fontWeight: 700, color: isDark ? "#E8E8E8" : "#111", lineHeight: 1, margin: "0 0 0.2rem" }}>
         {value}{unit && <span style={{ fontSize: "0.8rem", marginLeft: 2, fontWeight: 500 }}>{unit}</span>}
@@ -407,7 +407,7 @@ function HowBlock({ steps, isDark }: { steps: string[]; isDark: boolean }) {
         <div style={{ marginTop: "0.75rem", display: "flex", flexDirection: "column", gap: "0.45rem" }}>
           {steps.map((s, i) => (
             <div key={i} style={{ display: "flex", gap: "0.7rem", alignItems: "flex-start" }}>
-              <span style={{ width: 18, height: 18, borderRadius: "50%", flexShrink: 0, marginTop: 1, background: isDark ? "rgba(46,204,113,0.12)" : "rgba(46,204,113,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.6rem", fontWeight: 700, color: "#2ECC71" }}>{i + 1}</span>
+              <span style={{ width: 18, height: 18, borderRadius: "50%", flexShrink: 0, marginTop: 1, background: "transparent", border: "1.5px solid #2ECC71", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.6rem", fontWeight: 700, color: "#2ECC71" }}>{i + 1}</span>
               <p style={{ margin: 0, fontSize: "0.77rem", color: isDark ? "#B0B0B0" : "#555", lineHeight: 1.55 }}>{s}</p>
             </div>
           ))}
@@ -426,7 +426,7 @@ function LLMBlock({ text, isDark }: { text: string; isDark: boolean }) {
         Gemini LLM analysis {open ? "▲" : "▼"}
       </button>
       {open && (
-        <div style={{ marginTop: "0.75rem", padding: "0.9rem 1.1rem", borderRadius: 8, background: isDark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.025)", borderLeft: `2px solid ${isDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.1)"}` }}>
+        <div style={{ marginTop: "0.75rem", padding: "0.9rem 1.1rem", borderRadius: 8, background: "transparent", border: `1px solid ${isDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.1)"}`, borderLeft: "2.5px solid #2ECC71" }}>
           <p style={{ margin: 0, fontSize: "0.78rem", color: isDark ? "#B0B0B0" : "#444", lineHeight: 1.7, whiteSpace: "pre-line" }}>{text}</p>
         </div>
       )}
@@ -437,10 +437,10 @@ function LLMBlock({ text, isDark }: { text: string; isDark: boolean }) {
 // ─── Result card ─────────────────────────────────────────────────
 function ResultCard({ title, modeLabel, children, isDark }: { title: string; modeLabel: string; children: React.ReactNode; isDark: boolean }) {
   return (
-    <div style={{ borderRadius: 14, border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`, borderTop: "1.5px solid #2ECC71", background: isDark ? "rgba(12,16,20,0.88)" : "rgba(255,255,255,0.92)", backdropFilter: "blur(12px)", marginBottom: "1rem", overflow: "hidden" }}>
+    <div style={{ borderRadius: 14, border: "1.5px solid #2ECC71", background: "transparent", marginBottom: "1rem", overflow: "hidden" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1.1rem 1.4rem 0.8rem" }}>
         <h3 style={{ margin: 0, fontSize: "0.95rem", fontWeight: 700, color: isDark ? "#F0F0F0" : "#111" }}>{title}</h3>
-        <span style={{ fontSize: "0.65rem", fontWeight: 600, padding: "0.2rem 0.65rem", borderRadius: 9999, background: "rgba(46,204,113,0.12)", color: "#2ECC71", border: "1px solid rgba(46,204,113,0.25)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+        <span style={{ fontSize: "0.65rem", fontWeight: 600, padding: "0.2rem 0.65rem", borderRadius: 9999, background: "transparent", color: "#2ECC71", border: "1.5px solid #2ECC71", textTransform: "uppercase", letterSpacing: "0.06em" }}>
           Hardware
         </span>
       </div>
@@ -452,7 +452,7 @@ function ResultCard({ title, modeLabel, children, isDark }: { title: string; mod
 // ─── Action button ───────────────────────────────────────────────
 function ActionBtn({ label, loadingLabel, loading, onClick, isDark }: { label: string; loadingLabel: string; loading: boolean; onClick: () => void; isDark: boolean }) {
   return (
-    <button onClick={onClick} disabled={loading} style={{ width: "100%", padding: "0.6rem 1rem", borderRadius: 8, border: "1px solid rgba(46,204,113,0.4)", background: loading ? isDark ? "rgba(46,204,113,0.08)" : "rgba(46,204,113,0.06)" : isDark ? "rgba(46,204,113,0.12)" : "rgba(46,204,113,0.1)", color: "#2ECC71", fontWeight: 600, fontSize: "0.82rem", cursor: loading ? "not-allowed" : "pointer", transition: "background 0.15s", letterSpacing: "0.02em" }}>
+    <button onClick={onClick} disabled={loading} style={{ width: "100%", padding: "0.6rem 1rem", borderRadius: 8, border: "1.5px solid #2ECC71", background: "transparent", color: "#2ECC71", fontWeight: 600, fontSize: "0.82rem", cursor: loading ? "not-allowed" : "pointer", transition: "all 0.15s", letterSpacing: "0.02em" }}>
       {loading ? `${loadingLabel}…` : label}
     </button>
   );
@@ -600,7 +600,7 @@ export default function AIHardwareAccelerator() {
               FPGA-accelerated sensor fusion · rain prediction · irrigation intelligence
             </p>
           </div>
-          <span style={{ fontSize: "0.72rem", fontWeight: 600, padding: "0.3rem 0.85rem", borderRadius: 9999, border: `1px solid ${hwColor}40`, color: hwColor, background: `${hwColor}10`, letterSpacing: "0.04em" }}>
+          <span style={{ fontSize: "0.72rem", fontWeight: 600, padding: "0.3rem 0.85rem", borderRadius: 9999, border: `1.5px solid ${hwColor}`, color: hwColor, background: "transparent", letterSpacing: "0.04em" }}>
             {hwLabel}
           </span>
         </div>
@@ -608,7 +608,7 @@ export default function AIHardwareAccelerator() {
         <AIOverview page="growth" />
 
         {/* Graph panel */}
-        <div style={{ borderRadius: 16, border: `1px solid ${isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)"}`, background: isDark ? "rgba(8,11,15,0.9)" : "rgba(250,252,250,0.92)", backdropFilter: "blur(16px)", padding: "1.25rem 1.5rem 1rem", marginBottom: "1.5rem", overflow: "hidden" }}>
+        <div style={{ borderRadius: 16, border: `1.5px solid ${isDark ? "rgba(46,204,113,0.25)" : "rgba(30,100,50,0.22)"}`, background: "transparent", padding: "1.25rem 1.5rem 1rem", marginBottom: "1.5rem", overflow: "hidden" }}>
 
           <ColLegend isDark={isDark} />
 
@@ -629,7 +629,7 @@ export default function AIHardwareAccelerator() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1rem", marginBottom: "1.75rem" }}>
 
           {/* Rain */}
-          <div style={{ borderRadius: 14, padding: "1.25rem 1.4rem", border: `1px solid ${isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)"}`, background: isDark ? "rgba(12,16,20,0.88)" : "rgba(255,255,255,0.9)", backdropFilter: "blur(12px)" }}>
+          <div style={{ borderRadius: 14, padding: "1.25rem 1.4rem", border: `1.5px solid ${isDark ? "rgba(46,204,113,0.25)" : "rgba(30,100,50,0.22)"}`, background: "transparent" }}>
             <p style={{ margin: "0 0 0.35rem", fontSize: "0.72rem", fontWeight: 700, color: isDark ? "#555" : "#BBB", textTransform: "uppercase", letterSpacing: "0.08em" }}>Pipeline 1</p>
             <h3 style={{ margin: "0 0 0.5rem", fontSize: "1rem", fontWeight: 700, color: isDark ? "#E8E8E8" : "#111" }}>Rain Prediction</h3>
             <p style={{ margin: "0 0 0.85rem", fontSize: "0.78rem", color: isDark ? "#888" : "#666", lineHeight: 1.55 }}>
@@ -637,14 +637,14 @@ export default function AIHardwareAccelerator() {
             </p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem", marginBottom: "1rem" }}>
               {["Temp","Humidity","Pressure","Wind"].map(s => (
-                <span key={s} style={{ fontSize: "0.65rem", padding: "0.15rem 0.5rem", borderRadius: 9999, background: isDark ? "rgba(59,130,246,0.08)" : "rgba(59,130,246,0.07)", color: "#60A5FA", border: "1px solid rgba(59,130,246,0.25)" }}>{s}</span>
+                <span key={s} style={{ fontSize: "0.65rem", padding: "0.15rem 0.5rem", borderRadius: 9999, background: "transparent", color: "#60A5FA", border: "1px solid #60A5FA" }}>{s}</span>
               ))}
             </div>
             <ActionBtn label="Run Rain Prediction" loadingLabel="Processing on FPGA" loading={loadingRain} onClick={predictRain} isDark={isDark} />
           </div>
 
           {/* Fusion */}
-          <div style={{ borderRadius: 14, padding: "1.25rem 1.4rem", border: `1px solid ${isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)"}`, background: isDark ? "rgba(12,16,20,0.88)" : "rgba(255,255,255,0.9)", backdropFilter: "blur(12px)" }}>
+          <div style={{ borderRadius: 14, padding: "1.25rem 1.4rem", border: `1.5px solid ${isDark ? "rgba(46,204,113,0.25)" : "rgba(30,100,50,0.22)"}`, background: "transparent" }}>
             <p style={{ margin: "0 0 0.35rem", fontSize: "0.72rem", fontWeight: 700, color: isDark ? "#555" : "#BBB", textTransform: "uppercase", letterSpacing: "0.08em" }}>Pipeline 2</p>
             <h3 style={{ margin: "0 0 0.5rem", fontSize: "1rem", fontWeight: 700, color: isDark ? "#E8E8E8" : "#111" }}>Sensor Fusion</h3>
             <p style={{ margin: "0 0 0.85rem", fontSize: "0.78rem", color: isDark ? "#888" : "#666", lineHeight: 1.55 }}>
@@ -652,14 +652,14 @@ export default function AIHardwareAccelerator() {
             </p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem", marginBottom: "1rem" }}>
               {["Soil","Temp","Humidity","Light"].map(s => (
-                <span key={s} style={{ fontSize: "0.65rem", padding: "0.15rem 0.5rem", borderRadius: 9999, background: isDark ? "rgba(139,92,246,0.08)" : "rgba(139,92,246,0.07)", color: "#A78BFA", border: "1px solid rgba(139,92,246,0.25)" }}>{s}</span>
+                <span key={s} style={{ fontSize: "0.65rem", padding: "0.15rem 0.5rem", borderRadius: 9999, background: "transparent", color: "#A78BFA", border: "1px solid #A78BFA" }}>{s}</span>
               ))}
             </div>
             <ActionBtn label="Run Sensor Fusion" loadingLabel="Fusing on FPGA" loading={loadingFusion} onClick={runFusion} isDark={isDark} />
           </div>
 
           {/* Combined */}
-          <div style={{ borderRadius: 14, padding: "1.25rem 1.4rem", border: `1px solid ${isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)"}`, background: isDark ? "rgba(12,16,20,0.88)" : "rgba(255,255,255,0.9)", backdropFilter: "blur(12px)" }}>
+          <div style={{ borderRadius: 14, padding: "1.25rem 1.4rem", border: `1.5px solid ${isDark ? "rgba(46,204,113,0.25)" : "rgba(30,100,50,0.22)"}`, background: "transparent" }}>
             <p style={{ margin: "0 0 0.35rem", fontSize: "0.72rem", fontWeight: 700, color: isDark ? "#555" : "#BBB", textTransform: "uppercase", letterSpacing: "0.08em" }}>Pipeline 3</p>
             <h3 style={{ margin: "0 0 0.5rem", fontSize: "1rem", fontWeight: 700, color: isDark ? "#E8E8E8" : "#111" }}>Full Irrigation Analysis</h3>
             <p style={{ margin: "0 0 0.85rem", fontSize: "0.78rem", color: isDark ? "#888" : "#666", lineHeight: 1.55 }}>
@@ -667,7 +667,7 @@ export default function AIHardwareAccelerator() {
             </p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem", marginBottom: "1rem" }}>
               {["All sensors","All models","Gemini LLM"].map(s => (
-                <span key={s} style={{ fontSize: "0.65rem", padding: "0.15rem 0.5rem", borderRadius: 9999, background: isDark ? "rgba(46,204,113,0.08)" : "rgba(46,204,113,0.07)", color: "#2ECC71", border: "1px solid rgba(46,204,113,0.2)" }}>{s}</span>
+                <span key={s} style={{ fontSize: "0.65rem", padding: "0.15rem 0.5rem", borderRadius: 9999, background: "transparent", color: "#2ECC71", border: "1px solid #2ECC71" }}>{s}</span>
               ))}
             </div>
             <ActionBtn label="Run Full Analysis" loadingLabel="Running all pipelines" loading={loadingCombined} onClick={runCombined} isDark={isDark} />

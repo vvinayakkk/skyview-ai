@@ -167,13 +167,13 @@ function WeatherActionCard({ data, isDark }: { data: any; isDark: boolean }) {
   ];
   return (
     <div style={{
-      background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.015)',
-      border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)'}`,
+      background: 'transparent',
+      border: `1.5px solid #2ECC71`,
       borderRadius: 12, padding: 10, marginTop: 8, display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8
     }}>
       {stats.map((s, i) => (
         <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <div style={{ color: s.color, background: `${s.color}15`, padding: 5, borderRadius: 6 }}>{s.icon}</div>
+          <div style={{ color: s.color, background: 'transparent', border: `1px solid ${s.color}`, padding: 5, borderRadius: 6 }}>{s.icon}</div>
           <div>
             <p style={{ fontSize: 9, color: isDark ? '#6A8A6A' : '#777', margin: 0, textTransform: 'uppercase' }}>{s.label}</p>
             <p style={{ fontSize: 12, fontWeight: 700, color: isDark ? '#C8E8C8' : '#111', margin: 0 }}>{s.value}</p>
@@ -189,8 +189,8 @@ function MandiActionCard({ data, isDark }: { data: any; isDark: boolean }) {
   if (!records.length) return <p style={{ fontSize: 11, color: '#888', margin: '4px 0 0' }}>No Mandi rates found in record snapshot.</p>;
   return (
     <div style={{
-      background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.015)',
-      border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)'}`,
+      background: 'transparent',
+      border: `1.5px solid #2ECC71`,
       borderRadius: 12, padding: 10, marginTop: 8, display: 'flex', flexDirection: 'column', gap: 6,
       maxHeight: 180, overflowY: 'auto'
     }}>
@@ -216,8 +216,8 @@ function SchemesActionCard({ data, isDark }: { data: any; isDark: boolean }) {
   if (!list.length) return <p style={{ fontSize: 11, color: '#888', margin: '4px 0 0' }}>No matching schemes found.</p>;
   return (
     <div style={{
-      background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.015)',
-      border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)'}`,
+      background: 'transparent',
+      border: `1.5px solid #3B82F6`,
       borderRadius: 12, padding: 10, marginTop: 8, display: 'flex', flexDirection: 'column', gap: 6,
       maxHeight: 180, overflowY: 'auto'
     }}>
@@ -237,8 +237,8 @@ function ProfileActionCard({ data, isDark }: { data: any; isDark: boolean }) {
   if (!data || !data.available) return null;
   return (
     <div style={{
-      background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.015)',
-      border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)'}`,
+      background: 'transparent',
+      border: `1.5px solid #F59E0B`,
       borderRadius: 12, padding: 10, marginTop: 8, display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 6, textAlign: "left"
     }}>
       <div style={{ gridColumn: 'span 2', fontSize: 10, fontWeight: 800, color: '#F59E0B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Farmer Profile snapshot</div>
@@ -273,8 +273,8 @@ function AdvisorActionCard({ process, data, isDark }: { process: string; data: a
   if (process === 'crop_advice' && Array.isArray(insights)) {
     return (
       <div style={{
-        background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.015)',
-        border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)'}`,
+        background: 'transparent',
+        border: `1.5px solid #10B981`,
         borderRadius: 12, padding: 10, marginTop: 8, display: 'flex', flexDirection: 'column', gap: 6, textAlign: "left"
       }}>
         <div style={{ fontSize: 10, fontWeight: 800, color: '#2ECC71', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Sowing Suitability Suggestions</div>
@@ -299,14 +299,14 @@ function AdvisorActionCard({ process, data, isDark }: { process: string; data: a
     const status = insights.status || 'Good';
     return (
       <div style={{
-        background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.015)',
-        border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)'}`,
+        background: 'transparent',
+        border: `1.5px solid #2ECC71`,
         borderRadius: 12, padding: 10, marginTop: 8, textAlign: "left"
       }}>
         <div style={{ fontSize: 10, fontWeight: 800, color: '#2ECC71', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 6 }}>Soil Health Diagnostic</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
           <div style={{
-            width: 38, height: 38, borderRadius: '50%', background: 'rgba(46,204,113,0.1)', border: '2.5px solid #2ECC71',
+            width: 38, height: 38, borderRadius: '50%', background: 'transparent', border: '2px solid #2ECC71',
             display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, color: '#2ECC71', fontSize: 12
           }}>
             {score}
@@ -707,13 +707,12 @@ export default function Advisor() {
   }
 
   // Colors and Design Primitives
-  const borderCol = isDark ? 'rgba(46,204,113,0.12)' : 'rgba(30,100,50,0.1)';
-  const surfaceCol = isDark ? 'rgba(15,28,18,0.85)' : 'rgba(255,255,255,0.92)';
+  const borderCol = isDark ? 'rgba(46,204,113,0.25)' : 'rgba(30,100,50,0.22)';
   const cardStyle = {
-    background: surfaceCol,
-    border: `1px solid ${borderCol}`,
+    background: 'transparent',
+    border: `1.5px solid ${borderCol}`,
     borderRadius: '16px',
-    backdropFilter: 'blur(16px)',
+    boxShadow: 'none',
   };
 
   return (
@@ -748,13 +747,13 @@ export default function Advisor() {
               </h3>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12 }}>
                 {weatherStats.map((stat, i) => (
-                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, background: isDark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.01)", border: `1px solid ${borderCol}`, padding: "10px 12px", borderRadius: 12 }}>
-                    <div style={{ padding: 6, borderRadius: 8, background: `${stat.color}15`, color: stat.color }}>
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, background: "transparent", border: `1.5px solid ${borderCol}`, padding: "10px 12px", borderRadius: 12 }}>
+                    <div style={{ padding: 6, borderRadius: 8, background: "transparent", border: `1px solid ${stat.color}`, color: stat.color }}>
                       {stat.icon}
                     </div>
                     <div style={{ textAlign: "left" }}>
                       <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", color: isDark ? "#5A7A5A" : "#8A9A8C", margin: 0 }}>{stat.label}</p>
-                      <p style={{ fontSize: 15, fontWeight: 900, color: isDark ? "#C8E8C8" : "#1B3A20", margin: 0, fontVariantNumeric: "tabular-nums" }}>{stat.value}</p>
+                       <p style={{ fontSize: 15, fontWeight: 900, color: isDark ? "#C8E8C8" : "#1B3A20", margin: 0, fontVariantNumeric: "tabular-nums" }}>{stat.value}</p>
                     </div>
                   </div>
                 ))}
@@ -774,8 +773,8 @@ export default function Advisor() {
                   onClick={() => fetchAIOverview()}
                   disabled={isLoadingInsights}
                   style={{
-                    display: "flex", alignItems: "center", gap: 6, padding: "6px 12px", borderRadius: 10, border: "none",
-                    background: isDark ? "rgba(46,204,113,0.1)" : "rgba(46,204,113,0.06)", color: "#2ECC71",
+                    display: "flex", alignItems: "center", gap: 6, padding: "6px 12px", borderRadius: 10,
+                    border: "1.5px solid #2ECC71", background: "transparent", color: "#2ECC71",
                     fontSize: 12, fontWeight: 700, cursor: "pointer", transition: "all 0.2s"
                   }}
                 >
@@ -816,7 +815,7 @@ export default function Advisor() {
                           </h3>
                           <div style={{ display: "grid", gap: 8 }}>
                             {parsedOverview.focus_points.map((point: string, i: number) => (
-                              <div key={i} style={{ display: "flex", gap: 10, padding: "10px", borderRadius: 10, background: isDark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.01)", border: `1px solid ${isDark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.03)"}` }}>
+                              <div key={i} style={{ display: "flex", gap: 10, padding: "10px", borderRadius: 10, background: "transparent", border: `1.5px solid ${borderCol}` }}>
                                 <CheckCircle2 style={{ width: 15, height: 15, color: "#2ECC71", flexShrink: 0, marginTop: '2px' }} />
                                 <p style={{ fontSize: 12, color: isDark ? "#A8D89A" : "#333", margin: 0, lineHeight: 1.4 }}>{point}</p>
                               </div>
@@ -851,11 +850,11 @@ export default function Advisor() {
               {/* Chat Header (Using customized Bot Icon) */}
               <div style={{
                 display: "flex", justifyContent: "space-between", alignItems: "center",
-                padding: "14px 18px", borderBottom: `1px solid ${borderCol}`,
-                background: isDark ? "rgba(255,255,255,0.01)" : "rgba(0,0,0,0.005)"
+                padding: "14px 18px", borderBottom: `1.5px solid ${borderCol}`,
+                background: "transparent"
               }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <div style={{ width: 34, height: 34, borderRadius: "50%", background: "rgba(46,204,113,0.15)", border: `1px solid #2ECC71`, display: "flex", alignItems: "center", justifyContent: "center", color: "#2ECC71" }}>
+                  <div style={{ width: 34, height: 34, borderRadius: "50%", background: "transparent", border: `1.5px solid #2ECC71`, display: "flex", alignItems: "center", justifyContent: "center", color: "#2ECC71" }}>
                     <Bot size={18} />
                   </div>
                   <div style={{ textAlign: "left" }}>
@@ -874,8 +873,8 @@ export default function Advisor() {
                     onClick={clearChat}
                     title="Clear history"
                     style={{
-                      width: 30, height: 30, borderRadius: 8, border: "none", cursor: "pointer",
-                      background: isDark ? "rgba(239,68,68,0.1)" : "rgba(239,68,68,0.06)",
+                      width: 30, height: 30, borderRadius: 8, border: "1.5px solid #EF4444", cursor: "pointer",
+                      background: "transparent",
                       color: "#EF4444", display: "flex", alignItems: "center", justifyContent: "center",
                       transition: "all 0.2s"
                     }}
@@ -895,9 +894,9 @@ export default function Advisor() {
                 {messages.length === 0 ? (
                   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%", textAlign: "center", padding: "40px 20px" }}>
                     <div style={{
-                      width: 52, height: 52, borderRadius: "50%", background: "rgba(46,204,113,0.08)",
+                      width: 52, height: 52, borderRadius: "50%", background: "transparent",
                       display: "flex", alignItems: "center", justifyContent: "center", color: "#2ECC71",
-                      marginBottom: 16, border: `1.5px dashed rgba(46,204,113,0.3)`
+                      marginBottom: 16, border: `1.5px dashed #2ECC71`
                     }}>
                       <Bot size={24} />
                     </div>
@@ -916,17 +915,15 @@ export default function Advisor() {
                           onClick={() => handleSendMessage(chip.text)}
                           style={{
                             padding: "10px 14px", borderRadius: 10, textAlign: "left", fontSize: 12,
-                            background: isDark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.015)",
-                            border: `1px solid ${borderCol}`, color: isDark ? "#A8D89A" : "#1B3A20",
+                            background: "transparent",
+                            border: `1.5px solid ${borderCol}`, color: isDark ? "#A8D89A" : "#1B3A20",
                             cursor: "pointer", transition: "all 0.18s", fontWeight: 600,
                           }}
                           onMouseEnter={e => {
                             e.currentTarget.style.borderColor = "#2ECC71";
-                            e.currentTarget.style.background = isDark ? "rgba(46,204,113,0.05)" : "rgba(46,204,113,0.02)";
                           }}
                           onMouseLeave={e => {
                             e.currentTarget.style.borderColor = borderCol;
-                            e.currentTarget.style.background = isDark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.015)";
                           }}
                         >
                           <div style={{ fontWeight: 700, fontSize: 11, color: "#2ECC71", marginBottom: 2 }}>{chip.label}</div>
@@ -954,10 +951,10 @@ export default function Advisor() {
                             {/* Profile avatar (Using Bot Icon) */}
                             <div style={{
                               width: 28, height: 28, borderRadius: "50%", flexShrink: 0,
-                              background: isBot ? "rgba(46,204,113,0.15)" : "rgba(255,255,255,0.06)",
-                              border: `1px solid ${isBot ? "#2ECC71" : borderCol}`,
+                              background: "transparent",
+                              border: `1.5px solid ${isBot ? "#2ECC71" : "#3B82F6"}`,
                               display: "flex", alignItems: "center", justifyContent: "center",
-                              color: isBot ? "#2ECC71" : (isDark ? "#A8D89A" : "#1B3A20"),
+                              color: isBot ? "#2ECC71" : "#3B82F6",
                               fontSize: 11, fontWeight: 800
                             }}>
                               {isBot ? <Bot size={14} /> : <User size={12} />}
@@ -965,13 +962,11 @@ export default function Advisor() {
 
                             {/* Bubble body */}
                             <div style={{
-                              background: isBot
-                                ? (isDark ? "rgba(255,255,255,0.02)" : "#FFFFFF")
-                                : (isDark ? "rgba(46,204,113,0.12)" : "rgba(46,204,113,0.08)"),
-                              border: `1px solid ${isBot ? borderCol : "rgba(46,204,113,0.22)"}`,
+                              background: "transparent",
+                              border: `1.5px solid ${isBot ? "#2ECC71" : "#3B82F6"}`,
                               borderRadius: isBot ? "0px 16px 16px 16px" : "16px 0px 16px 16px",
                               padding: "12px 14px",
-                              boxShadow: isBot && !isDark ? "0 2px 10px rgba(0,0,0,0.03)" : "none"
+                              boxShadow: "none"
                             }}>
                               
                               {/* User query */}
@@ -988,8 +983,8 @@ export default function Advisor() {
                                   {/* Steps list container */}
                                   {msg.steps && msg.steps.length > 0 && (
                                     <div style={{
-                                      background: isDark ? "rgba(46,204,113,0.04)" : "rgba(46,204,113,0.02)",
-                                      border: `1px solid rgba(46,204,113,0.12)`,
+                                      background: "transparent",
+                                      border: `1.5px solid rgba(46,204,113,0.3)`,
                                       borderRadius: 10, padding: 8,
                                       minWidth: 200
                                     }}>
@@ -1093,8 +1088,8 @@ export default function Advisor() {
               {messages.length > 0 && (
                 <div style={{
                   display: "flex", gap: 6, overflowX: "auto", padding: "8px 16px",
-                  borderTop: `1px solid ${borderCol}`, scrollbarWidth: "none",
-                  background: isDark ? "rgba(255,255,255,0.005)" : "rgba(0,0,0,0.002)"
+                  borderTop: `1.5px solid ${borderCol}`, scrollbarWidth: "none",
+                  background: "transparent"
                 }}>
                   {activeSuggestChips.map((chip, idx) => (
                     <button
@@ -1102,18 +1097,16 @@ export default function Advisor() {
                       onClick={() => handleSendMessage(chip.text)}
                       style={{
                         padding: "6px 12px", borderRadius: 12, fontSize: 11,
-                        background: isDark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.01)",
-                        border: `1px solid ${borderCol}`, color: isDark ? "#A8D89A" : "#1B3A20",
+                        background: "transparent",
+                        border: `1.5px solid ${borderCol}`, color: isDark ? "#A8D89A" : "#1B3A20",
                         cursor: "pointer", transition: "all 0.2s", whiteSpace: "nowrap",
                         fontWeight: 600,
                       }}
                       onMouseEnter={e => {
                         e.currentTarget.style.borderColor = "#2ECC71";
-                        e.currentTarget.style.background = isDark ? "rgba(46,204,113,0.06)" : "rgba(46,204,113,0.03)";
                       }}
                       onMouseLeave={e => {
                         e.currentTarget.style.borderColor = borderCol;
-                        e.currentTarget.style.background = isDark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.01)";
                       }}
                     >
                       {chip.text}
@@ -1124,8 +1117,8 @@ export default function Advisor() {
 
               {/* Chat Input Box */}
               <div style={{
-                padding: "12px 16px 16px", borderTop: `1px solid ${borderCol}`,
-                background: isDark ? "rgba(255,255,255,0.01)" : "rgba(0,0,0,0.005)"
+                padding: "12px 16px 16px", borderTop: `1.5px solid ${borderCol}`,
+                background: "transparent"
               }}>
                 {error && (
                   <p style={{ color: "#EF4444", fontSize: 11, margin: "0 0 8px 4px", textAlign: "left" }}>
@@ -1140,9 +1133,11 @@ export default function Advisor() {
                     onClick={toggleRecording}
                     disabled={isProcessingVoice}
                     style={{
-                      width: 44, height: 44, borderRadius: "50%", border: "none", cursor: "pointer",
-                      background: isRecording ? "#EF4444" : (isDark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.025)"),
-                      color: isRecording ? "#FFF" : (isDark ? "#A8D89A" : "#1B3A20"),
+                      width: 44, height: 44, borderRadius: "50%",
+                      border: isRecording ? "1.5px solid #EF4444" : "1.5px solid #2ECC71",
+                      cursor: "pointer",
+                      background: isRecording ? "#EF4444" : "transparent",
+                      color: isRecording ? "#FFF" : "#2ECC71",
                       display: "flex", alignItems: "center", justifyItems: "center", justifyContent: "center",
                       boxShadow: isRecording ? "0 0 12px rgba(239,68,68,0.4)" : "none",
                       transition: "all 0.2s",
@@ -1166,8 +1161,8 @@ export default function Advisor() {
                   {/* Text Input */}
                   <div style={{
                     flex: 1, display: "flex", alignItems: "center", gap: 8,
-                    background: isDark ? "rgba(255,255,255,0.04)" : "#F8FAF8",
-                    border: `1px solid ${borderCol}`, borderRadius: 12,
+                    background: "transparent",
+                    border: `1.5px solid ${borderCol}`, borderRadius: 12,
                     padding: "0 12px", height: 44,
                   }}>
                     <input

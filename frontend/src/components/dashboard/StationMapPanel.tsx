@@ -19,8 +19,8 @@ export function StationMapPanel() {
 
     const mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${STATION.lng - 0.03},${STATION.lat - 0.02},${STATION.lng + 0.03},${STATION.lat + 0.02}&layer=mapnik&marker=${STATION.lat},${STATION.lng}`;
 
-    const cardBg = isDark ? 'rgba(20, 35, 20, 0.5)' : 'rgba(0,0,0,0.02)';
-    const cardBorder = isDark ? '1px solid rgba(46,204,113,0.08)' : '1px solid rgba(200,220,200,0.3)';
+    const cardBg = 'transparent';
+    const cardBorder = isDark ? '1.5px solid rgba(46,204,113,0.22)' : '1.5px solid rgba(200,220,200,0.4)';
     const labelColor = isDark ? '#6A8A6A' : '#8A9A8C';
     const valueColor = isDark ? '#C8E8C8' : '#1B3A20';
 
@@ -45,7 +45,8 @@ export function StationMapPanel() {
                 }} />
                 <div style={{
                     padding: '8px', borderRadius: '10px',
-                    background: isDark ? 'rgba(33,150,243,0.1)' : 'rgba(33,150,243,0.08)',
+                    background: 'transparent',
+                    border: '1.5px solid #2196F3',
                 }}>
                     <MapPin style={{ width: '16px', height: '16px', color: '#2196F3' }} />
                 </div>
@@ -61,7 +62,8 @@ export function StationMapPanel() {
                 <div style={{
                     marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '6px',
                     padding: '4px 10px', borderRadius: '20px',
-                    background: 'rgba(46,204,113,0.12)',
+                    background: 'transparent',
+                    border: '1.5px solid #2ECC71',
                 }}>
                     <div style={{
                         width: '6px', height: '6px', borderRadius: '50%',

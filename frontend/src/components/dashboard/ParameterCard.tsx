@@ -37,26 +37,27 @@ export function ParameterCard({
   return (
     <div
       style={{
-        background: isDark ? 'rgba(255,255,255,0.04)' : '#fff',
+        background: 'transparent',
         borderRadius: '16px',
         padding: '14px 16px',
-        border: isDark ? '1px solid rgba(255,255,255,0.07)' : '1px solid rgba(0,0,0,0.06)',
-        boxShadow: isDark ? 'none' : '0 2px 12px rgba(0,0,0,0.04)',
+        border: isDark ? '1.5px solid rgba(255,255,255,0.12)' : '1.5px solid rgba(0,0,0,0.1)',
+        boxShadow: 'none',
         display: 'flex',
         alignItems: 'center',
         gap: '12px',
-        transition: 'box-shadow 0.2s',
+        transition: 'border-color 0.2s, transform 0.2s',
         cursor: 'default',
       }}
-      onMouseEnter={e => { if (!isDark) (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)'; }}
-      onMouseLeave={e => { if (!isDark) (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 12px rgba(0,0,0,0.04)'; }}
+      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = cfg.color; }}
+      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.1)'; }}
     >
       {/* Icon bubble */}
       <div style={{
         width: '42px',
         height: '42px',
         borderRadius: '12px',
-        background: cfg.bg,
+        background: 'transparent',
+        border: `1.5px solid ${cfg.color}`,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

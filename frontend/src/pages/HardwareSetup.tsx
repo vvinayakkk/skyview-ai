@@ -28,9 +28,8 @@ export default function HardwareSetup() {
   };
 
   const textPrimary = isDark ? '#A8D89A' : '#1B3A20';
-  const textSecondary = isDark ? '#6A8A6A' : '#5A7A60';
-  const cardBg = isDark ? 'rgba(15, 25, 15, 0.82)' : 'rgba(255, 255, 255, 0.92)';
-  const cardBorder = isDark ? '1px solid rgba(46,204,113,0.15)' : '1px solid rgba(200,230,200,0.5)';
+  const cardBg = 'transparent';
+  const cardBorder = isDark ? '1.5px solid rgba(46,204,113,0.25)' : '1.5px solid rgba(46,204,113,0.3)';
 
   return (
     <div style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden' }}>
@@ -89,7 +88,8 @@ export default function HardwareSetup() {
             >
               <div style={{
                 width: '52px', height: '52px', borderRadius: '14px',
-                background: 'rgba(46,204,113,0.12)',
+                background: 'transparent',
+                border: '1.5px solid #2ECC71',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 marginBottom: '20px',
               }}>
@@ -109,9 +109,9 @@ export default function HardwareSetup() {
               {/* Device chip */}
               <div style={{
                 display: 'flex', alignItems: 'center', gap: '10px',
-                background: isDark ? 'rgba(46,204,113,0.08)' : 'rgba(46,204,113,0.06)',
+                background: 'transparent',
                 borderRadius: '12px', padding: '12px 16px',
-                border: '1px solid rgba(46,204,113,0.15)',
+                border: '1.5px solid rgba(46,204,113,0.3)',
                 marginBottom: '24px',
               }}>
                 <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#2ECC71', boxShadow: '0 0 6px #2ECC71' }} />
@@ -156,18 +156,17 @@ export default function HardwareSetup() {
                 backdropFilter: 'blur(18px)',
                 WebkitBackdropFilter: 'blur(18px)',
                 borderRadius: '20px',
-                border: isDark ? '1px solid rgba(33,150,243,0.2)' : '1px solid rgba(200,210,230,0.6)',
+                border: isDark ? '1.5px solid rgba(33,150,243,0.3)' : '1.5px solid rgba(33,150,243,0.35)',
                 padding: '32px 28px',
-                boxShadow: isDark
-                  ? '0 8px 32px rgba(0,0,0,0.3)'
-                  : '0 8px 32px rgba(0,0,0,0.07)',
+                boxShadow: 'none',
                 cursor: 'pointer',
               }}
               onClick={() => navigate('/buy-hardware')}
             >
               <div style={{
                 width: '52px', height: '52px', borderRadius: '14px',
-                background: 'rgba(33,150,243,0.12)',
+                background: 'transparent',
+                border: '1.5px solid #2196F3',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 marginBottom: '20px',
               }}>
@@ -186,9 +185,9 @@ export default function HardwareSetup() {
                 {['FPGA Accelerated', 'IoT + MQTT', '8 Sensors', 'AI Ready'].map(f => (
                   <span key={f} style={{
                     fontSize: '11px', fontWeight: 700, padding: '4px 10px', borderRadius: '20px',
-                    background: 'rgba(33,150,243,0.08)',
+                    background: 'transparent',
                     color: '#2196F3',
-                    border: '1px solid rgba(33,150,243,0.15)',
+                    border: '1.5px solid rgba(33,150,243,0.3)',
                   }}>{f}</span>
                 ))}
               </div>

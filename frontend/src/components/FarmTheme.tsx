@@ -84,11 +84,11 @@ export function GlassCard({ children, className }: {
     return (
         <div
             style={{
-                background: isDark ? '#2C2C2E' : '#F9FAFB',
+                background: 'transparent',
                 borderRadius: '16px',
                 padding: '20px',
-                border: isDark ? '1px solid rgba(255,255,255,0.05)' : '1px solid rgba(0,0,0,0.03)',
-                boxShadow: isDark ? '0 2px 10px rgba(0,0,0,0.15)' : '0 2px 10px rgba(0,0,0,0.02)',
+                border: isDark ? '1.5px solid rgba(255,255,255,0.12)' : '1.5px solid rgba(0,0,0,0.1)',
+                boxShadow: 'none',
                 transition: 'all 0.3s ease',
             }}
             className={className}

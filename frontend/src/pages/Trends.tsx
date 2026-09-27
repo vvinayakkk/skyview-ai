@@ -38,10 +38,10 @@ interface TrendInfo {
 // ─── Shared design tokens (mirrored from MandiRates) ──────────────────────────
 const css = {
   card: (isDark: boolean) => ({
-    background: isDark ? 'rgba(15,28,18,0.85)' : 'rgba(255,255,255,0.92)',
-    border: `1px solid ${isDark ? 'rgba(46,204,113,0.12)' : 'rgba(30,100,50,0.1)'}`,
+    background: 'transparent',
+    border: `1.5px solid ${isDark ? 'rgba(46,204,113,0.25)' : 'rgba(30,100,50,0.22)'}`,
     borderRadius: '16px',
-    backdropFilter: 'blur(16px)',
+    boxShadow: 'none',
   } as React.CSSProperties),
   text: {
     primary: (isDark: boolean) => isDark ? '#D4EDDA' : '#142A1A',
@@ -92,11 +92,11 @@ async function storeTrends(tempTrend: TrendInfo, humidTrend: TrendInfo, rainTren
 }
 
 // ─── Badge (shared pattern from Mandi) ───────────────────────────────────────
-function Badge({ label, color, bg }: { label: string; color: string; bg: string }) {
+function Badge({ label, color, bg }: { label: string; color: string; bg?: string }) {
   return (
     <span style={{
       display: 'inline-flex', alignItems: 'center', gap: 4,
-      background: bg, color, padding: '3px 10px',
+      background: 'transparent', color, border: `1.5px solid ${color}`, padding: '3px 10px',
       borderRadius: 20, fontSize: 11, fontWeight: 700, letterSpacing: '0.02em',
       whiteSpace: 'nowrap',
     }}>
@@ -114,7 +114,7 @@ function StatCard({ label, value, icon, accentColor, isDark }: {
     <div style={{ ...css.card(isDark), padding: '18px 20px', display: 'flex', alignItems: 'center', gap: 14 }}>
       <div style={{
         width: 44, height: 44, borderRadius: 12, flexShrink: 0,
-        background: `${accentColor}18`, color: accentColor,
+        background: 'transparent', border: `1.5px solid ${accentColor}`, color: accentColor,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
         {icon}
@@ -137,11 +137,10 @@ function TrendBadge({ trend, unit, isDark }: { trend: TrendInfo; unit: string; i
   const c = map[trend.direction];
   return (
     <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-      <Badge label={`${trend.direction.charAt(0).toUpperCase() + trend.direction.slice(1)} (${trend.rate > 0 ? '+' : ''}${trend.rate}/pt)`} color={c.color} bg={c.bg} />
+      <Badge label={`${trend.direction.charAt(0).toUpperCase() + trend.direction.slice(1)} (${trend.rate > 0 ? '+' : ''}${trend.rate}/pt)`} color={c.color} />
       <Badge
         label={`Avg ${trend.avg}${unit}  ·  Min ${trend.min}${unit}  ·  Max ${trend.max}${unit}`}
         color={css.text.secondary(isDark)}
-        bg={isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)'}
       />
     </div>
   );
@@ -317,11 +316,12 @@ export default function Trends() {
               disabled={isRefreshing}
               style={{
                 display: 'flex', alignItems: 'center', gap: 7,
-                padding: '0 20px', height: 44, borderRadius: 12, border: 'none',
-                background: '#2ECC71', color: '#fff', cursor: isRefreshing ? 'not-allowed' : 'pointer',
+                padding: '0 20px', height: 44, borderRadius: 12,
+                border: '1.5px solid #2ECC71',
+                background: 'transparent', color: '#2ECC71', cursor: isRefreshing ? 'not-allowed' : 'pointer',
                 fontWeight: 700, fontSize: 14, transition: 'all 0.18s',
                 opacity: isRefreshing ? 0.65 : 1, flexShrink: 0,
-                boxShadow: isRefreshing ? 'none' : '0 2px 10px rgba(46,204,113,0.25)',
+                boxShadow: 'none',
               }}
             >
               <RefreshCw
@@ -599,8 +599,8 @@ export default function Trends() {
 
               {/* Live trend summary panel */}
               <div style={{
-                background: isDark ? 'rgba(46,204,113,0.04)' : 'rgba(0,0,0,0.02)',
-                border: `1px solid ${isDark ? 'rgba(46,204,113,0.12)' : 'rgba(0,0,0,0.05)'}`,
+                background: 'transparent',
+                border: `1.5px solid ${isDark ? 'rgba(46,204,113,0.25)' : 'rgba(30,100,50,0.22)'}`,
                 borderRadius: 12, padding: 14,
               }}>
                 <p style={{ fontSize: 10, color: textSecondary, textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.06em', margin: '0 0 12px' }}>
@@ -637,8 +637,8 @@ export default function Trends() {
               <div style={{
                 display: 'flex', alignItems: 'center', gap: 6,
                 padding: '8px 12px', borderRadius: 10,
-                background: isDark ? 'rgba(46,204,113,0.06)' : 'rgba(46,204,113,0.08)',
-                border: `1px solid ${isDark ? 'rgba(46,204,113,0.12)' : 'rgba(46,204,113,0.15)'}`,
+                background: 'transparent',
+                border: '1.5px solid #2ECC71',
               }}>
                 <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#2ECC71', animation: 'trends-pulse 2s infinite' }} />
                 <span style={{ fontSize: 11, color: textSecondary }}>Auto-refresh every 15s</span>

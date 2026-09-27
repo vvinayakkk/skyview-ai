@@ -372,7 +372,7 @@ export default function Marketplace() {
         {mainTab === "matching" && (
           <>
             {/* Visual Node Architecture Card */}
-            <div className="p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/10 mb-6 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="p-4 rounded-xl bg-transparent border border-emerald-500/25 mb-6 flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="max-w-md">
                 <h4 className="text-sm font-bold text-emerald-800 dark:text-emerald-400 flex items-center gap-2">
                   <Compass size={16} /> 2-Party Matching (Mutual Barter)
@@ -381,8 +381,8 @@ export default function Marketplace() {
                   Pairs you directly with another farmer. You provide the equipment they need, and they provide what you need, maximizing tool utilization.
                 </p>
               </div>
-              <div className="flex items-center gap-4 bg-white dark:bg-zinc-950 p-3 rounded-xl border border-gray-150 dark:border-white/5 shadow-sm">
-                <div className="flex flex-col items-center p-2 rounded-lg bg-emerald-100/30 dark:bg-emerald-950/30 border border-emerald-500/20">
+              <div className="flex items-center gap-4 bg-transparent p-3 rounded-xl border border-emerald-500/25 shadow-none">
+                <div className="flex flex-col items-center p-2 rounded-lg bg-transparent border border-emerald-500/40">
                   <User size={18} className="text-emerald-600" />
                   <span className="text-[10px] font-bold mt-1 text-gray-700 dark:text-gray-300">You (A)</span>
                   <span className="text-[9px] text-emerald-600 font-semibold">Tractor</span>
@@ -395,7 +395,7 @@ export default function Marketplace() {
                   </div>
                   <span className="text-[8px] text-gray-400 mt-0.5">Mutual Need</span>
                 </div>
-                <div className="flex flex-col items-center p-2 rounded-lg bg-emerald-100/30 dark:bg-emerald-950/30 border border-emerald-500/20">
+                <div className="flex flex-col items-center p-2 rounded-lg bg-transparent border border-blue-500/40">
                   <Users size={18} className="text-emerald-600" />
                   <span className="text-[10px] font-bold mt-1 text-gray-700 dark:text-gray-300">Partner (B)</span>
                   <span className="text-[9px] text-blue-600 font-semibold">Harvester</span>
@@ -522,8 +522,9 @@ export default function Marketplace() {
                           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem 1.2rem 0.5rem" }}>
                             <span
                               style={{
-                                background: b.bg,
+                                background: "transparent",
                                 color: b.text,
+                                border: `1.5px solid ${b.color || "#10B981"}`,
                                 padding: "2px 8px",
                                 borderRadius: "12px",
                                 fontSize: "10px",
@@ -568,7 +569,7 @@ export default function Marketplace() {
                               <span className="text-[10px] uppercase font-bold text-gray-400 dark:text-gray-500 block">Crops Cultivated</span>
                               <div className="flex flex-wrap gap-1 mt-1">
                                 {match.crops.map((c: string, j: number) => (
-                                  <span key={j} className="text-[11px] font-semibold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded">
+                                  <span key={j} className="text-[11px] font-semibold bg-transparent text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/30">
                                     {c}
                                   </span>
                                 ))}
@@ -579,8 +580,8 @@ export default function Marketplace() {
                               style={{
                                 padding: "10px 12px",
                                 borderRadius: "10px",
-                                background: isDark ? "rgba(0,0,0,0.2)" : "rgba(0,0,0,0.02)",
-                                border: isDark ? "1px solid rgba(255,255,255,0.04)" : "1px solid rgba(0,0,0,0.04)",
+                                background: "transparent",
+                                border: isDark ? "1.5px solid rgba(255,255,255,0.12)" : "1.5px solid rgba(0,0,0,0.12)",
                                 marginBottom: "1rem"
                               }}
                             >
@@ -626,7 +627,7 @@ export default function Marketplace() {
                               <Button
                                 onClick={() => runNegotiation(match)}
                                 variant="secondary"
-                                className="w-full bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/30 dark:hover:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 font-bold gap-2 text-xs border border-emerald-600/20"
+                                className="w-full bg-transparent hover:bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 font-bold gap-2 text-xs border border-emerald-600/30"
                               >
                                 <Sparkles size={13} /> AI Negotiate Deal
                               </Button>
@@ -646,7 +647,7 @@ export default function Marketplace() {
         {mainTab === "circular" && (
           <>
             {/* Visual Node Architecture Card */}
-            <div className="p-4 rounded-xl bg-blue-500/5 border border-blue-500/10 mb-6 flex flex-col md:flex-row items-center justify-between gap-6 font-sans">
+            <div className="p-4 rounded-xl bg-transparent border border-blue-500/25 mb-6 flex flex-col md:flex-row items-center justify-between gap-6 font-sans">
               <div className="max-w-md">
                 <h4 className="text-sm font-bold text-blue-800 dark:text-blue-400 flex items-center gap-2">
                   <ArrowRightLeft size={16} /> 3-Party Circular Barter Loops
@@ -655,23 +656,23 @@ export default function Marketplace() {
                   Solves multi-party resource conflicts where A needs B, B needs C, and C needs A. A closed circular loop is created, satisfying all requirements cash-free.
                 </p>
               </div>
-              <div className="flex items-center gap-3 bg-white dark:bg-zinc-950 p-3 rounded-xl border border-gray-150 dark:border-white/5 shadow-sm">
-                <div className="flex flex-col items-center p-1.5 rounded-lg bg-blue-100/30 dark:bg-blue-950/30 border border-blue-500/20 text-center">
+              <div className="flex items-center gap-3 bg-transparent p-3 rounded-xl border border-blue-500/20 shadow-none">
+                <div className="flex flex-col items-center p-1.5 rounded-lg bg-transparent border border-blue-500/40 text-center">
                   <span className="text-[9px] font-black text-blue-600 dark:text-blue-400">Farmer A</span>
                   <span className="text-[8px] text-gray-500">Has Tractor</span>
                 </div>
                 <ArrowRight size={12} className="text-blue-500 animate-pulse" />
-                <div className="flex flex-col items-center p-1.5 rounded-lg bg-blue-100/30 dark:bg-blue-950/30 border border-blue-500/20 text-center">
+                <div className="flex flex-col items-center p-1.5 rounded-lg bg-transparent border border-blue-500/40 text-center">
                   <span className="text-[9px] font-black text-blue-600 dark:text-blue-400">Farmer B</span>
                   <span className="text-[8px] text-gray-500">Has Harvester</span>
                 </div>
                 <ArrowRight size={12} className="text-blue-500 animate-pulse" />
-                <div className="flex flex-col items-center p-1.5 rounded-lg bg-blue-100/30 dark:bg-blue-950/30 border border-blue-500/20 text-center">
+                <div className="flex flex-col items-center p-1.5 rounded-lg bg-transparent border border-blue-500/40 text-center">
                   <span className="text-[9px] font-black text-blue-600 dark:text-blue-400">Farmer C</span>
                   <span className="text-[8px] text-gray-500">Has Labor</span>
                 </div>
                 <ArrowRight size={12} className="text-blue-500 rotate-90 lg:rotate-0 animate-pulse" />
-                <div className="text-[8px] bg-blue-500/10 text-blue-700 px-1.5 py-0.5 rounded font-black">Loop</div>
+                <div className="text-[8px] bg-transparent text-blue-500 px-1.5 py-0.5 rounded font-black border border-blue-500/50">Loop</div>
               </div>
             </div>
 
@@ -797,13 +798,13 @@ export default function Marketplace() {
                             </div>
                           </div>
 
-                          <div className="p-3 rounded-lg bg-amber-500/5 border border-amber-500/10">
+                          <div className="p-3 rounded-lg bg-transparent border border-amber-500/30">
                             <span className="text-[10px] font-bold text-amber-600 uppercase block tracking-wider">Missing Resources Needed</span>
                             <div className="flex flex-wrap gap-1 mt-1.5">
                               {pool.required_pool.length === 0 ? (
                                 <span className="text-xs text-gray-400">None listed</span>
                               ) : pool.required_pool.map((item: string, iIdx: number) => (
-                                <span key={iIdx} className="text-xs font-bold bg-amber-100/50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 px-2 py-0.5 rounded">
+                                <span key={iIdx} className="text-xs font-bold bg-transparent text-amber-700 dark:text-amber-300 px-2 py-0.5 rounded border border-amber-500/35">
                                   {item}
                                 </span>
                               ))}
@@ -812,7 +813,7 @@ export default function Marketplace() {
                         </div>
 
                         {/* Regional Optimization Plan with Typewriter Live Streaming */}
-                        <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-600/10">
+                        <div className="p-4 rounded-xl bg-transparent border border-emerald-600/25">
                           <h5 className="text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-400 flex items-center gap-1.5">
                             <Sparkles size={14} className="text-emerald-500 animate-pulse" /> AI Regional Optimization Plan
                           </h5>
@@ -835,7 +836,7 @@ export default function Marketplace() {
                           <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wide block">Active Cluster Members</span>
                           <div className="mt-2 space-y-1.5 max-h-40 overflow-y-auto pr-1">
                             {pool.farmers.map((farmer: any, fIdx: number) => (
-                              <div key={fIdx} className="flex justify-between items-center text-xs p-2 rounded bg-gray-500/5 border border-white/5">
+                              <div key={fIdx} className="flex justify-between items-center text-xs p-2 rounded bg-transparent border border-white/10">
                                 <span className="font-bold text-gray-700 dark:text-gray-300">{farmer.name}</span>
                                 <span className="text-gray-500 dark:text-gray-400 text-[11px] truncate max-w-[150px]">{farmer.crops.slice(0, 2).join(", ")}</span>
                               </div>

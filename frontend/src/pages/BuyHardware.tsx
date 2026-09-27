@@ -369,12 +369,8 @@ export default function BuyHardware() {
                     gap: "8px",
                     padding: "14px 24px",
                     borderRadius: "14px",
-                    border: isDark
-                      ? "1px solid rgba(33,150,243,0.3)"
-                      : "1px solid rgba(33,150,243,0.3)",
-                    background: isDark
-                      ? "rgba(33,150,243,0.1)"
-                      : "rgba(33,150,243,0.06)",
+                    border: "1.5px solid #2196F3",
+                    background: "transparent",
                     color: "#2196F3",
                     fontSize: "14px",
                     fontWeight: 800,
@@ -456,17 +452,14 @@ export default function BuyHardware() {
               <div
                 key={label}
                 style={{
-                  background: cardBg,
-                  backdropFilter: "blur(12px)",
-                  WebkitBackdropFilter: "blur(12px)",
+                  background: "transparent",
                   borderRadius: "16px",
                   padding: "18px 20px",
-                  border: isDark
-                    ? "1px solid rgba(255,255,255,0.04)"
-                    : "1px solid rgba(200,230,200,0.4)",
+                  border: `1.5px solid ${color}40`,
                   display: "flex",
                   alignItems: "center",
                   gap: "14px",
+                  transition: "border-color 0.2s, transform 0.2s",
                 }}
               >
                 <div
@@ -474,7 +467,8 @@ export default function BuyHardware() {
                     width: "40px",
                     height: "40px",
                     borderRadius: "12px",
-                    background: `${color}15`,
+                    background: "transparent",
+                    border: `1.5px solid ${color}`,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",

@@ -300,7 +300,7 @@ export default function FarmersMap() {
                   {/* Close drawer button */}
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
                     <span style={{
-                      background: "rgba(16,185,129,0.12)", color: "#10B981",
+                      background: "transparent", color: "#10B981", border: "1.5px solid #10B981",
                       padding: "2px 10px", borderRadius: "12px", fontSize: "10px", fontWeight: 800, textTransform: "uppercase"
                     }}>
                       Farmer Profile
@@ -326,13 +326,13 @@ export default function FarmersMap() {
 
                     {/* Stats */}
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "20px" }}>
-                      <div className="bg-emerald-50/50 dark:bg-emerald-950/20 p-3 rounded-lg border border-emerald-600/10">
+                      <div className="bg-transparent p-3 rounded-lg border border-emerald-600/30">
                         <span className="text-[10px] text-gray-400 uppercase font-bold block">Landholding</span>
                         <span className="text-sm font-bold text-gray-700 dark:text-gray-200 mt-1 block">
                           {selectedFarmer.land_size_acres ? `${selectedFarmer.land_size_acres} Acres` : "Not specified"}
                         </span>
                       </div>
-                      <div className="bg-emerald-50/50 dark:bg-emerald-950/20 p-3 rounded-lg border border-emerald-600/10">
+                      <div className="bg-transparent p-3 rounded-lg border border-emerald-600/30">
                         <span className="text-[10px] text-gray-400 uppercase font-bold block">Active Crops</span>
                         <span className="text-sm font-bold text-gray-700 dark:text-gray-200 mt-1 block truncate" title={selectedFarmer.crops.join(', ')}>
                           {selectedFarmer.crops.join(', ') || "None"}
@@ -348,7 +348,7 @@ export default function FarmersMap() {
                       <div className="flex flex-wrap gap-1">
                         {selectedFarmer.excess_resources?.length > 0 ? (
                           selectedFarmer.excess_resources.map((r: string, idx: number) => (
-                            <span key={idx} className="text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 px-2.5 py-1 rounded-md">
+                            <span key={idx} className="text-xs font-semibold bg-transparent text-emerald-800 dark:text-emerald-300 px-2.5 py-1 rounded-md border border-emerald-500/30">
                               {r}
                             </span>
                           ))
@@ -366,7 +366,7 @@ export default function FarmersMap() {
                       <div className="flex flex-wrap gap-1">
                         {selectedFarmer.required_resources?.length > 0 ? (
                           selectedFarmer.required_resources.map((r: string, idx: number) => (
-                            <span key={idx} className="text-xs font-semibold bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 px-2.5 py-1 rounded-md">
+                            <span key={idx} className="text-xs font-semibold bg-transparent text-amber-800 dark:text-amber-300 px-2.5 py-1 rounded-md border border-amber-500/30">
                               {r}
                             </span>
                           ))

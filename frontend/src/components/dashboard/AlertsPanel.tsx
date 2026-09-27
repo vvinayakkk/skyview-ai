@@ -21,9 +21,9 @@ export function AlertsPanel({ alerts }: AlertsPanelProps) {
   };
 
   const alertStyles = {
-    warning: 'text-amber-500 bg-amber-500/10 border-amber-500/20',
-    critical: 'text-destructive bg-destructive/10 border-destructive/20',
-    info: 'text-primary bg-primary/10 border-primary/20',
+    warning: 'text-amber-500 bg-transparent border-amber-500/40',
+    critical: 'text-destructive bg-transparent border-destructive/40',
+    info: 'text-primary bg-transparent border-primary/40',
   };
 
   return (
@@ -46,7 +46,8 @@ export function AlertsPanel({ alerts }: AlertsPanelProps) {
         }} />
         <div style={{
           padding: '8px', borderRadius: '10px',
-          background: isDark ? 'rgba(46,204,113,0.1)' : 'rgba(46,204,113,0.08)',
+          background: 'transparent',
+          border: '1.5px solid #2ECC71',
         }}>
           <Bell style={{ width: '16px', height: '16px', color: '#2ECC71' }} />
         </div>
@@ -65,7 +66,8 @@ export function AlertsPanel({ alerts }: AlertsPanelProps) {
           <div style={{ padding: '36px 0', textAlign: 'center' }}>
             <div style={{
               width: '48px', height: '48px', borderRadius: '50%', margin: '0 auto 12px',
-              background: isDark ? 'rgba(46,204,113,0.06)' : 'rgba(0,0,0,0.04)',
+              background: 'transparent',
+              border: `1.5px dashed ${isDark ? '#3A5A3A' : '#C0D0C0'}`,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
               <Bell style={{ width: '24px', height: '24px', color: isDark ? '#3A5A3A' : '#C0D0C0' }} />
@@ -86,7 +88,7 @@ export function AlertsPanel({ alerts }: AlertsPanelProps) {
                   alertStyles[alert.type]
                 )}
               >
-                <div className="p-2 rounded-lg bg-background/50">
+                <div className="p-2 rounded-lg bg-transparent border border-current/30">
                   <Icon className="w-4 h-4" />
                 </div>
                 <div className="flex-1 min-w-0">

@@ -41,10 +41,10 @@ const STATES = [
 
 const css = {
   card: (isDark: boolean) => ({
-    background: isDark ? 'rgba(15,28,18,0.85)' : 'rgba(255,255,255,0.92)',
-    border: `1px solid ${isDark ? 'rgba(46,204,113,0.12)' : 'rgba(30,100,50,0.1)'}`,
+    background: 'transparent',
+    border: `1.5px solid ${isDark ? 'rgba(46,204,113,0.25)' : 'rgba(30,100,50,0.22)'}`,
     borderRadius: '16px',
-    backdropFilter: 'blur(16px)',
+    boxShadow: 'none',
   } as React.CSSProperties),
   text: {
     primary: (isDark: boolean) => isDark ? '#D4EDDA' : '#142A1A',
@@ -69,11 +69,11 @@ function Sparkline({ data, color }: { data: number[]; color: string }) {
 }
 
 // ─── Badge ─────────────────────────────────────────────────────────────────────
-function Badge({ label, color, bg }: { label: string; color: string; bg: string }) {
+function Badge({ label, color, bg }: { label: string; color: string; bg?: string }) {
   return (
     <span style={{
       display: 'inline-flex', alignItems: 'center', gap: 4,
-      background: bg, color, padding: '3px 10px',
+      background: 'transparent', color, border: `1.5px solid ${color}`, padding: '3px 10px',
       borderRadius: 20, fontSize: 11, fontWeight: 700, letterSpacing: '0.02em',
       whiteSpace: 'nowrap',
     }}>
@@ -92,14 +92,13 @@ function FilterSelect({
   isDark: boolean;
   children: React.ReactNode;
 }) {
-  const border = isDark ? 'rgba(46,204,113,0.14)' : 'rgba(30,100,50,0.12)';
-  const bg = isDark ? 'rgba(255,255,255,0.06)' : '#FFFFFF';
+  const border = isDark ? 'rgba(46,204,113,0.25)' : 'rgba(30,100,50,0.22)';
   const text = css.text.primary(isDark);
   const muted = css.text.secondary(isDark);
   return (
     <div style={{
       display: 'flex', alignItems: 'center', gap: 8,
-      background: bg, border: `1px solid ${border}`,
+      background: 'transparent', border: `1.5px solid ${border}`,
       borderRadius: 12, padding: '0 14px', height: 44, flexShrink: 0,
     }}>
       <span style={{ color: muted, display: 'flex', flexShrink: 0 }}>{icon}</span>
@@ -127,7 +126,7 @@ function StatCard({ label, value, icon, accentColor, isDark }: {
     <div style={{ ...css.card(isDark), padding: '18px 20px', display: 'flex', alignItems: 'center', gap: 14 }}>
       <div style={{
         width: 44, height: 44, borderRadius: 12, flexShrink: 0,
-        background: `${accentColor}18`, color: accentColor,
+        background: 'transparent', border: `1.5px solid ${accentColor}`, color: accentColor,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
         {icon}
@@ -400,9 +399,9 @@ export default function MandiRates() {
             {/* Tab switcher — right aligned */}
             <div style={{
               display: 'flex', gap: 6,
-              background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
+              background: 'transparent',
               padding: 5, borderRadius: 14,
-              border: `1px solid ${borderColor}`,
+              border: `1.5px solid ${borderColor}`,
               flexShrink: 0,
             }}>
               {([
@@ -416,11 +415,13 @@ export default function MandiRates() {
                     onClick={() => setActiveTab(tab.key)}
                     style={{
                       display: 'flex', alignItems: 'center', gap: 7,
-                      padding: '8px 18px', borderRadius: 10, border: 'none', cursor: 'pointer',
+                      padding: '8px 18px', borderRadius: 10,
+                      border: isActive ? '1.5px solid #2ECC71' : '1.5px solid transparent',
+                      cursor: 'pointer',
                       fontWeight: 700, fontSize: 13, transition: 'all 0.18s',
-                      background: isActive ? '#2ECC71' : 'transparent',
-                      color: isActive ? '#fff' : textSecondary,
-                      boxShadow: isActive ? '0 2px 10px rgba(46,204,113,0.25)' : 'none',
+                      background: 'transparent',
+                      color: isActive ? '#2ECC71' : textSecondary,
+                      boxShadow: 'none',
                       whiteSpace: 'nowrap',
                     }}
                   >
@@ -446,8 +447,8 @@ export default function MandiRates() {
             <div style={{
               flex: '1 1 200px', minWidth: 160,
               display: 'flex', alignItems: 'center', gap: 8,
-              background: isDark ? 'rgba(255,255,255,0.06)' : '#F8FAF8',
-              border: `1px solid ${borderColor}`, borderRadius: 12, padding: '0 14px', height: 44,
+              background: 'transparent',
+              border: `1.5px solid ${borderColor}`, borderRadius: 12, padding: '0 14px', height: 44,
             }}>
               <Search size={16} color={textSecondary} style={{ flexShrink: 0 }} />
               <input
@@ -494,11 +495,12 @@ export default function MandiRates() {
             disabled={isLoading}
             style={{
               display: 'flex', alignItems: 'center', gap: 7,
-              padding: '0 20px', height: 44, borderRadius: 12, border: 'none',
-              background: '#2ECC71', color: '#fff', cursor: isLoading ? 'not-allowed' : 'pointer',
+              padding: '0 20px', height: 44, borderRadius: 12,
+              border: '1.5px solid #2ECC71',
+              background: 'transparent', color: '#2ECC71', cursor: isLoading ? 'not-allowed' : 'pointer',
               fontWeight: 700, fontSize: 14, transition: 'all 0.18s',
               opacity: isLoading ? 0.65 : 1, flexShrink: 0,
-              boxShadow: isLoading ? 'none' : '0 2px 10px rgba(46,204,113,0.25)',
+              boxShadow: 'none',
             }}
           >
             <RefreshCw
@@ -581,7 +583,7 @@ export default function MandiRates() {
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
                     {/* Timeframe Selector */}
-                    <div style={{ display: 'flex', gap: 4, background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)', padding: 4, borderRadius: 10 }}>
+                    <div style={{ display: 'flex', gap: 4, background: 'transparent', padding: 4, borderRadius: 10, border: `1.5px solid ${borderColor}` }}>
                       {(['1M', '3M', 'all'] as const).map(tf => {
                         const isActive = timeframe === tf;
                         return (
@@ -591,9 +593,9 @@ export default function MandiRates() {
                             style={{
                               padding: '4px 12px',
                               borderRadius: 8,
-                              border: 'none',
-                              background: isActive ? '#2ECC71' : 'transparent',
-                              color: isActive ? '#fff' : textSecondary,
+                              border: isActive ? '1.5px solid #2ECC71' : '1.5px solid transparent',
+                              background: 'transparent',
+                              color: isActive ? '#2ECC71' : textSecondary,
                               fontWeight: 700,
                               fontSize: 11,
                               cursor: 'pointer',
@@ -608,7 +610,6 @@ export default function MandiRates() {
                     <Badge
                       label={isCacheHit ? '● CACHED · HIT' : '● LIVE · MISS'}
                       color={isCacheHit ? '#2ECC71' : '#F59E0B'}
-                      bg={isCacheHit ? 'rgba(46,204,113,0.1)' : 'rgba(245,158,11,0.1)'}
                     />
                   </div>
                 </div>
@@ -792,8 +793,8 @@ export default function MandiRates() {
 
                 {/* Hovered node detail */}
                 <div style={{
-                  background: isDark ? 'rgba(46,204,113,0.04)' : 'rgba(0,0,0,0.02)',
-                  border: `1px solid ${isDark ? 'rgba(46,204,113,0.12)' : 'rgba(0,0,0,0.05)'}`,
+                  background: 'transparent',
+                  border: `1.5px solid ${borderColor}`,
                   borderRadius: 12, padding: 14,
                 }}>
                   <p style={{ fontSize: 10, color: textSecondary, textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.06em', margin: '0 0 10px' }}>

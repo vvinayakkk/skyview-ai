@@ -79,15 +79,15 @@ export default function SystemOverview() {
                         bottom: '40px',
                         left: '50%',
                         transform: 'translateX(-50%)',
-                        background: isDark ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.7)',
+                        background: 'transparent',
                         backdropFilter: 'blur(10px)',
                         padding: '12px 24px',
                         borderRadius: '30px',
                         color: isDark ? 'white' : '#1B3A20',
                         fontSize: '14px',
                         fontWeight: 'bold',
-                        border: isDark ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(0,0,0,0.1)',
-                        boxShadow: isDark ? '0 10px 30px rgba(0,0,0,0.3)' : '0 10px 30px rgba(0,0,0,0.05)',
+                        border: isDark ? '1.5px solid rgba(46,204,113,0.5)' : '1.5px solid rgba(46,204,113,0.7)',
+                        boxShadow: 'none',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '10px'
@@ -126,8 +126,8 @@ export default function SystemOverview() {
                                         right: '15px',
                                         padding: '5px',
                                         borderRadius: '50%',
-                                        background: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)',
-                                        border: 'none',
+                                        background: 'transparent',
+                                        border: isDark ? '1.5px solid rgba(255,255,255,0.2)' : '1.5px solid rgba(0,0,0,0.2)',
                                         cursor: 'pointer',
                                         color: isDark ? 'white' : '#1B3A20'
                                     }}
@@ -141,7 +141,7 @@ export default function SystemOverview() {
                                     </p>
 
                                     <div className="mt-8 space-y-4">
-                                        <div className={`p-4 ${isDark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} border rounded-2xl`}>
+                                        <div className={`p-4 bg-transparent ${isDark ? 'border-white/20' : 'border-black/20'} border rounded-2xl`}>
                                             <span className="text-[10px] font-black uppercase tracking-widest text-[#2ECC71]">Status</span>
                                             <div className="flex justify-between items-center mt-1">
                                                 <span className={`${isDark ? 'text-white' : 'text-[#1B3A20]'} font-bold`}>Operational</span>
@@ -149,7 +149,7 @@ export default function SystemOverview() {
                                             </div>
                                         </div>
 
-                                        <div className={`p-4 ${isDark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} border rounded-2xl`}>
+                                        <div className={`p-4 bg-transparent ${isDark ? 'border-white/20' : 'border-black/20'} border rounded-2xl`}>
                                             <span className={`text-[10px] font-black uppercase tracking-widest ${isDark ? 'text-white/50' : 'text-[#1B3A20]/50'}`}>Telemetry</span>
                                             <div className="flex justify-between items-center mt-1">
                                                 <span className={`${isDark ? 'text-white' : 'text-[#1B3A20]'} font-medium`}>Last Sync</span>
@@ -158,7 +158,7 @@ export default function SystemOverview() {
                                         </div>
                                     </div>
 
-                                    <div className="mt-8 p-4 bg-[#2ECC71]/10 border border-[#2ECC71]/30 rounded-2xl text-[#2ECC71]">
+                                    <div className="mt-8 p-4 bg-transparent border-1.5 border-[#2ECC71] rounded-2xl text-[#2ECC71]">
                                         <p className="text-xs font-bold text-center">
                                             Active Interaction Enabled
                                         </p>

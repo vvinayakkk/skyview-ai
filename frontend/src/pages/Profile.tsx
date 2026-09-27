@@ -20,10 +20,10 @@ const API_URL = import.meta.env.VITE_API_URL || '';
 // ─── Shared design tokens (same as MandiRates / Trends) ──────────────────────
 const css = {
   card: (isDark: boolean) => ({
-    background: isDark ? 'rgba(15,28,18,0.85)' : 'rgba(255,255,255,0.92)',
-    border: `1px solid ${isDark ? 'rgba(46,204,113,0.12)' : 'rgba(30,100,50,0.1)'}`,
+    background: 'transparent',
+    border: `1.5px solid ${isDark ? 'rgba(46,204,113,0.25)' : 'rgba(30,100,50,0.22)'}`,
     borderRadius: '16px',
-    backdropFilter: 'blur(16px)',
+    boxShadow: 'none',
   } as React.CSSProperties),
   text: {
     primary:   (isDark: boolean) => isDark ? '#D4EDDA' : '#142A1A',
@@ -36,11 +36,11 @@ const css = {
 };
 
 // ─── Reusable primitives ──────────────────────────────────────────────────────
-function Badge({ label, color, bg }: { label: string; color: string; bg: string }) {
+function Badge({ label, color, bg }: { label: string; color: string; bg?: string }) {
   return (
     <span style={{
       display: 'inline-flex', alignItems: 'center', gap: 4,
-      background: bg, color, padding: '3px 10px',
+      background: 'transparent', color, border: `1.5px solid ${color}`, padding: '3px 10px',
       borderRadius: 20, fontSize: 11, fontWeight: 700, letterSpacing: '0.02em',
       whiteSpace: 'nowrap',
     }}>
@@ -93,7 +93,7 @@ function StatCard({ label, value, icon, accentColor, isDark }: {
     <div style={{ ...css.card(isDark), padding: '18px 20px', display: 'flex', alignItems: 'center', gap: 14 }}>
       <div style={{
         width: 44, height: 44, borderRadius: 12, flexShrink: 0,
-        background: `${accentColor}18`, color: accentColor,
+        background: 'transparent', border: `1.5px solid ${accentColor}`, color: accentColor,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
         {icon}
@@ -136,8 +136,7 @@ function FieldInput({ label, value, onChange, placeholder, isDark }: {
   label: string; value: string;
   onChange: (v: string) => void; placeholder: string; isDark: boolean;
 }) {
-  const borderColor = isDark ? 'rgba(46,204,113,0.14)' : 'rgba(30,100,50,0.12)';
-  const bg          = isDark ? 'rgba(255,255,255,0.06)' : '#FFFFFF';
+  const borderColor = isDark ? 'rgba(46,204,113,0.25)' : 'rgba(30,100,50,0.22)';
   return (
     <div style={{ marginBottom: 12 }}>
       <p style={{ fontSize: 10, color: css.text.secondary(isDark), fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 5px' }}>{label}</p>
@@ -147,7 +146,7 @@ function FieldInput({ label, value, onChange, placeholder, isDark }: {
         placeholder={placeholder}
         style={{
           width: '100%', padding: '10px 14px', borderRadius: 10,
-          border: `1px solid ${borderColor}`, background: bg,
+          border: `1.5px solid ${borderColor}`, background: 'transparent',
           color: css.text.primary(isDark), fontSize: 14, outline: 'none',
           boxSizing: 'border-box',
         }}
@@ -163,8 +162,8 @@ function SchemeCard({ scheme, isMatch, index, isDark }: {
   const textPrimary   = css.text.primary(isDark);
   const textSecondary = css.text.secondary(isDark);
   const borderColor   = isMatch
-    ? (isDark ? 'rgba(46,204,113,0.28)' : 'rgba(46,204,113,0.35)')
-    : (isDark ? 'rgba(46,204,113,0.12)' : 'rgba(30,100,50,0.1)');
+    ? '#2ECC71'
+    : (isDark ? 'rgba(46,204,113,0.25)' : 'rgba(30,100,50,0.22)');
 
   return (
     <motion.div
@@ -174,13 +173,11 @@ function SchemeCard({ scheme, isMatch, index, isDark }: {
     >
       <div style={{
         ...css.card(isDark),
-        border: `1px solid ${borderColor}`,
+        border: `1.5px solid ${borderColor}`,
         padding: '22px 24px',
         position: 'relative',
         overflow: 'hidden',
-        background: isMatch
-          ? (isDark ? 'rgba(46,204,113,0.06)' : 'rgba(46,204,113,0.03)')
-          : css.card(isDark).background,
+        background: 'transparent',
       }}>
         {/* Local match ribbon */}
         {isMatch && (
@@ -647,7 +644,9 @@ export default function Profile() {
                     onClick={getGeolocation}
                     type="button"
                     style={{
-                      width: '100%', marginBottom: 14, background: 'rgba(46,204,113,0.12)', border: '1px solid rgba(46,204,113,0.25)',
+                      width: '100%', marginBottom: 14,
+                      background: 'transparent',
+                      border: '1.5px solid #2ECC71',
                       borderRadius: 10, padding: '8px 10px', fontSize: 12, fontWeight: 700, color: '#2ECC71', cursor: 'pointer',
                     }}
                   >
@@ -685,7 +684,7 @@ export default function Profile() {
 
             {/* Hardware card */}
             <div style={{ ...css.card(isDark), padding: '20px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 18, paddingBottom: 14, borderBottom: `1px solid ${borderColor}` }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 18, paddingBottom: 14, borderBottom: `1.5px solid ${borderColor}` }}>
                 <Cpu size={16} color="#2ECC71" />
                 <span style={{ fontSize: 12, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.07em', color: textPrimary }}>
                   Hardware Device
@@ -697,8 +696,8 @@ export default function Profile() {
                   <div style={{
                     display: 'flex', alignItems: 'center', gap: 10,
                     padding: '12px 14px', borderRadius: 12,
-                    background: 'rgba(46,204,113,0.08)',
-                    border: '1px solid rgba(46,204,113,0.2)',
+                    background: 'transparent',
+                    border: '1.5px solid #2ECC71',
                   }}>
                     <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#2ECC71', animation: 'profile-pulse 2s infinite', flexShrink: 0 }} />
                     <div style={{ flex: 1 }}>
@@ -716,8 +715,8 @@ export default function Profile() {
                   <div style={{
                     display: 'flex', alignItems: 'center', gap: 10,
                     padding: '12px 14px', borderRadius: 12,
-                    background: isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.03)',
-                    border: `1px solid ${borderColor}`,
+                    background: 'transparent',
+                    border: `1.5px solid ${borderColor}`,
                   }}>
                     <WifiOff size={16} color={textSecondary} />
                     <p style={{ fontSize: 13, color: textSecondary, margin: 0 }}>No device connected</p>

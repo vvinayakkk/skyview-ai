@@ -271,30 +271,30 @@ export default function DatabaseExplorer() {
   };
 
   /* ─── Design tokens — clean, monochromatic, dense ─── */
-  const bg          = isDark ? '#0d0d0d' : '#f4f4f5';
-  const panel       = isDark ? '#141414' : '#ffffff';
-  const panelHover  = isDark ? '#1a1a1a' : '#fafafa';
-  const border      = isDark ? '#232323' : '#e4e4e7';
-  const borderFocus = isDark ? '#3a3a3a' : '#d1d5db';
+  const bg          = 'transparent';
+  const panel       = 'transparent';
+  const panelHover  = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)';
+  const border      = isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.18)';
+  const borderFocus = isDark ? '#2ECC71' : '#1B3A20';
   const text        = isDark ? '#e8e8e8' : '#111111';
-  const textSub     = isDark ? '#666666' : '#888888';
-  const textDim     = isDark ? '#3d3d3d' : '#c4c4c4';
-  const accent      = isDark ? '#e8e8e8' : '#111111';   // reversed for active states
-  const accentBg    = isDark ? '#1f1f1f' : '#f0f0f0';
-  const accentSel   = isDark ? '#222222' : '#e8e8e8';
-  const selBorder   = isDark ? '#383838' : '#c8c8c8';
+  const textSub     = isDark ? '#888888' : '#666666';
+  const textDim     = isDark ? '#555555' : '#aaaaaa';
+  const accent      = isDark ? '#2ECC71' : '#1B3A20';
+  const accentBg    = 'transparent';
+  const accentSel   = 'transparent';
+  const selBorder   = isDark ? '#2ECC71' : '#1B3A20';
   const mono        = '"Berkeley Mono", "Fira Code", "JetBrains Mono", "Cascadia Code", monospace';
   const sans        = '"Geist", "DM Sans", ui-sans-serif, system-ui, sans-serif';
 
-  const rowHoverBg  = isDark ? '#191919' : '#f9f9f9';
+  const rowHoverBg  = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.03)';
 
   // compact input
   const input: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
     gap: 6,
-    background: isDark ? '#111111' : '#f9f9f9',
-    border: `1px solid ${border}`,
+    background: 'transparent',
+    border: `1.5px solid ${border}`,
     borderRadius: 6,
     padding: '5px 9px',
     color: text,
@@ -304,7 +304,7 @@ export default function DatabaseExplorer() {
   };
 
   const inputEl: React.CSSProperties = {
-    background: 'none',
+    background: 'transparent',
     border: 'none',
     outline: 'none',
     color: text,
@@ -314,7 +314,7 @@ export default function DatabaseExplorer() {
   };
 
   const selectEl: React.CSSProperties = {
-    background: 'none',
+    background: 'transparent',
     border: 'none',
     outline: 'none',
     color: text,
@@ -342,22 +342,22 @@ export default function DatabaseExplorer() {
   const btnDefault: React.CSSProperties = {
     ...btnBase,
     background: 'transparent',
-    border: `1px solid ${border}`,
+    border: `1.5px solid ${border}`,
     color: textSub,
   };
 
   const btnPrimary: React.CSSProperties = {
     ...btnBase,
-    background: accent,
-    border: `1px solid ${accent}`,
-    color: isDark ? '#000000' : '#ffffff',
+    background: 'transparent',
+    border: `1.5px solid ${accent}`,
+    color: accent,
   };
 
   const tabBtn = (active: boolean): React.CSSProperties => ({
     ...btnBase,
-    background: active ? accentSel : 'transparent',
-    border: `1px solid ${active ? selBorder : 'transparent'}`,
-    color: active ? text : textSub,
+    background: 'transparent',
+    border: `1.5px solid ${active ? selBorder : border}`,
+    color: active ? (isDark ? '#2ECC71' : '#1B3A20') : textSub,
     padding: '4px 10px',
   });
 

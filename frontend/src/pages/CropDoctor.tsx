@@ -276,15 +276,15 @@ export default function CropDoctor() {
   const getSeverityColor = (sev: string) => {
     switch (sev?.toLowerCase()) {
       case "low":
-        return { bg: "bg-emerald-500/10 text-emerald-500 border-emerald-500/30", bar: "bg-emerald-500" };
+        return { bg: "bg-transparent text-emerald-500 border-emerald-500", bar: "bg-emerald-500" };
       case "moderate":
-        return { bg: "bg-amber-500/10 text-amber-500 border-amber-500/30", bar: "bg-amber-500" };
+        return { bg: "bg-transparent text-amber-500 border-amber-500", bar: "bg-amber-500" };
       case "severe":
-        return { bg: "bg-orange-500/10 text-orange-500 border-orange-500/30", bar: "bg-orange-500" };
+        return { bg: "bg-transparent text-orange-500 border-orange-500", bar: "bg-orange-500" };
       case "critical":
-        return { bg: "bg-rose-500/10 text-rose-500 border-rose-500/30", bar: "bg-rose-500" };
+        return { bg: "bg-transparent text-rose-500 border-rose-500", bar: "bg-rose-500" };
       default:
-        return { bg: "bg-emerald-500/10 text-emerald-500 border-emerald-500/30", bar: "bg-emerald-500" };
+        return { bg: "bg-transparent text-emerald-500 border-emerald-500", bar: "bg-emerald-500" };
     }
   };
 
@@ -296,7 +296,7 @@ export default function CropDoctor() {
       <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-6">
         {/* Title Banner */}
         <div className="text-center max-w-3xl mx-auto mb-8">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-3 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 backdrop-blur-md">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-3 bg-transparent text-emerald-500 border border-emerald-500/40 backdrop-blur-md">
             <Sparkles className="w-3.5 h-3.5" />
             <span>SkyView Multimodal Plant Pathology Diagnostics</span>
           </div>
@@ -318,7 +318,7 @@ export default function CropDoctor() {
             <button
               key={idx}
               onClick={() => loadPresetSample(sample)}
-              className="text-xs font-medium px-3.5 py-1.5 rounded-xl border border-border/60 bg-card/60 hover:bg-card/90 hover:border-emerald-500/50 transition-all flex items-center gap-2 backdrop-blur-md shadow-sm"
+              className="text-xs font-medium px-3.5 py-1.5 rounded-xl border border-emerald-500/30 bg-transparent hover:border-emerald-500 text-foreground transition-all flex items-center gap-2 backdrop-blur-md shadow-none"
             >
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               <span>{sample.crop}</span>
@@ -332,8 +332,8 @@ export default function CropDoctor() {
             <div
               className={`relative border-2 border-dashed rounded-3xl overflow-hidden transition-all duration-300 min-h-[380px] flex flex-col items-center justify-center p-4 sm:p-6 text-center backdrop-blur-xl ${
                 isDark
-                  ? "bg-[#121417]/80 border-white/[0.08] shadow-2xl shadow-black/40"
-                  : "bg-white/85 border-zinc-200/80 shadow-xl shadow-zinc-900/5"
+                  ? "bg-[#141419]/70 border-white/[0.12] shadow-2xl shadow-black/40"
+                  : "bg-white/60 border-zinc-200/80 shadow-xl shadow-zinc-900/5"
               } ${selectedImage ? "border-emerald-500/40" : "hover:border-emerald-500/60"}`}
             >
               {selectedImage ? (
@@ -349,8 +349,8 @@ export default function CropDoctor() {
                         onClick={() => setShowOverlays(!showOverlays)}
                         className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all border ${
                           showOverlays
-                            ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30"
-                            : "bg-secondary text-muted-foreground border-transparent"
+                            ? "bg-transparent text-emerald-500 border-emerald-500"
+                            : "bg-transparent text-muted-foreground border-border/60"
                         }`}
                       >
                         {showOverlays ? "Hide Lesions" : "Show Lesions"}
@@ -359,8 +359,8 @@ export default function CropDoctor() {
                         onClick={() => setShowCrosshair(!showCrosshair)}
                         className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all border ${
                           showCrosshair
-                            ? "bg-blue-500/20 text-blue-400 border-blue-500/30"
-                            : "bg-secondary text-muted-foreground border-transparent"
+                            ? "bg-transparent text-blue-500 border-blue-500"
+                            : "bg-transparent text-muted-foreground border-border/60"
                         }`}
                       >
                         Crosshairs
@@ -526,7 +526,7 @@ export default function CropDoctor() {
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center gap-4 py-12">
-                  <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500 shadow-inner">
+                  <div className="w-16 h-16 rounded-2xl bg-transparent border-2 border-emerald-500/40 flex items-center justify-center text-emerald-500 shadow-none">
                     <Stethoscope className="w-8 h-8" />
                   </div>
                   <div>
@@ -556,7 +556,7 @@ export default function CropDoctor() {
                 </button>
                 <button
                   onClick={() => fileInputRef.current?.click()}
-                  className="px-4 py-2.5 rounded-xl font-semibold text-xs border border-border/80 bg-card/60 hover:bg-card/90 text-foreground transition-all flex items-center gap-2"
+                  className="px-4 py-2.5 rounded-xl font-semibold text-xs border border-emerald-500/40 bg-transparent hover:border-emerald-500 text-foreground transition-all flex items-center gap-2"
                 >
                   <Camera className="w-4 h-4 text-emerald-500" />
                   <span>Capture Live</span>
@@ -567,8 +567,8 @@ export default function CropDoctor() {
             {/* Lesion Navigator Cards */}
             {result && result.bounding_boxes && result.bounding_boxes.length > 0 && (
               <div
-                className={`p-4 rounded-2xl border text-xs backdrop-blur-md ${
-                  isDark ? "bg-[#121417]/60 border-white/[0.06]" : "bg-white/70 border-zinc-200/60"
+                className={`p-4 rounded-2xl border text-xs backdrop-blur-md bg-transparent ${
+                  isDark ? "border-white/[0.12]" : "border-zinc-200/80"
                 }`}
               >
                 <div className="font-semibold text-foreground flex items-center justify-between mb-2">
@@ -590,8 +590,8 @@ export default function CropDoctor() {
                         onMouseLeave={() => setHoveredBox(null)}
                         className={`p-2 rounded-xl border text-left transition-all ${
                           isSelected
-                            ? "bg-rose-500/15 border-rose-500/50 text-rose-400 font-bold"
-                            : "bg-secondary/40 border-border/40 text-muted-foreground hover:bg-secondary/80"
+                            ? "bg-transparent border-rose-500 text-rose-400 font-bold border-2"
+                            : "bg-transparent border-border/60 text-muted-foreground hover:border-emerald-500/50"
                         }`}
                       >
                         <div className="flex items-center justify-between">
@@ -617,15 +617,15 @@ export default function CropDoctor() {
               <div
                 className={`p-6 sm:p-7 rounded-3xl border backdrop-blur-xl transition-all ${
                   isDark
-                    ? "bg-[#121417]/90 border-white/[0.08] shadow-2xl shadow-black/50"
-                    : "bg-white/95 border-zinc-200/80 shadow-xl shadow-zinc-900/5"
+                    ? "bg-[#141419]/70 border-white/[0.12] shadow-2xl shadow-black/50"
+                    : "bg-white/60 border-zinc-200/80 shadow-xl shadow-zinc-900/5"
                 }`}
               >
                 {/* Header Metrics */}
                 <div className="flex flex-wrap items-start justify-between gap-4 pb-5 border-b border-border/40">
                   <div>
                     <div className="flex items-center gap-2.5 mb-1.5">
-                      <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                      <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-transparent text-emerald-500 border border-emerald-500/40">
                         {result.crop_identified}
                       </span>
                       <span
@@ -647,7 +647,7 @@ export default function CropDoctor() {
                       Model Confidence
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-24 h-2.5 rounded-full bg-secondary/80 overflow-hidden">
+                      <div className="w-24 h-2.5 rounded-full bg-transparent border border-border/60 overflow-hidden">
                         <div
                           className={`h-full rounded-full transition-all duration-500 ${
                             getSeverityColor(result.severity).bar
@@ -688,7 +688,7 @@ export default function CropDoctor() {
                     {result.symptoms.map((symptom, idx) => (
                       <div
                         key={idx}
-                        className="text-xs p-2.5 rounded-xl border border-border/40 bg-secondary/30 flex items-start gap-2"
+                        className="text-xs p-2.5 rounded-xl border border-amber-500/30 bg-transparent flex items-start gap-2"
                       >
                         <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 shrink-0" />
                         <span className="text-foreground/90">{symptom}</span>
@@ -707,18 +707,18 @@ export default function CropDoctor() {
                     {result.solutions.map((sol, idx) => (
                       <div
                         key={idx}
-                        className="p-3.5 rounded-2xl border border-border/50 bg-secondary/20 hover:bg-secondary/40 transition-colors"
+                        className="p-3.5 rounded-2xl border border-emerald-500/30 bg-transparent hover:border-emerald-500/60 transition-colors"
                       >
                         <div className="flex items-center justify-between gap-2 mb-1.5">
                           <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                            <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-transparent text-emerald-500 border border-emerald-500/40">
                               Stage {idx + 1}: {sol.stage}
                             </span>
                             <span className="text-xs font-bold text-foreground">
                               {sol.title}
                             </span>
                           </div>
-                          <span className="text-[10px] font-semibold text-muted-foreground px-2 py-0.5 rounded-full bg-secondary/80">
+                          <span className="text-[10px] font-semibold text-muted-foreground px-2 py-0.5 rounded-full bg-transparent border border-border/60">
                             {sol.type}
                           </span>
                         </div>
@@ -765,13 +765,9 @@ export default function CropDoctor() {
             ) : (
               /* Empty Placeholder State */
               <div
-                className={`p-10 rounded-3xl border border-dashed text-center flex flex-col items-center justify-center min-h-[420px] backdrop-blur-xl ${
-                  isDark
-                    ? "bg-[#121417]/60 border-white/[0.08]"
-                    : "bg-white/70 border-zinc-200/80"
-                }`}
+                className={`p-10 rounded-3xl border border-dashed border-emerald-500/30 text-center flex flex-col items-center justify-center min-h-[420px] backdrop-blur-xl bg-transparent`}
               >
-                <div className="w-14 h-14 rounded-2xl bg-secondary/50 flex items-center justify-center text-muted-foreground mb-4">
+                <div className="w-14 h-14 rounded-2xl bg-transparent border-2 border-emerald-500/35 flex items-center justify-center text-muted-foreground mb-4">
                   <Leaf className="w-7 h-7 text-emerald-500/70" />
                 </div>
                 <h3 className="text-base font-bold text-foreground mb-1">
@@ -782,7 +778,7 @@ export default function CropDoctor() {
                 </p>
                 <button
                   onClick={() => loadPresetSample(SAMPLE_DIAGNOSES[0])}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold bg-secondary/70 hover:bg-secondary text-foreground border border-border/50 transition-all flex items-center gap-2"
+                  className="px-4 py-2 rounded-xl text-xs font-semibold bg-transparent hover:bg-emerald-500/10 text-emerald-500 border border-emerald-500/50 transition-all flex items-center gap-2"
                 >
                   <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
                   <span>Try Sample Diagnostic</span>
