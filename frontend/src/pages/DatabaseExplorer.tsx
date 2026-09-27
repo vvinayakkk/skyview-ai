@@ -272,7 +272,7 @@ export default function DatabaseExplorer() {
 
   /* ─── Design tokens — clean, monochromatic, dense ─── */
   const bg          = 'transparent';
-  const panel       = 'transparent';
+  const panel       = isDark ? 'rgba(20, 20, 25, 0.75)' : 'rgba(255, 255, 255, 0.75)';
   const panelHover  = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)';
   const border      = isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.18)';
   const borderFocus = isDark ? '#2ECC71' : '#1B3A20';

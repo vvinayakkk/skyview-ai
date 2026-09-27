@@ -765,7 +765,11 @@ export default function CropDoctor() {
             ) : (
               /* Empty Placeholder State */
               <div
-                className={`p-10 rounded-3xl border border-dashed border-emerald-500/30 text-center flex flex-col items-center justify-center min-h-[420px] backdrop-blur-xl bg-transparent`}
+                className={`p-10 rounded-3xl border border-dashed text-center flex flex-col items-center justify-center min-h-[420px] backdrop-blur-xl ${
+                  isDark
+                    ? "bg-[#141419]/70 border-white/[0.12] shadow-2xl shadow-black/40"
+                    : "bg-white/75 border-zinc-200/80 shadow-xl shadow-zinc-900/5"
+                }`}
               >
                 <div className="w-14 h-14 rounded-2xl bg-transparent border-2 border-emerald-500/35 flex items-center justify-center text-muted-foreground mb-4">
                   <Leaf className="w-7 h-7 text-emerald-500/70" />

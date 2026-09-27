@@ -75,8 +75,8 @@ export function GlassSection({ title, icon, children, noHeader, style }: {
 }
 
 
-export function GlassCard({ children, className }: {
-    children: React.ReactNode; className?: string;
+export function GlassCard({ children, className, style }: {
+    children: React.ReactNode; className?: string; style?: React.CSSProperties;
 }) {
     const { theme } = useTheme();
     const isDark = theme === 'dark';
@@ -84,12 +84,15 @@ export function GlassCard({ children, className }: {
     return (
         <div
             style={{
-                background: 'transparent',
-                borderRadius: '16px',
+                background: isDark ? 'rgba(28, 28, 35, 0.7)' : 'rgba(255, 255, 255, 0.75)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                borderRadius: '20px',
                 padding: '20px',
-                border: isDark ? '1.5px solid rgba(255,255,255,0.12)' : '1.5px solid rgba(0,0,0,0.1)',
-                boxShadow: 'none',
+                border: isDark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(255, 255, 255, 0.8)',
+                boxShadow: isDark ? '0 10px 30px rgba(0,0,0,0.3)' : '0 10px 30px rgba(0,0,0,0.06)',
                 transition: 'all 0.3s ease',
+                ...style,
             }}
             className={className}
         >

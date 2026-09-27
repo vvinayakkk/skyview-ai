@@ -348,10 +348,12 @@ p,span,div,strong{color:#222!important}
   // Styling Primitives
   const borderCol = isDark ? 'rgba(46,204,113,0.25)' : 'rgba(30,100,50,0.22)';
   const cardStyle = {
-    background: 'transparent',
-    border: `1.5px solid ${borderCol}`,
-    borderRadius: '16px',
-    boxShadow: 'none',
+    background: isDark ? 'rgba(20, 20, 25, 0.7)' : 'rgba(255, 255, 255, 0.75)',
+    backdropFilter: 'blur(20px)',
+    WebkitBackdropFilter: 'blur(20px)',
+    border: `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.8)'}`,
+    borderRadius: '20px',
+    boxShadow: isDark ? '0 10px 30px rgba(0,0,0,0.3)' : '0 10px 30px rgba(0,0,0,0.06)',
   };
 
   const sectionTitleStyle: React.CSSProperties = {

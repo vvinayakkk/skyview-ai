@@ -28,8 +28,8 @@ export default function HardwareSetup() {
   };
 
   const textPrimary = isDark ? '#A8D89A' : '#1B3A20';
-  const cardBg = 'transparent';
-  const cardBorder = isDark ? '1.5px solid rgba(46,204,113,0.25)' : '1.5px solid rgba(46,204,113,0.3)';
+  const cardBg = isDark ? 'rgba(20, 20, 25, 0.7)' : 'rgba(255, 255, 255, 0.75)';
+  const cardBorder = isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.8)';
 
   return (
     <div style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden' }}>
