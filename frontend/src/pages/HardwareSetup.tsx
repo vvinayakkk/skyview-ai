@@ -126,16 +126,15 @@ export default function HardwareSetup() {
                 onClick={(e) => { e.stopPropagation(); !connecting && !connected && handleConnect(); }}
                 disabled={connecting || connected}
                 style={{
-                  width: '100%', padding: '14px', borderRadius: '12px', border: 'none',
-                  background: connected
-                    ? 'rgba(46,204,113,0.15)'
-                    : 'linear-gradient(135deg, #2ECC71, #1a9e52)',
-                  color: connected ? '#2ECC71' : 'white',
+                  width: '100%', padding: '14px', borderRadius: '12px',
+                  background: 'transparent',
+                  border: '1.5px solid #2ECC71',
+                  color: '#2ECC71',
                   fontSize: '14px', fontWeight: 800,
                   cursor: connecting || connected ? 'default' : 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
                   transition: 'all 0.3s',
-                  boxShadow: connected ? 'none' : '0 4px 14px rgba(46,204,113,0.35)',
+                  boxShadow: 'none',
                 }}
               >
                 {connected ? (
@@ -196,12 +195,15 @@ export default function HardwareSetup() {
               <button
                 onClick={(e) => { e.stopPropagation(); navigate('/buy-hardware'); }}
                 style={{
-                  width: '100%', padding: '14px', borderRadius: '12px', border: 'none',
-                  background: 'linear-gradient(135deg, #2196F3, #1565C0)',
-                  color: 'white', fontSize: '14px', fontWeight: 800,
+                  width: '100%', padding: '14px', borderRadius: '12px',
+                  background: 'transparent',
+                  border: '1.5px solid #2196F3',
+                  color: '#2196F3',
+                  fontSize: '14px', fontWeight: 800,
                   cursor: 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                  boxShadow: '0 4px 14px rgba(33,150,243,0.35)',
+                  boxShadow: 'none',
+                  transition: 'all 0.3s',
                 }}
               >
                 <ShoppingCart style={{ width: '16px', height: '16px' }} /> View Hardware

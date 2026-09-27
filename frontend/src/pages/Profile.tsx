@@ -722,7 +722,7 @@ export default function Profile() {
                     <WifiOff size={16} color={textSecondary} />
                     <p style={{ fontSize: 13, color: textSecondary, margin: 0 }}>No device connected</p>
                   </div>
-                  <PrimaryBtn onClick={handleConnectHardware} disabled={hwConnecting}>
+                  <PrimaryBtn outline onClick={handleConnectHardware} disabled={hwConnecting}>
                     {hwConnecting
                       ? <><Loader2 size={15} style={{ animation: 'profile-spin 1s linear infinite' }} /> Connecting…</>
                       : <><Wifi size={15} /> Connect AgriSense WS01</>

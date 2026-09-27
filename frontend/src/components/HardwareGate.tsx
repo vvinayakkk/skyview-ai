@@ -84,12 +84,13 @@ export function HardwareGate({ children }: HardwareGateProps) {
               onClick={() => navigate('/profile')}
               style={{
                 width: '100%', padding: '14px 20px',
-                borderRadius: '14px', border: 'none',
-                background: 'linear-gradient(135deg, #2ECC71, #1a9e52)',
-                color: 'white', fontSize: '15px', fontWeight: 800,
+                borderRadius: '14px',
+                background: 'transparent',
+                border: '1.5px solid #2ECC71',
+                color: '#2ECC71', fontSize: '15px', fontWeight: 800,
                 cursor: 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                boxShadow: '0 4px 16px rgba(46,204,113,0.35)',
+                boxShadow: 'none',
               }}
             >
               <Cpu style={{ width: '17px', height: '17px' }} />
@@ -102,8 +103,8 @@ export function HardwareGate({ children }: HardwareGateProps) {
               style={{
                 width: '100%', padding: '12px 20px',
                 borderRadius: '14px',
-                border: isDark ? '1px solid rgba(33,150,243,0.25)' : '1px solid rgba(33,150,243,0.2)',
-                background: isDark ? 'rgba(33,150,243,0.08)' : 'rgba(33,150,243,0.05)',
+                border: isDark ? '1.5px solid rgba(33,150,243,0.4)' : '1.5px solid rgba(33,150,243,0.4)',
+                background: 'transparent',
                 color: '#2196F3', fontSize: '14px', fontWeight: 700,
                 cursor: 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
