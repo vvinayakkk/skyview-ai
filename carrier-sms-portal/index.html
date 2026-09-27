@@ -133,8 +133,9 @@
       width: 20px;
       height: 20px;
       border-radius: 6px;
-      background: var(--emerald);
-      color: #042f1a;
+      background: transparent;
+      border: 1px solid var(--emerald);
+      color: var(--emerald);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -164,8 +165,9 @@
       line-height: 1.35;
     }
     .island-otp-pill {
-      background: var(--emerald);
-      color: #042f1a;
+      background: transparent;
+      border: 1.5px solid var(--emerald);
+      color: var(--emerald);
       font-size: 19px;
       font-weight: 800;
       padding: 7px 15px;
@@ -231,8 +233,9 @@
       width: 16px;
       height: 16px;
       border-radius: 50%;
-      background: var(--emerald);
-      color: #042f1a;
+      background: transparent;
+      border: 1.5px solid var(--emerald);
+      color: var(--emerald);
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -321,9 +324,9 @@
       gap: 6px;
     }
     .telemetry-tag {
-      background: rgba(16, 185, 129, 0.12);
+      background: transparent;
       color: var(--emerald);
-      border: 1px solid var(--border-accent);
+      border: 1px solid var(--emerald);
       padding: 2px 7px;
       border-radius: 6px;
       font-size: 10px;
@@ -397,8 +400,10 @@
       transition: all 0.2s;
     }
     .btn-test-trigger:hover, .btn-test-trigger:active {
-      background: var(--emerald);
-      color: #042f1a;
+      background: transparent;
+      border-color: var(--emerald);
+      color: var(--emerald);
+      box-shadow: 0 0 14px var(--emerald-glow);
     }
 
     /* Message Cards */
@@ -426,11 +431,12 @@
       margin-bottom: 14px;
     }
     .sender-pill {
-      background: var(--emerald);
-      color: #042f1a;
+      background: transparent;
+      color: var(--emerald);
+      border: 1.5px solid var(--emerald);
       font-size: 11px;
       font-weight: 800;
-      padding: 3px 9px;
+      padding: 2px 8px;
       border-radius: 8px;
       letter-spacing: 0.05em;
     }
@@ -819,7 +825,7 @@
               <div style="display:flex;align-items:center;gap:8px;">
                 <span class="sender-pill">${item.sender || 'VK-SKYVIEW'}</span>
                 <span class="time-badge">${formatTime(item.timestamp)}</span>
-                ${isNewest ? '<span style="font-size:10px;font-weight:800;background:rgba(16,185,129,0.20);color:var(--emerald);padding:2px 7px;border-radius:6px;border:1px solid var(--border-accent);">NEW</span>' : ''}
+                ${isNewest ? '<span style="font-size:10px;font-weight:800;background:transparent;color:var(--emerald);padding:2px 7px;border-radius:6px;border:1px solid var(--emerald);">NEW</span>' : ''}
               </div>
               <span class="purpose-tag">${item.purpose || 'Verification'}</span>
             </div>
