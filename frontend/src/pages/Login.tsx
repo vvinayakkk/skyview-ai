@@ -15,7 +15,6 @@ export default function Login() {
   const [dialCode, setDialCode] = useState('+91');
   const [otp, setOtp]         = useState('');
   const [otpSent, setOtpSent] = useState(false);
-  const [demoOtp, setDemoOtp] = useState('');
   const [error, setError]     = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -41,7 +40,6 @@ export default function Login() {
     const result = await sendOtp(fullPhone());
     if (result.success) {
       setOtpSent(true);
-      if (result.otp) setDemoOtp(result.otp);
     } else {
       setError(result.message || 'Phone not registered. Please sign up first.');
     }
@@ -183,18 +181,6 @@ export default function Login() {
                     ))}
                   </InputOTPGroup>
                 </InputOTP>
-                {demoOtp && otp !== demoOtp && (
-                  <button
-                    type="button"
-                    onClick={() => setOtp(demoOtp)}
-                    style={{
-                      background: 'none', border: 'none', color: '#10B981',
-                      fontSize: '12px', cursor: 'pointer', textDecoration: 'underline', padding: '2px 0'
-                    }}
-                  >
-                    Auto-fill saved profile OTP ({demoOtp})
-                  </button>
-                )}
               </div>
             </div>
           )}
@@ -239,7 +225,7 @@ export default function Login() {
               </button>
               <button
                 type="button"
-                onClick={() => { setOtpSent(false); setOtp(''); setDemoOtp(''); }}
+                onClick={() => { setOtpSent(false); setOtp(''); }}
                 style={{
                   background: 'none', border: 'none', cursor: 'pointer', padding: '4px',
                   fontSize: '12px', color: textMuted, textDecoration: 'underline',

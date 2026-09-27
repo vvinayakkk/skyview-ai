@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Messages · VK-SKYVIEW</title>
+  <meta name="theme-color" content="#0a0d0a">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2310B981'><path d='M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z'/></svg>">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      background-color: #0b0f0c;
+      color: #e5e7eb;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(11, 15, 12, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(16, 185, 129, 0.20);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .carrier-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #10B981, #059669);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 800;
+      font-size: 15px;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+    }
+    .header-text h1 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #f9fafb;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .badge-verified {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      background: #10B981;
+      border-radius: 50%;
+      color: #042f1a;
+      font-size: 10px;
+      font-weight: bold;
+    }
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 2px;
+    }
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: #10B981;
+      box-shadow: 0 0 8px #10B981;
+      animation: pulse 1.5s infinite;
+    }
+    .status-text {
+      font-size: 11.5px;
+      color: #9ca3af;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-icon {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #10B981;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-icon:active { transform: scale(0.92); }
+    .btn-icon.muted { color: #6b7280; }
+    .container {
+      flex: 1;
+      max-width: 520px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .empty-state {
+      margin-top: 40px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1.5px dashed rgba(16, 185, 129, 0.25);
+      border-radius: 20px;
+      padding: 40px 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .empty-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #10B981;
+      font-size: 26px;
+    }
+    .empty-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #f3f4f6;
+    }
+    .empty-desc {
+      font-size: 13px;
+      color: #9ca3af;
+      line-height: 1.5;
+      max-width: 300px;
+    }
+    .message-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 18px;
+      transition: all 0.3s;
+      position: relative;
+    }
+    .message-card.newest {
+      background: rgba(16, 185, 129, 0.07);
+      border: 1.5px solid rgba(16, 185, 129, 0.5);
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.18);
+    }
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .sender-tag {
+      background: #10B981;
+      color: #042f1a;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.04em;
+    }
+    .time-tag {
+      font-size: 11px;
+      color: #9ca3af;
+    }
+    .purpose-badge {
+      font-size: 11px;
+      font-weight: 600;
+      color: #34d399;
+    }
+    .otp-display-box {
+      background: rgba(0, 0, 0, 0.65);
+      border: 1.5px solid rgba(16, 185, 129, 0.35);
+      border-radius: 14px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .otp-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #9ca3af;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .otp-number {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      color: #10B981;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+    .copy-btn {
+      background: transparent;
+      border: 1.5px solid #10B981;
+      border-radius: 10px;
+      color: #10B981;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .copy-btn:active {
+      background: #10B981;
+      color: #042f1a;
+    }
+    .copy-btn.copied {
+      background: #10B981;
+      color: #042f1a;
+    }
+    .sms-body {
+      font-size: 13px;
+      color: #d1d5db;
+      line-height: 1.5;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 10px 14px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      word-break: break-word;
+    }
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #6b7280;
+    }
+    .footer-recipient strong {
+      color: #9ca3af;
+    }
+    .footer-status {
+      color: #10B981;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    footer {
+      text-align: center;
+      padding: 16px;
+      font-size: 11px;
+      color: #6b7280;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.3); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Mobile Carrier Bar -->
+  <header>
+    <div class="carrier-info">
+      <div class="avatar">VK</div>
+      <div class="header-text">
+        <h1>
+          VK-SKYVIEW
+          <span class="badge-verified">✓</span>
+        </h1>
+        <div class="status-row">
+          <span class="dot"></span>
+          <span class="status-text" id="status-text">Connected · 5G VoLTE</span>
+        </div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn-icon" id="sound-btn" title="Toggle Chime">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+          <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+        </svg>
+      </button>
+      <button class="btn-icon" id="clear-btn" title="Clear All" style="color: #ef4444;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6"/>
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Feed Container -->
+  <div class="container" id="feed-container">
+    <div class="empty-state" id="empty-state">
+      <div class="empty-icon">📡</div>
+      <h3 class="empty-title">Waiting for OTP...</h3>
+      <p class="empty-desc">
+        Click <strong>Send Code</strong> on your computer during Signup or Login. Your verification code will appear here in real time.
+      </p>
+    </div>
+  </div>
+
+  <footer>
+    SkyView Carrier Stream · Connected to Render API
+  </footer>
+
+  <script>
+    const API_BASE = 'https://brics-agrin-backend.onrender.com';
+    let soundEnabled = true;
+    let prevCount = 0;
+    const feedContainer = document.getElementById('feed-container');
+    const emptyState = document.getElementById('empty-state');
+    const soundBtn = document.getElementById('sound-btn');
+    const clearBtn = document.getElementById('clear-btn');
+    const statusText = document.getElementById('status-text');
+
+    soundBtn.addEventListener('click', () => {
+      soundEnabled = !soundEnabled;
+      soundBtn.classList.toggle('muted', !soundEnabled);
+    });
+
+    clearBtn.addEventListener('click', async () => {
+      try {
+        await fetch(`${API_BASE}/api/auth/live-otps`, { method: 'DELETE' });
+      } catch (e) {}
+      renderMessages([]);
+      prevCount = 0;
+    });
+
+    function playAlertChime() {
+      // Vibrate phone
+      if ('vibrate' in navigator) {
+        try { navigator.vibrate([200, 100, 200]); } catch (e) {}
+      }
+      if (!soundEnabled) return;
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+        osc.frequency.setValueAtTime(880, ctx.currentTime + 0.1); // A5
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.35);
+      } catch (e) {}
+    }
+
+    function formatTime(iso) {
+      try {
+        const d = new Date(iso);
+        return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      } catch (e) {
+        return 'Just now';
+      }
+    }
+
+    function renderMessages(list) {
+      if (!list || list.length === 0) {
+        feedContainer.innerHTML = '';
+        feedContainer.appendChild(emptyState);
+        emptyState.style.display = 'flex';
+        statusText.textContent = 'Connected · 0 Messages';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+      statusText.textContent = `Live Stream · ${list.length} SMS Received`;
+
+      feedContainer.innerHTML = list.map((item, idx) => {
+        const isNewest = idx === 0;
+        return `
+          <div class="message-card ${isNewest ? 'newest' : ''}">
+            <div class="card-top">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span class="sender-tag">${item.sender || 'VK-SKYVIEW'}</span>
+                <span class="time-tag">${formatTime(item.timestamp)}</span>
+                ${isNewest ? '<span style="font-size:10px;font-weight:700;background:rgba(16,185,129,0.25);color:#34d399;padding:1px 6px;border-radius:4px;">NEW</span>' : ''}
+              </div>
+              <span class="purpose-badge">${item.purpose || 'Verification'}</span>
+            </div>
+
+            <div class="otp-display-box">
+              <div>
+                <div class="otp-label">Security OTP</div>
+                <div class="otp-number">${item.otp}</div>
+              </div>
+              <button class="copy-btn" onclick="copyOtp('${item.id}', '${item.otp}', this)">Copy</button>
+            </div>
+
+            <div class="sms-body">${item.message}</div>
+
+            <div class="card-footer">
+              <span class="footer-recipient">Recipient: <strong>${item.masked_phone || item.phone}</strong></span>
+              <span class="footer-status">✓ Delivered</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.copyOtp = function(id, code, btn) {
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    };
+
+    async function poll() {
+      try {
+        const res = await fetch(`${API_BASE}/api/auth/live-otps?_t=${Date.now()}`, {
+          cache: 'no-store'
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const list = data.otps || [];
+          if (list.length > prevCount && prevCount > 0) {
+            playAlertChime();
+          }
+          prevCount = list.length;
+          renderMessages(list);
+        }
+      } catch (err) {}
+    }
+
+    poll();
+    setInterval(poll, 1200);
+  </script>
+</body>
+</html>

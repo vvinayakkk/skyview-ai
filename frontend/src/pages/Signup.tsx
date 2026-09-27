@@ -20,8 +20,6 @@ export default function Signup() {
   const [crops, setCrops]       = useState('');
   const [otp, setOtp]           = useState('');
   const [otpSent, setOtpSent]   = useState(false);
-  const [smsSent, setSmsSent]   = useState<boolean | null>(null);
-  const [demoOtp, setDemoOtp]   = useState('');
   const [error, setError]       = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -55,8 +53,6 @@ export default function Signup() {
     const result = await sendOtp(fullPhone(), true);
     if (result.success) {
       setOtpSent(true);
-      setSmsSent(result.sms_sent ?? false);
-      if (result.otp) setDemoOtp(result.otp);
     } else {
       setError(result.message || 'Failed to send OTP.');
     }
@@ -263,53 +259,22 @@ export default function Signup() {
 
               {/* SMS Dispatched confirmation */}
               {otpSent && (
-                smsSent ? (
-                  <div style={{
-                    padding: '12px 16px', borderRadius: '12px',
-                    background: 'rgba(16,185,129,0.08)', border: '1.5px solid rgba(16,185,129,0.25)',
-                    display: 'flex', alignItems: 'center', gap: '12px',
-                  }}>
-                    <ShieldCheck style={{ width: '18px', height: '18px', color: '#10B981', flexShrink: 0 }} />
-                    <div>
-                      <p style={{ margin: 0, fontSize: '11px', fontWeight: 700, color: '#10B981', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                        Live Verification Code Dispatched
-                      </p>
-                      <p style={{ margin: '2px 0 0', fontSize: '12.5px', color: textMuted }}>
-                        Enter the 6-digit OTP delivered via SMS to your phone.
-                      </p>
-                    </div>
-                  </div>
-                ) : (
-                  <div style={{
-                    padding: '12px 16px', borderRadius: '12px',
-                    background: 'rgba(245,158,11,0.08)', border: '1.5px solid rgba(245,158,11,0.30)',
-                    display: 'flex', flexDirection: 'column', gap: '8px',
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <ShieldCheck style={{ width: '16px', height: '16px', color: '#f59e0b', flexShrink: 0 }} />
-                        <span style={{ fontSize: '11px', fontWeight: 700, color: '#f59e0b', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                          Fast2SMS Pending Website Verification
-                        </span>
-                      </div>
-                      {demoOtp && (
-                        <button
-                          type="button"
-                          onClick={() => setOtp(demoOtp)}
-                          style={{
-                            background: 'rgba(245,158,11,0.15)', border: '1px solid #f59e0b', borderRadius: '6px',
-                            color: '#f59e0b', fontSize: '11px', fontWeight: 700, padding: '3px 10px', cursor: 'pointer',
-                          }}
-                        >
-                          Auto-Fill {demoOtp}
-                        </button>
-                      )}
-                    </div>
-                    <p style={{ margin: 0, fontSize: '12px', color: textMuted, lineHeight: 1.5 }}>
-                      Direct handset SMS delivery requires website verification in Fast2SMS dashboard. Your code is <strong style={{ color: '#f59e0b', letterSpacing: '0.1em', fontSize: '13px' }}>{demoOtp}</strong>.
+                <div style={{
+                  padding: '12px 16px', borderRadius: '12px',
+                  background: isDark ? 'rgba(16,185,129,0.07)' : 'rgba(16,185,129,0.08)',
+                  border: '1.5px solid rgba(16,185,129,0.25)',
+                  display: 'flex', alignItems: 'center', gap: '12px',
+                }}>
+                  <ShieldCheck style={{ width: '20px', height: '20px', color: '#10B981', flexShrink: 0 }} />
+                  <div>
+                    <p style={{ margin: 0, fontSize: '11px', fontWeight: 700, color: '#10B981', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                      Verification Code Dispatched
+                    </p>
+                    <p style={{ margin: '2px 0 0', fontSize: '12.5px', color: textMuted }}>
+                      Enter the 6-digit OTP sent via SMS to <strong style={{ color: textMain }}>{fullPhone()}</strong>.
                     </p>
                   </div>
-                )
+                </div>
               )}
 
               {/* OTP Entry */}
@@ -324,18 +289,6 @@ export default function Signup() {
                         ))}
                       </InputOTPGroup>
                     </InputOTP>
-                    {demoOtp && otp !== demoOtp && (
-                      <button
-                        type="button"
-                        onClick={() => setOtp(demoOtp)}
-                        style={{
-                          background: 'none', border: 'none', color: '#10B981',
-                          fontSize: '11.5px', cursor: 'pointer', textDecoration: 'underline', padding: '2px 0'
-                        }}
-                      >
-                        Auto-fill verification code ({demoOtp})
-                      </button>
-                    )}
                   </div>
                 </div>
               )}
@@ -382,7 +335,7 @@ export default function Signup() {
                   );
                 })()}
                 {otpSent && (
-                  <button type="button" onClick={() => { setOtpSent(false); setOtp(''); setDemoOtp(''); }}
+                  <button type="button" onClick={() => { setOtpSent(false); setOtp(''); }}
                     style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '12px', color: textMuted, textDecoration: 'underline', textUnderlineOffset: '2px' }}>
                     Change details
                   </button>
