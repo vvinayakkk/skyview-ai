@@ -9,7 +9,7 @@ interface AuthContextType {
   hardwareConnected: boolean;
   connectHardware: (deviceId: string) => void;
   disconnectHardware: () => void;
-  sendOtp: (phone: string, isSignup?: boolean) => Promise<{ success: boolean; message?: string; otp?: string }>;
+  sendOtp: (phone: string, isSignup?: boolean) => Promise<{ success: boolean; message?: string; otp?: string; sms_sent?: boolean }>;
   login: (phone: string, otp: string) => Promise<boolean>;
   logout: () => void;
 }
@@ -83,7 +83,7 @@ export function AuthProvider({ children }: { readonly children: React.ReactNode 
         await sendDirectFast2SMS(phone, data.otp);
       }
       
-      return { success: data.status === "success", otp: data.otp };
+      return { success: data.status === "success", otp: data.otp, sms_sent: data.sms_sent };
     } catch {
       // Offline fallback for signup
       if (isSignup) {

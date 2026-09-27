@@ -129,6 +129,7 @@ async def send_otp(req: SendOtpReq):
             "status": "success",
             "message": f"OTP sent to {_mask_phone(req.phone)}",
             "sms_sent": sms_sent,
+            "otp": otp,
         }
     else:
         # LOGIN: Prevent burning credits!
@@ -159,6 +160,7 @@ async def send_otp(req: SendOtpReq):
             "status": "success",
             "message": f"OTP sent to {_mask_phone(req.phone)}",
             "sms_sent": False,
+            "otp": saved_otp,
         }
 
 

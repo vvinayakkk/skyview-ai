@@ -175,7 +175,7 @@ export default function Login() {
               <label htmlFor="login-otp-input" style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: textMuted, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                 Enter OTP
               </label>
-              <div id="login-otp-input" style={{ display: 'flex', justifyContent: 'center' }}>
+              <div id="login-otp-input" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
                 <InputOTP maxLength={6} value={otp} onChange={setOtp}>
                   <InputOTPGroup>
                     {[0,1,2,3,4,5].map(i => (
@@ -183,6 +183,18 @@ export default function Login() {
                     ))}
                   </InputOTPGroup>
                 </InputOTP>
+                {demoOtp && otp !== demoOtp && (
+                  <button
+                    type="button"
+                    onClick={() => setOtp(demoOtp)}
+                    style={{
+                      background: 'none', border: 'none', color: '#10B981',
+                      fontSize: '12px', cursor: 'pointer', textDecoration: 'underline', padding: '2px 0'
+                    }}
+                  >
+                    Auto-fill saved profile OTP ({demoOtp})
+                  </button>
+                )}
               </div>
             </div>
           )}

@@ -20,6 +20,7 @@ export default function Signup() {
   const [crops, setCrops]       = useState('');
   const [otp, setOtp]           = useState('');
   const [otpSent, setOtpSent]   = useState(false);
+  const [smsSent, setSmsSent]   = useState<boolean | null>(null);
   const [demoOtp, setDemoOtp]   = useState('');
   const [error, setError]       = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -54,6 +55,7 @@ export default function Signup() {
     const result = await sendOtp(fullPhone(), true);
     if (result.success) {
       setOtpSent(true);
+      setSmsSent(result.sms_sent ?? false);
       if (result.otp) setDemoOtp(result.otp);
     } else {
       setError(result.message || 'Failed to send OTP.');
@@ -196,26 +198,39 @@ export default function Signup() {
               <p style={{ margin: 0, fontSize: '12px', fontWeight: 700, color: '#10B981', textTransform: 'uppercase', letterSpacing: '0.07em' }}>Farmer Details</p>
             </div>
 
-            <form style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {/* Name & Phone row */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                <div>
-                  <label htmlFor="signup-name" style={labelStyle}>Full Name *</label>
-                  <div style={{ position: 'relative' }}>
-                    <User style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', width: '14px', height: '14px', color: '#10B981' }} />
-                    <input id="signup-name" type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Rajesh Kumar" disabled={otpSent} style={inputStyle} />
-                  </div>
+            <form style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              {/* Full Name - Dedicated full-width row */}
+              <div style={{ width: '100%' }}>
+                <label htmlFor="signup-name" style={labelStyle}>Full Name *</label>
+                <div style={{ position: 'relative', width: '100%' }}>
+                  <User style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', width: '15px', height: '15px', color: '#10B981', pointerEvents: 'none' }} />
+                  <input
+                    id="signup-name"
+                    type="text"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    placeholder="e.g. Rajesh Kumar"
+                    disabled={otpSent}
+                    style={{
+                      ...inputStyle,
+                      width: '100%',
+                      paddingLeft: '38px',
+                      paddingRight: '14px',
+                    }}
+                  />
                 </div>
-                <div>
-                  <label htmlFor="signup-phone-input" style={labelStyle}>Phone *</label>
-                  <div id="signup-phone-input">
-                    <PhoneInput
-                      value={phone}
-                      onChange={(num, code) => { setPhone(num); setDialCode(code); }}
-                      disabled={otpSent}
-                      isDark={isDark}
-                    />
-                  </div>
+              </div>
+
+              {/* Phone - Dedicated full-width row */}
+              <div style={{ width: '100%' }}>
+                <label htmlFor="signup-phone-input" style={labelStyle}>Phone Number *</label>
+                <div id="signup-phone-input" style={{ width: '100%' }}>
+                  <PhoneInput
+                    value={phone}
+                    onChange={(num, code) => { setPhone(num); setDialCode(code); }}
+                    disabled={otpSent}
+                    isDark={isDark}
+                  />
                 </div>
               </div>
 
@@ -248,28 +263,60 @@ export default function Signup() {
 
               {/* SMS Dispatched confirmation */}
               {otpSent && (
-                <div style={{
-                  padding: '12px 16px', borderRadius: '12px',
-                  background: 'rgba(16,185,129,0.08)', border: '1.5px solid rgba(16,185,129,0.25)',
-                  display: 'flex', alignItems: 'center', gap: '12px',
-                }}>
-                  <ShieldCheck style={{ width: '18px', height: '18px', color: '#10B981', flexShrink: 0 }} />
-                  <div>
-                    <p style={{ margin: 0, fontSize: '11px', fontWeight: 700, color: '#10B981', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                      Live Verification Code Dispatched
-                    </p>
-                    <p style={{ margin: '2px 0 0', fontSize: '12.5px', color: textMuted }}>
-                      Enter the 6-digit OTP delivered to your phone SMS inbox.
+                smsSent ? (
+                  <div style={{
+                    padding: '12px 16px', borderRadius: '12px',
+                    background: 'rgba(16,185,129,0.08)', border: '1.5px solid rgba(16,185,129,0.25)',
+                    display: 'flex', alignItems: 'center', gap: '12px',
+                  }}>
+                    <ShieldCheck style={{ width: '18px', height: '18px', color: '#10B981', flexShrink: 0 }} />
+                    <div>
+                      <p style={{ margin: 0, fontSize: '11px', fontWeight: 700, color: '#10B981', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                        Live Verification Code Dispatched
+                      </p>
+                      <p style={{ margin: '2px 0 0', fontSize: '12.5px', color: textMuted }}>
+                        Enter the 6-digit OTP delivered via SMS to your phone.
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <div style={{
+                    padding: '12px 16px', borderRadius: '12px',
+                    background: 'rgba(245,158,11,0.08)', border: '1.5px solid rgba(245,158,11,0.30)',
+                    display: 'flex', flexDirection: 'column', gap: '8px',
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <ShieldCheck style={{ width: '16px', height: '16px', color: '#f59e0b', flexShrink: 0 }} />
+                        <span style={{ fontSize: '11px', fontWeight: 700, color: '#f59e0b', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                          Fast2SMS Pending Website Verification
+                        </span>
+                      </div>
+                      {demoOtp && (
+                        <button
+                          type="button"
+                          onClick={() => setOtp(demoOtp)}
+                          style={{
+                            background: 'rgba(245,158,11,0.15)', border: '1px solid #f59e0b', borderRadius: '6px',
+                            color: '#f59e0b', fontSize: '11px', fontWeight: 700, padding: '3px 10px', cursor: 'pointer',
+                          }}
+                        >
+                          Auto-Fill {demoOtp}
+                        </button>
+                      )}
+                    </div>
+                    <p style={{ margin: 0, fontSize: '12px', color: textMuted, lineHeight: 1.5 }}>
+                      Direct handset SMS delivery requires website verification in Fast2SMS dashboard. Your code is <strong style={{ color: '#f59e0b', letterSpacing: '0.1em', fontSize: '13px' }}>{demoOtp}</strong>.
                     </p>
                   </div>
-                </div>
+                )
               )}
 
               {/* OTP Entry */}
               {otpSent && (
                 <div>
                   <label htmlFor="signup-otp-input" style={labelStyle}>Enter OTP</label>
-                  <div id="signup-otp-input" style={{ display: 'flex', justifyContent: 'center', marginTop: '4px' }}>
+                  <div id="signup-otp-input" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', marginTop: '4px' }}>
                     <InputOTP maxLength={6} value={otp} onChange={setOtp}>
                       <InputOTPGroup>
                         {[0,1,2,3,4,5].map(i => (
@@ -277,6 +324,18 @@ export default function Signup() {
                         ))}
                       </InputOTPGroup>
                     </InputOTP>
+                    {demoOtp && otp !== demoOtp && (
+                      <button
+                        type="button"
+                        onClick={() => setOtp(demoOtp)}
+                        style={{
+                          background: 'none', border: 'none', color: '#10B981',
+                          fontSize: '11.5px', cursor: 'pointer', textDecoration: 'underline', padding: '2px 0'
+                        }}
+                      >
+                        Auto-fill verification code ({demoOtp})
+                      </button>
+                    )}
                   </div>
                 </div>
               )}
