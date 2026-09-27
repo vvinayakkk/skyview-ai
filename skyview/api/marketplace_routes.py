@@ -409,11 +409,12 @@ async def circular_barter(req: CircularBarterReq):
             else:
                 # Generate sharing schedule prompt
                 prompt = (
-                    f"You are the SkyView Agentic Deal Broker. Generate a highly structured, practical, and friendly weekly sharing schedule (Mon to Sun) for these 3 farmers in a circular barter:\n"
+                    f"You are the SkyView Agri-Logistics Deal Broker. Generate a highly structured, practical, and clean weekly sharing schedule (Mon to Sun) for these 3 farmers in a circular barter loop:\n"
                     f"- Farmer A: {A['name']} (Location: {A['location']}) gives {item_ab} to {B['name']}\n"
                     f"- Farmer B: {B['name']} (Location: {B['location']}) gives {item_bc} to {C['name']}\n"
                     f"- Farmer C: {C['name']} (Location: {C['location']}) gives {item_ca} to {A['name']}\n\n"
-                    f"Write a 3-sentence sharing plan describing who gets what and when. Use markdown formatting with **bold** for key names and tools. Keep it practical and simple."
+                    f"Provide a clear, practical weekly handover plan. Divide into 3 distinct daily phases (e.g. Phase 1: Mon-Tue, Phase 2: Wed-Thu, Phase 3: Fri-Sat, Sunday Maintenance). "
+                    f"Do NOT use markdown tables or pipe (|) delimiters. Use clean bullet points with **bold** names and tools."
                 )
                 try:
                     res_schedule = await invoke_llm([("user", prompt)], temperature=0.3, timeout=8)

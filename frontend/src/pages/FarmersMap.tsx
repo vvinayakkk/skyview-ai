@@ -81,13 +81,15 @@ export default function FarmersMap() {
     const map = window.L.map(mapContainerRef.current).setView([22.9734, 78.6569], 5);
     mapRef.current = map;
 
-    // Apply reliable OpenStreetMap tiles (No API key required)
-    const tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+    // Apply CartoDB tiles with global English language labels (No native Urdu/Arabic script clutter)
+    const tileUrl = isDark
+      ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+      : "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png";
 
     window.L.tileLayer(tileUrl, {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      maxZoom: 18,
-      className: isDark ? "dark-map-tiles" : "",
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 19,
     }).addTo(map);
 
     markersGroupRef.current = window.L.layerGroup().addTo(map);
@@ -178,12 +180,14 @@ export default function FarmersMap() {
       }
     });
 
-    const tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+    const tileUrl = isDark
+      ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+      : "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png";
 
     window.L.tileLayer(tileUrl, {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      maxZoom: 18,
-      className: isDark ? "dark-map-tiles" : "",
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 19,
     }).addTo(mapRef.current);
   }, [isDark]);
 
@@ -410,9 +414,6 @@ export default function FarmersMap() {
             transform: scale(2.2);
             opacity: 0;
           }
-        }
-        .dark-map-tiles {
-          filter: invert(0.9) hue-rotate(180deg) brightness(0.95) contrast(1.1) !important;
         }
       `}</style>
     </div>

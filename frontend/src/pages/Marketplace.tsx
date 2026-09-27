@@ -13,6 +13,7 @@ import {
   MessageSquare, ArrowRightLeft, MapPin, RotateCw, Compass,
   Layers, ArrowRight, HelpCircle, Check, Sparkles, User
 } from "lucide-react";
+import { CircularBarterLoopCard } from "@/components/marketplace/CircularBarterLoopCard";
 
 const API_URL = import.meta.env.VITE_API_URL || '';
 
@@ -694,87 +695,15 @@ export default function Marketplace() {
                 </GlassSection>
               ) : (
                 <div className="space-y-6">
-                  {circularLoops.map((loop, idx) => {
-                    const containsMe = loop.farmers.some((f: any) => f.phone === phone);
-                    return (
-                      <Card
-                        key={idx}
-                        style={{
-                          background: isDark ? "rgba(20,30,35,0.85)" : "rgba(255,255,255,0.92)",
-                          border: containsMe ? "2px solid #3B82F6" : "1px solid rgba(0,0,0,0.08)",
-                          boxShadow: "0 4px 25px rgba(0,0,0,0.05)"
-                        }}
-                      >
-                        <CardHeader className="pb-2">
-                          <div className="flex justify-between items-center flex-wrap gap-2">
-                            <CardTitle className="text-md md:text-lg font-bold text-blue-900 dark:text-blue-100 flex items-center gap-2">
-                              <Sparkles size={18} className="text-blue-500" /> Loop #{idx + 1}: {loop.farmers.map((f: any) => f.name.split(" ")[0]).join(" ➔ ")}
-                            </CardTitle>
-                            <span className="text-xs bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-full font-bold">
-                              Total Distance: {loop.total_distance_km} km
-                            </span>
-                          </div>
-                        </CardHeader>
-                        <CardContent>
-                          
-                          {/* Circular Flow Visualization */}
-                          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 my-4 p-4 rounded-xl bg-gray-50 dark:bg-black/20 border border-gray-100 dark:border-white/5">
-                            {loop.transfer_flow.map((flow: any, fIdx: number) => {
-                              const fromFarmer = loop.farmers.find((f: any) => f.name === flow.from);
-                              const toFarmer = loop.farmers.find((f: any) => f.name === flow.to);
-                              return (
-                                <div key={fIdx} className="flex flex-col items-center justify-center p-3 text-center border-b lg:border-b-0 lg:border-r last:border-0 border-gray-200 dark:border-white/10">
-                                  <div className="font-bold text-gray-800 dark:text-gray-200 flex items-center gap-1">
-                                    <Tractor size={15} className="text-blue-500" /> {flow.from}
-                                  </div>
-                                  <div className="text-[10px] text-gray-400 mt-0.5">{fromFarmer?.location}</div>
-                                  
-                                  <div className="my-2 flex items-center justify-center gap-2 text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-500/10 px-3 py-1 rounded-lg">
-                                    <span>Lends {flow.item}</span>
-                                    <ArrowRight size={14} />
-                                  </div>
-
-                                  <div className="font-bold text-gray-700 dark:text-gray-300">{flow.to}</div>
-                                  <div className="text-[10px] text-gray-500 mt-0.5">{toFarmer?.location} ({flow.distance_km} km away)</div>
-                                </div>
-                              );
-                            })}
-                          </div>
-
-                          {/* AI Sharing Plan Schedule with Typewriter Live Streaming */}
-                          <div className="mt-4 p-4 rounded-xl bg-blue-500/5 border border-blue-500/10">
-                            <h5 className="text-xs font-bold uppercase tracking-wider text-blue-800 dark:text-blue-400 flex items-center gap-1.5">
-                              <Sparkles size={14} className="text-blue-500 animate-pulse" /> AI-Generated Sharing Schedule
-                            </h5>
-                            <p className="text-sm mt-2 font-sans italic text-gray-700 dark:text-gray-300 leading-relaxed">
-                              "<TypewriterText text={loop.ai_schedule} speed={8} />"
-                            </p>
-                          </div>
-
-                          {/* Action Bar */}
-                          <div className="mt-4 flex justify-end gap-2">
-                            {loop.farmers.map((farmer: any, fIdx: number) => {
-                              if (farmer.phone === phone) return null;
-                              return (
-                                <Button
-                                  key={fIdx}
-                                  asChild
-                                  size="sm"
-                                  variant="outline"
-                                  className="text-xs border-blue-500/20 text-blue-800 dark:text-blue-300 font-bold hover:bg-blue-500/10"
-                                >
-                                  <a href={`https://wa.me/${farmer.whatsapp.replace(/[+\s-]/g, '')}?text=${encodeURIComponent(`Hi ${farmer.name}, I saw our 3-party cooperative barter match on SkyView! Can we coordinate our schedule?`)}`} target="_blank" rel="noopener noreferrer">
-                                    <MessageSquare size={13} className="mr-1" /> WhatsApp {farmer.name.split(" ")[0]}
-                                  </a>
-                                </Button>
-                              );
-                            })}
-                          </div>
-
-                        </CardContent>
-                      </Card>
-                    );
-                  })}
+                  {circularLoops.map((loop, idx) => (
+                    <CircularBarterLoopCard
+                      key={idx}
+                      loop={loop}
+                      loopIndex={idx}
+                      currentUserPhone={phone}
+                      isDark={isDark}
+                    />
+                  ))}
                 </div>
               )}
             </motion.div>
