@@ -50,12 +50,18 @@
 - [Glassmorphic & Border-First UI Design System](#-glassmorphic--border-first-ui-design-system)
 - [Autonomous Multi-Tier Agentic Consensus](#-autonomous-multi-tier-agentic-consensus)
 - [Core Functional Engines](#-core-functional-engines)
-  - [1. Crop Doctor: Multimodal Vision Pathology](#1-crop-doctor-multimodal-foliar-pathology-diagnostic-engine)
-  - [2. System-One Typed Decision Engine](#2-system-one-typed-decision-engine-jev-architecture)
-  - [3. Interactive Farmers Geographic Map](#3-interactive-farmers-geographic-map--resource-pooling)
-  - [4. Vernacular Speech-to-Speech Telephony](#4-vernacular-speech-to-speech-telephony-ai)
-  - [5. Edge FPGA Hardware Co-Processor](#5-edge-fpga-hardware-co-processor-xilinx-zc706)
-  - [6. Resilient Government Welfare Navigator](#6-resilient-government-welfare-navigator)
+  - [1. Crop Doctor: Multimodal Vision Pathology](#1--crop-doctor-multimodal-foliar-pathology-diagnostic-engine)
+  - [2. System-One Typed Decision Engine](#2--system-one-typed-decision-engine-jev-architecture)
+  - [3. Interactive Farmers Geographic Map](#3-️-interactive-farmers-geographic-map--resource-pooling)
+  - [4. Vernacular Speech-to-Speech Telephony](#4--vernacular-speech-to-speech-telephony-ai)
+  - [5. Edge FPGA Hardware Co-Processor](#5--edge-fpga-hardware-co-processor-xilinx-zc706)
+  - [6. Resilient Government Welfare Navigator](#6-️-resilient-government-welfare-navigator)
+  - [7. Cooperative Economic Marketplace & Circular Barter](#7--cooperative-economic-marketplace--circular-3-party-barter-kisan-bazaar)
+  - [8. Real-Time Mandi Rates & Price Forecasting](#8--real-time-mandi-rates--econometric-price-forecasting)
+  - [9. Automated Farm Health Dossier & Audit Reports](#9--automated-full-spectrum-farm-health-dossier--audit-reports)
+  - [10. 3D Digital Twin Weather Station & IoT Telemetry](#10-️-interactive-3d-digital-twin-weather-station--iot-telemetry)
+  - [11. AgriSense Hardware Ecosystem & Procurement](#11-️-agrisense-hardware-ecosystem--procurement-lifecycle)
+  - [12. Database Explorer & Developer Workbench](#12-️-relational-database-explorer--developer-workbench)
 - [Continuous Integration, SonarQube & Quality Gates](#-continuous-integration-sonarqube--quality-gates)
 - [Monorepo Directory Structure](#-monorepo-directory-structure)
 - [Quick Start & Local Deployment](#-quick-start--local-deployment)
@@ -245,6 +251,34 @@ SkyView rejects single-provider vulnerability in favor of an **Autonomous Multi-
 ### 6. 🏛️ Resilient Government Welfare Navigator
 - Direct API integration with `MyScheme.gov.in`, PM-KISAN, PMFBY (Crop Insurance), and Soil Health Card portals.
 - Algorithmic profile matching automatically identifies eligible state and national subsidies.
+
+### 7. 🔄 Cooperative Economic Marketplace & Circular 3-Party Barter (Kisan Bazaar)
+- **Multi-Party Barter Graph Algorithms:** Solves smallholder working-capital and liquidity constraints by finding 2-party mutual exchanges and autonomous **3-Party circular barter loops** ($Farmer A \to Farmer B \to Farmer C \to Farmer A$).
+- **Cooperative Equipment Pooling:** Shared machinery co-ownership groups (tractors, combine harvesters, solar drip units) with automated per-acre cost allocation models.
+- **Agentic Deal Broker Simulator:** Autonomous LLM-driven negotiation engine that evaluates fair exchange terms, seasonal commodity parity, and transit distance.
+
+### 8. 📈 Real-Time Mandi Rates & Econometric Price Forecasting
+- **Live Open Data Integration:** Streams real-time APMC commodity arrivals and modal pricing from `data.gov.in` across 14+ Indian states and dozens of agricultural crops.
+- **Predictive Moving-Average Trends:** Interactive historical price time-series visualizations with 5-day moving average (MA) smoothing, price spread volatility bands, and MSP benchmark comparisons.
+- **High-Density Econometric Filters:** Rapid state-level, market-level, and commodity-level querying with 0ms in-memory cache delivery.
+
+### 9. 📑 Automated Full-Spectrum Farm Health Dossier & Audit Reports
+- **Multi-Persona Diagnostic Synthesis:** Autonomous agronomic reasoning engine synthesizing microclimatic sensor telemetry, soil chemistry, satellite indices, and live commodity economics into a unified health dossier.
+- **Three Expert Perspectives:** Actionable multi-angle recommendations categorized across **Agronomist**, **Soil Scientist**, and **Market Analyst** personas.
+- **Audit-Ready Export:** One-click clean PDF and printable dispatch dossiers for agricultural extension officers and cooperative lenders.
+
+### 10. 🛰️ Interactive 3D Digital Twin Weather Station & IoT Telemetry
+- **Three.js Digital Twin:** Fully interactive, real-time 3D rendered model of the solar-powered AgriSense station with interactive raycasting labels.
+- **8-Parameter Continuous Telemetry:** Ambient temperature, relative air humidity, soil moisture content, wind velocity & direction, tipping-bucket rainfall volume, solar irradiance, UV index, and barometric pressure.
+- **Telemetry Health Matrix:** Real-time battery charge percentage, solar harvesting efficiency, and LoRa packet delivery latency.
+
+### 11. ⚙️ AgriSense Hardware Ecosystem & Procurement Lifecycle
+- **Complete Open-Hardware Spec:** Production-ready schematics using ESP32 dual-core MCU, LoRa SX1276 long-range transceiver (868/915 MHz), BME280 sensor, corrosion-resistant capacitive soil probes, and solar LiFePO4 battery management.
+- **Realistic Hardware Procurement Flow:** Interactive order configuration, bill of materials, estimated logistics dispatch tracking, and instant live demo sensor streaming.
+
+### 12. 🗄️ Relational Database Explorer & Developer Workbench
+- **In-Browser Schema & Data Inspector:** Native developer tool enabling deep inspection of platform relational tables (`users`, `sensor_readings`, `mandi_rates`, `marketplace_listings`).
+- **Zero-Latency Pagination & Filtering:** Column sorting, full-text search, primary key indexing, and instant JSON data export.
 
 ---
 
