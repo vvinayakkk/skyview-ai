@@ -291,7 +291,9 @@ export default function CropDoctor() {
   return (
     <div className="min-h-screen relative pb-20 selection:bg-emerald-500/30">
       <FarmBackground />
-      <DashboardHeader />
+      <div style={{ position: 'relative', zIndex: 50 }}>
+        <DashboardHeader lastUpdateSeconds={0} sensorNodeOnline={true} />
+      </div>
 
       <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-6">
         {/* Title Banner */}

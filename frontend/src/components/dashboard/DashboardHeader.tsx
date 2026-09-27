@@ -25,14 +25,14 @@ import { ultraCache } from '@/lib/ultraCache';
 import { SkyViewLogo } from '@/components/SkyViewLogo';
 
 interface DashboardHeaderProps {
-  lastUpdateSeconds: number;
-  sensorNodeOnline: boolean;
+  lastUpdateSeconds?: number;
+  sensorNodeOnline?: boolean;
 }
 
 export function DashboardHeader({
-  lastUpdateSeconds,
-  sensorNodeOnline,
-}: DashboardHeaderProps) {
+  lastUpdateSeconds = 0,
+  sensorNodeOnline = true,
+}: DashboardHeaderProps = {}) {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -297,7 +297,7 @@ export function DashboardHeader({
                   whiteSpace: 'nowrap',
                 }}
               >
-                L-SYNC 0s
+                L-SYNC {lastUpdateSeconds}s
               </span>
             </div>
 
