@@ -4,23 +4,118 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Messages · VK-SKYVIEW</title>
-  <meta name="theme-color" content="#0a0d0a">
+  <meta name="theme-color" content="#070a08">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2310B981'><path d='M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z'/></svg>">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body {
-      background-color: #0b0f0c;
+      background-color: #070a08;
       color: #e5e7eb;
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
     }
+
+    /* iOS / Android Native Push Notification Toast */
+    .push-banner {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      max-width: 480px;
+      margin: 0 auto;
+      z-index: 9999;
+      background: rgba(18, 24, 20, 0.94);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1.5px solid rgba(16, 185, 129, 0.5);
+      border-radius: 18px;
+      padding: 14px 16px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(16, 185, 129, 0.25);
+      display: none;
+      transform: translateY(-120%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+    }
+    .push-banner.show {
+      display: block;
+      transform: translateY(0);
+      animation: bannerSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes bannerSlideIn {
+      from { transform: translateY(-120%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .push-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .push-app {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .push-app-icon {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      background: #10B981;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #042f1a;
+      font-size: 10px;
+      font-weight: bold;
+    }
+    .push-time {
+      font-size: 11px;
+      color: #6b7280;
+    }
+    .push-body {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .push-content h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #f9fafb;
+      margin-bottom: 2px;
+    }
+    .push-content p {
+      font-size: 12.5px;
+      color: #d1d5db;
+      line-height: 1.35;
+    }
+    .push-otp-pill {
+      background: #10B981;
+      color: #042f1a;
+      font-size: 17px;
+      font-weight: 800;
+      padding: 6px 14px;
+      border-radius: 10px;
+      font-family: ui-monospace, Menlo, Monaco, monospace;
+      letter-spacing: 0.1em;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    }
+
+    /* Carrier Top Bar */
     header {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(11, 15, 12, 0.92);
+      background: rgba(7, 10, 8, 0.95);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid rgba(16, 185, 129, 0.20);
@@ -45,10 +140,10 @@
       color: #fff;
       font-weight: 800;
       font-size: 15px;
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
     }
     .header-text h1 {
-      font-size: 16px;
+      font-size: 15.5px;
       font-weight: 700;
       color: #f9fafb;
       display: flex;
@@ -59,12 +154,12 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 16px;
-      height: 16px;
+      width: 15px;
+      height: 15px;
       background: #10B981;
       border-radius: 50%;
       color: #042f1a;
-      font-size: 10px;
+      font-size: 9px;
       font-weight: bold;
     }
     .status-row {
@@ -105,6 +200,8 @@
     }
     .btn-icon:active { transform: scale(0.92); }
     .btn-icon.muted { color: #6b7280; }
+
+    /* Feed Container */
     .container {
       flex: 1;
       max-width: 520px;
@@ -149,6 +246,8 @@
       line-height: 1.5;
       max-width: 300px;
     }
+
+    /* Message Thread Cards */
     .message-card {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.08);
@@ -272,6 +371,24 @@
 </head>
 <body>
 
+  <!-- Native Mobile Push Notification Banner -->
+  <div class="push-banner" id="push-banner">
+    <div class="push-header">
+      <div class="push-app">
+        <div class="push-app-icon">💬</div>
+        <span>Messages · now</span>
+      </div>
+      <span class="push-time" id="push-time">Just now</span>
+    </div>
+    <div class="push-body">
+      <div class="push-content">
+        <h3 id="push-sender">VK-SKYVIEW</h3>
+        <p id="push-msg">Your SkyView verification code is 482910.</p>
+      </div>
+      <div class="push-otp-pill" id="push-otp">482910</div>
+    </div>
+  </div>
+
   <!-- Mobile Carrier Bar -->
   <header>
     <div class="carrier-info">
@@ -288,7 +405,7 @@
       </div>
     </div>
     <div class="header-actions">
-      <button class="btn-icon" id="sound-btn" title="Toggle Chime">
+      <button class="btn-icon" id="sound-btn" title="Toggle Sound / Chime">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
           <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
@@ -307,26 +424,34 @@
   <div class="container" id="feed-container">
     <div class="empty-state" id="empty-state">
       <div class="empty-icon">📡</div>
-      <h3 class="empty-title">Waiting for OTP...</h3>
+      <h3 class="empty-title">Waiting for SMS...</h3>
       <p class="empty-desc">
-        Click <strong>Send Code</strong> on your computer during Signup or Login. Your verification code will appear here in real time.
+        Click <strong>Send Code</strong> during <strong>Signup</strong> or <strong>Login</strong>. The OTP popup will trigger here in real time!
       </p>
     </div>
   </div>
 
   <footer>
-    SkyView Carrier Stream · Connected to Render API
+    SkyView Carrier Stream · 1.0s Polling Heartbeat
   </footer>
 
   <script>
     const API_BASE = 'https://brics-agrin-backend.onrender.com';
     let soundEnabled = true;
     let prevCount = 0;
+    let bannerTimeout = null;
+
     const feedContainer = document.getElementById('feed-container');
     const emptyState = document.getElementById('empty-state');
     const soundBtn = document.getElementById('sound-btn');
     const clearBtn = document.getElementById('clear-btn');
     const statusText = document.getElementById('status-text');
+
+    const pushBanner = document.getElementById('push-banner');
+    const pushSender = document.getElementById('push-sender');
+    const pushMsg = document.getElementById('push-msg');
+    const pushOtp = document.getElementById('push-otp');
+    const pushTime = document.getElementById('push-time');
 
     soundBtn.addEventListener('click', () => {
       soundEnabled = !soundEnabled;
@@ -339,13 +464,44 @@
       } catch (e) {}
       renderMessages([]);
       prevCount = 0;
+      hidePushBanner();
     });
 
-    function playAlertChime() {
-      // Vibrate phone
+    function showPushBanner(item) {
+      pushSender.textContent = item.sender || 'VK-SKYVIEW';
+      pushMsg.textContent = item.message || `Your verification code is ${item.otp}`;
+      pushOtp.textContent = item.otp;
+      pushTime.textContent = 'Just now';
+      
+      pushBanner.classList.add('show');
+      
+      // Tap toast to copy code
+      pushBanner.onclick = () => {
+        navigator.clipboard.writeText(item.otp);
+        pushOtp.textContent = 'Copied!';
+        setTimeout(() => { pushOtp.textContent = item.otp; }, 2000);
+      };
+
+      if (bannerTimeout) clearTimeout(bannerTimeout);
+      bannerTimeout = setTimeout(() => {
+        hidePushBanner();
+      }, 9000);
+    }
+
+    function hidePushBanner() {
+      pushBanner.classList.remove('show');
+    }
+
+    function triggerAlerts(item) {
+      // Vibrate mobile device
       if ('vibrate' in navigator) {
-        try { navigator.vibrate([200, 100, 200]); } catch (e) {}
+        try { navigator.vibrate([250, 100, 250]); } catch (e) {}
       }
+
+      // Show native slide-down push notification banner
+      showPushBanner(item);
+
+      // Play audio chime
       if (!soundEnabled) return;
       try {
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -438,7 +594,7 @@
           const data = await res.json();
           const list = data.otps || [];
           if (list.length > prevCount && prevCount > 0) {
-            playAlertChime();
+            triggerAlerts(list[0]);
           }
           prevCount = list.length;
           renderMessages(list);
@@ -447,7 +603,7 @@
     }
 
     poll();
-    setInterval(poll, 1200);
+    setInterval(poll, 1000);
   </script>
 </body>
 </html>
