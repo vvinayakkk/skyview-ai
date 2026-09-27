@@ -12,6 +12,12 @@ from skyview.data.db import init_db
 
 setup_logging()
 logger = get_logger(__name__)
+import time
+from fastapi.middleware.gzip import GZipMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.requests import Request
+from starlette.responses import Response
+
 settings = get_settings()
 
 app = FastAPI(
@@ -20,6 +26,31 @@ app = FastAPI(
     description="Multi-agent IoT + AI agricultural platform",
 )
 
+# 1. Performance timing & intelligent HTTP Cache-Control injection
+class PerformanceAndCacheMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        start_time = time.perf_counter()
+        response: Response = await call_next(request)
+        process_time = time.perf_counter() - start_time
+        response.headers["X-Process-Time-Ms"] = f"{process_time * 1000:.2f}"
+
+        # Inject Cache-Control for read-only GET endpoints to allow browser & edge caching
+        if request.method == "GET" and response.status_code == 200:
+            path = request.url.path
+            if any(p in path for p in ["/api/mandi", "/api/marketplace/farmers", "/api/marketplace/loops", "/api/marketplace/directory", "/api/trends", "/api/schemes"]):
+                if "cache-control" not in response.headers:
+                    response.headers["Cache-Control"] = "public, max-age=300, stale-while-revalidate=86400"
+            elif any(p in path for p in ["/api/sensor/readings", "/api/weather"]):
+                if "cache-control" not in response.headers:
+                    response.headers["Cache-Control"] = "public, max-age=15, stale-while-revalidate=60"
+        return response
+
+app.add_middleware(PerformanceAndCacheMiddleware)
+
+# 2. GZip compression (reduces JSON payload size across the wire by up to 80%)
+app.add_middleware(GZipMiddleware, minimum_size=1000)
+
+# 3. CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS,

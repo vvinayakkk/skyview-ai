@@ -12,14 +12,17 @@ from sqlalchemy import text
 
 from skyview.data.db import get_session
 from skyview.utils.llm_pool import invoke_llm
+import time
 from skyview.utils.logger import get_logger
 from skyview.agents.mandi_agent import fetch_rates
 
 router = APIRouter(prefix="/api/marketplace", tags=["Marketplace"])
 logger = get_logger(__name__)
 
-# Global cache to optimize LLM calls and reduce latency
+# Global caches to optimize LLM calls and reduce DB load
 _llm_cache = {}
+_farmers_cache = {"data": None, "timestamp": 0}
+_FARMERS_CACHE_TTL = 30  # 30 seconds cache for rapid map pans / filters
 
 
 class MarketplaceMatchReq(BaseModel):
@@ -61,7 +64,11 @@ def parse_resources(resources_str: Optional[str]) -> List[str]:
 
 @router.get("/farmers")
 def get_all_farmers():
-    """Retrieve all farmers for interactive map visualizations."""
+    """Retrieve all farmers for interactive map visualizations (with 30s in-memory cache)."""
+    now = time.time()
+    if _farmers_cache["data"] is not None and (now - _farmers_cache["timestamp"]) < _FARMERS_CACHE_TTL:
+        return _farmers_cache["data"]
+
     db = get_session()
     try:
         rows = db.execute(
@@ -92,7 +99,10 @@ def get_all_farmers():
             "required_resources": [req.strip() for req in r[10].split(",") if req.strip()] if r[10] else [],
             "whatsapp_number": r[11],
         })
-    return {"status": "success", "farmers": farmers}
+    result = {"status": "success", "farmers": farmers}
+    _farmers_cache["data"] = result
+    _farmers_cache["timestamp"] = now
+    return result
 
 
 @router.post("/match")

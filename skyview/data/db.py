@@ -23,7 +23,7 @@ _SessionLocal = None
 
 
 def _make_engine(database_url: str):
-    kwargs: Dict[str, Any] = {"pool_pre_ping": True, "echo": False}
+    kwargs: Dict[str, Any] = {"pool_pre_ping": True, "pool_recycle": 300, "echo": False}
     if "sqlite" in database_url.lower():
         kwargs["connect_args"] = {"check_same_thread": False}
         kwargs["poolclass"] = StaticPool
