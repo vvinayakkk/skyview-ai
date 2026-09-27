@@ -838,7 +838,13 @@ export default function Advisor() {
           </div>
 
           {/* ─── RIGHT COLUMN: Interactive Agentic Chatbot (span 7) ─── */}
-          <div className="lg:col-span-7 flex flex-col" style={{ minHeight: "620px" }}>
+          <div className="lg:col-span-7 flex flex-col" style={{
+            height: "calc(100vh - 140px)",
+            maxHeight: "750px",
+            minHeight: "520px",
+            position: "sticky",
+            top: "84px",
+          }}>
             
             <div style={{
               ...cardStyle,
@@ -851,6 +857,7 @@ export default function Advisor() {
               
               {/* Chat Header (Using customized Bot Icon) */}
               <div style={{
+                flexShrink: 0,
                 display: "flex", justifyContent: "space-between", alignItems: "center",
                 padding: "14px 18px", borderBottom: `1.5px solid ${borderCol}`,
                 background: "transparent"
@@ -888,13 +895,18 @@ export default function Advisor() {
 
               {/* Chat Scroll Feed (Dynamically resizes via flexbox and overflow) */}
               <div style={{
-                flex: 1, overflowY: "auto", padding: "16px",
-                display: "flex", flexDirection: "column", gap: 14,
+                flex: 1,
+                minHeight: 0,
+                overflowY: "auto",
+                padding: "16px",
+                display: "flex",
+                flexDirection: "column",
+                gap: 14,
                 scrollbarWidth: "thin",
               }}>
                 
                 {messages.length === 0 ? (
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%", textAlign: "center", padding: "40px 20px" }}>
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", margin: "auto 0", textAlign: "center", padding: "20px 20px" }}>
                     <div style={{
                       width: 52, height: 52, borderRadius: "50%", background: "transparent",
                       display: "flex", alignItems: "center", justifyContent: "center", color: "#2ECC71",
@@ -1119,8 +1131,12 @@ export default function Advisor() {
 
               {/* Chat Input Box */}
               <div style={{
-                padding: "12px 16px 16px", borderTop: `1.5px solid ${borderCol}`,
-                background: "transparent"
+                flexShrink: 0,
+                padding: "12px 16px 16px",
+                borderTop: `1.5px solid ${borderCol}`,
+                background: isDark ? "rgba(20, 20, 25, 0.9)" : "rgba(255, 255, 255, 0.9)",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
               }}>
                 {error && (
                   <p style={{ color: "#EF4444", fontSize: 11, margin: "0 0 8px 4px", textAlign: "left" }}>

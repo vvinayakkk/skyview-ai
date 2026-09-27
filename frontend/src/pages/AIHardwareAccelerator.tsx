@@ -437,7 +437,16 @@ function LLMBlock({ text, isDark }: { text: string; isDark: boolean }) {
 // ─── Result card ─────────────────────────────────────────────────
 function ResultCard({ title, modeLabel, children, isDark }: { title: string; modeLabel: string; children: React.ReactNode; isDark: boolean }) {
   return (
-    <div style={{ borderRadius: 14, border: "1.5px solid #2ECC71", background: "transparent", marginBottom: "1rem", overflow: "hidden" }}>
+    <div style={{
+      borderRadius: 18,
+      border: isDark ? "1px solid rgba(255,255,255,0.12)" : "1px solid rgba(255,255,255,0.8)",
+      background: isDark ? "rgba(20, 20, 25, 0.75)" : "rgba(255, 255, 255, 0.8)",
+      backdropFilter: "blur(20px)",
+      WebkitBackdropFilter: "blur(20px)",
+      boxShadow: isDark ? "0 10px 30px rgba(0,0,0,0.3)" : "0 10px 30px rgba(0,0,0,0.06)",
+      marginBottom: "1rem",
+      overflow: "hidden"
+    }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1.1rem 1.4rem 0.8rem" }}>
         <h3 style={{ margin: 0, fontSize: "0.95rem", fontWeight: 700, color: isDark ? "#F0F0F0" : "#111" }}>{title}</h3>
         <span style={{ fontSize: "0.65rem", fontWeight: 600, padding: "0.2rem 0.65rem", borderRadius: 9999, background: "transparent", color: "#2ECC71", border: "1.5px solid #2ECC71", textTransform: "uppercase", letterSpacing: "0.06em" }}>
@@ -626,12 +635,20 @@ export default function AIHardwareAccelerator() {
         </div>
 
         {/* Pipeline cards */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1rem", marginBottom: "1.75rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1.25rem", marginBottom: "1.75rem" }}>
 
           {/* Rain */}
-          <div style={{ borderRadius: 14, padding: "1.25rem 1.4rem", border: `1.5px solid ${isDark ? "rgba(46,204,113,0.25)" : "rgba(30,100,50,0.22)"}`, background: "transparent" }}>
-            <p style={{ margin: "0 0 0.35rem", fontSize: "0.72rem", fontWeight: 700, color: isDark ? "#555" : "#BBB", textTransform: "uppercase", letterSpacing: "0.08em" }}>Pipeline 1</p>
-            <h3 style={{ margin: "0 0 0.5rem", fontSize: "1rem", fontWeight: 700, color: isDark ? "#E8E8E8" : "#111" }}>Rain Prediction</h3>
+          <div style={{
+            borderRadius: 18,
+            padding: "1.35rem 1.5rem",
+            border: isDark ? "1px solid rgba(255,255,255,0.12)" : "1px solid rgba(255,255,255,0.8)",
+            background: isDark ? "rgba(20, 20, 25, 0.75)" : "rgba(255, 255, 255, 0.8)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+            boxShadow: isDark ? "0 10px 30px rgba(0,0,0,0.3)" : "0 10px 30px rgba(0,0,0,0.06)",
+          }}>
+            <p style={{ margin: "0 0 0.35rem", fontSize: "0.72rem", fontWeight: 700, color: isDark ? "#A8D89A" : "#1B3A20", textTransform: "uppercase", letterSpacing: "0.08em" }}>Pipeline 1</p>
+            <h3 style={{ margin: "0 0 0.5rem", fontSize: "1.05rem", fontWeight: 700, color: isDark ? "#E8E8E8" : "#111" }}>Rain Prediction</h3>
             <p style={{ margin: "0 0 0.85rem", fontSize: "0.78rem", color: isDark ? "#888" : "#666", lineHeight: 1.55 }}>
               Sends temperature, humidity, barometric pressure, and wind speed to the FPGA random-forest HLS core. Outputs rain probability (%) and a confidence score.
             </p>
@@ -644,9 +661,17 @@ export default function AIHardwareAccelerator() {
           </div>
 
           {/* Fusion */}
-          <div style={{ borderRadius: 14, padding: "1.25rem 1.4rem", border: `1.5px solid ${isDark ? "rgba(46,204,113,0.25)" : "rgba(30,100,50,0.22)"}`, background: "transparent" }}>
-            <p style={{ margin: "0 0 0.35rem", fontSize: "0.72rem", fontWeight: 700, color: isDark ? "#555" : "#BBB", textTransform: "uppercase", letterSpacing: "0.08em" }}>Pipeline 2</p>
-            <h3 style={{ margin: "0 0 0.5rem", fontSize: "1rem", fontWeight: 700, color: isDark ? "#E8E8E8" : "#111" }}>Sensor Fusion</h3>
+          <div style={{
+            borderRadius: 18,
+            padding: "1.35rem 1.5rem",
+            border: isDark ? "1px solid rgba(255,255,255,0.12)" : "1px solid rgba(255,255,255,0.8)",
+            background: isDark ? "rgba(20, 20, 25, 0.75)" : "rgba(255, 255, 255, 0.8)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+            boxShadow: isDark ? "0 10px 30px rgba(0,0,0,0.3)" : "0 10px 30px rgba(0,0,0,0.06)",
+          }}>
+            <p style={{ margin: "0 0 0.35rem", fontSize: "0.72rem", fontWeight: 700, color: isDark ? "#A8D89A" : "#1B3A20", textTransform: "uppercase", letterSpacing: "0.08em" }}>Pipeline 2</p>
+            <h3 style={{ margin: "0 0 0.5rem", fontSize: "1.05rem", fontWeight: 700, color: isDark ? "#E8E8E8" : "#111" }}>Sensor Fusion</h3>
             <p style={{ margin: "0 0 0.85rem", fontSize: "0.78rem", color: isDark ? "#888" : "#666", lineHeight: 1.55 }}>
               Passes soil moisture, temperature, humidity, and light through an AXI4-Lite Kalman filter on the FPGA. Returns a plant-health score, stress index, and alert level.
             </p>
@@ -659,9 +684,17 @@ export default function AIHardwareAccelerator() {
           </div>
 
           {/* Combined */}
-          <div style={{ borderRadius: 14, padding: "1.25rem 1.4rem", border: `1.5px solid ${isDark ? "rgba(46,204,113,0.25)" : "rgba(30,100,50,0.22)"}`, background: "transparent" }}>
-            <p style={{ margin: "0 0 0.35rem", fontSize: "0.72rem", fontWeight: 700, color: isDark ? "#555" : "#BBB", textTransform: "uppercase", letterSpacing: "0.08em" }}>Pipeline 3</p>
-            <h3 style={{ margin: "0 0 0.5rem", fontSize: "1rem", fontWeight: 700, color: isDark ? "#E8E8E8" : "#111" }}>Full Irrigation Analysis</h3>
+          <div style={{
+            borderRadius: 18,
+            padding: "1.35rem 1.5rem",
+            border: isDark ? "1px solid rgba(255,255,255,0.12)" : "1px solid rgba(255,255,255,0.8)",
+            background: isDark ? "rgba(20, 20, 25, 0.75)" : "rgba(255, 255, 255, 0.8)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+            boxShadow: isDark ? "0 10px 30px rgba(0,0,0,0.3)" : "0 10px 30px rgba(0,0,0,0.06)",
+          }}>
+            <p style={{ margin: "0 0 0.35rem", fontSize: "0.72rem", fontWeight: 700, color: isDark ? "#A8D89A" : "#1B3A20", textTransform: "uppercase", letterSpacing: "0.08em" }}>Pipeline 3</p>
+            <h3 style={{ margin: "0 0 0.5rem", fontSize: "1.05rem", fontWeight: 700, color: isDark ? "#E8E8E8" : "#111" }}>Full Irrigation Analysis</h3>
             <p style={{ margin: "0 0 0.85rem", fontSize: "0.78rem", color: isDark ? "#888" : "#666", lineHeight: 1.55 }}>
               Runs all three FPGA pipelines — fusion, rain prediction, and irrigation scheduling — in sequence. Gemini LLM synthesises results into a concrete field action plan.
             </p>
