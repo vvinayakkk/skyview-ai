@@ -7,19 +7,21 @@ import { LanguageSelector } from '@/components/LanguageSelector';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { SmartVoiceForm } from '@/components/SmartVoiceForm';
-import { AlertCircle, Phone, MapPin, Leaf, RefreshCw, ShieldCheck, ArrowRight, User, Layers, Wheat, Mic } from 'lucide-react';
+import { AlertCircle, MapPin, Leaf, RefreshCw, ShieldCheck, ArrowRight, User, Layers, Wheat, Mic } from 'lucide-react';
 import { SkyViewLogo } from '@/components/SkyViewLogo';
+import { PhoneInput } from '@/components/PhoneInput';
 
 export default function Signup() {
-  const [name, setName]       = useState('');
-  const [phone, setPhone]     = useState('');
+  const [name, setName]         = useState('');
+  const [phone, setPhone]       = useState('');
+  const [dialCode, setDialCode] = useState('+91');
   const [landSize, setLandSize] = useState('');
   const [location, setLocation] = useState('');
-  const [crops, setCrops]     = useState('');
-  const [otp, setOtp]         = useState('');
-  const [otpSent, setOtpSent] = useState(false);
-  const [demoOtp, setDemoOtp] = useState('');
-  const [error, setError]     = useState('');
+  const [crops, setCrops]       = useState('');
+  const [otp, setOtp]           = useState('');
+  const [otpSent, setOtpSent]   = useState(false);
+  const [demoOtp, setDemoOtp]   = useState('');
+  const [error, setError]       = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const { login, sendOtp } = useAuth();
@@ -39,17 +41,17 @@ export default function Signup() {
     if (data.crops) setCrops(Array.isArray(data.crops) ? data.crops.join(', ') : data.crops);
   };
 
+  const fullPhone = () => `${dialCode}${phone.trim().replace(/[\s\-]/g, '')}`;
+
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !phone.trim()) { setError('Name and phone are required.'); return; }
-    const trimmedName = name.trim();
-    if (trimmedName.length < 2) { setError('Please provide a valid name.'); return; }
-    const phoneStr = phone.trim().replace(/[-\s()]/g, '').replace(/^\+?91/, '');
-    if (!/^\d{10}$/.test(phoneStr)) { setError('Enter a valid 10-digit mobile number.'); return; }
+    if (name.trim().length < 2) { setError('Please provide a valid name.'); return; }
+    const digits = phone.trim().replace(/[\s\-]/g, '');
+    if (!/^\d{7,15}$/.test(digits)) { setError('Enter a valid phone number.'); return; }
 
     setError(''); setIsLoading(true);
-    const fullPhone = `+91${phoneStr}`;
-    const result = await sendOtp(fullPhone, true);
+    const result = await sendOtp(fullPhone(), true);
     if (result.success) {
       setOtpSent(true);
       if (result.otp) setDemoOtp(result.otp);
@@ -62,15 +64,14 @@ export default function Signup() {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(''); setIsLoading(true);
-    const phoneStr = phone.trim().replace(/[-\s()]/g, '').replace(/^\+?91/, '');
-    const fullPhone = `+91${phoneStr}`;
+    const fp = fullPhone();
 
     try {
       try {
         await fetch(`${import.meta.env.VITE_API_URL || ''}/api/profile/save`, {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            name, phone: fullPhone,
+            name, phone: fp,
             land_size_acres: landSize ? Number(landSize) : null,
             location,
             crops: crops.split(',').map(c => c.trim()).filter(Boolean),
@@ -83,7 +84,7 @@ export default function Signup() {
       if (location) localStorage.setItem('user_location', location);
       if (crops)    localStorage.setItem('user_crops', crops);
 
-      const success = await login(fullPhone, otp);
+      const success = await login(fp, otp);
       if (success) {
         navigate('/hardware-setup');
       } else {
@@ -204,10 +205,12 @@ export default function Signup() {
                 </div>
                 <div>
                   <label style={labelStyle}>Phone *</label>
-                  <div style={{ position: 'relative' }}>
-                    <Phone style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', width: '14px', height: '14px', color: '#10B981' }} />
-                    <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="10-digit mobile" disabled={otpSent} style={inputStyle} />
-                  </div>
+                  <PhoneInput
+                    value={phone}
+                    onChange={(num, code) => { setPhone(num); setDialCode(code); }}
+                    disabled={otpSent}
+                    isDark={isDark}
+                  />
                 </div>
               </div>
 

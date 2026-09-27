@@ -6,15 +6,17 @@ import { useTheme } from 'next-themes';
 import { LanguageSelector } from '@/components/LanguageSelector';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
-import { AlertCircle, Phone, ArrowRight, Leaf, RefreshCw, ShieldCheck, Sparkles } from 'lucide-react';
+import { AlertCircle, ArrowRight, Leaf, RefreshCw, ShieldCheck } from 'lucide-react';
 import { SkyViewLogo } from '@/components/SkyViewLogo';
+import { PhoneInput } from '@/components/PhoneInput';
 
 export default function Login() {
-  const [phone, setPhone] = useState('');
-  const [otp, setOtp] = useState('');
+  const [phone, setPhone]     = useState('');
+  const [dialCode, setDialCode] = useState('+91');
+  const [otp, setOtp]         = useState('');
   const [otpSent, setOtpSent] = useState(false);
   const [demoOtp, setDemoOtp] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError]     = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const { login, sendOtp, hardwareConnected } = useAuth();
@@ -23,19 +25,23 @@ export default function Login() {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
 
+  const fullPhone = () => {
+    const num = phone.trim().replace(/[\s\-]/g, '');
+    return `${dialCode}${num}`;
+  };
+
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
-    const cleanPhone = phone.trim().startsWith('+') ? phone.trim() : `+91${phone.trim()}`;
     if (!phone.trim()) {
       setError('Please enter your phone number');
       return;
     }
     setError('');
     setIsLoading(true);
-    const result = await sendOtp(cleanPhone);
+    const result = await sendOtp(fullPhone());
     if (result.success) {
       setOtpSent(true);
-      if (result.otp) setDemoOtp(result.otp); // demo mode – show inline
+      if (result.otp) setDemoOtp(result.otp);
     } else {
       setError(result.message || 'Phone not registered. Please sign up first.');
     }
@@ -46,8 +52,7 @@ export default function Login() {
     e.preventDefault();
     setError('');
     setIsLoading(true);
-    const cleanPhone = phone.trim().startsWith('+') ? phone.trim() : `+91${phone.trim()}`;
-    const success = await login(cleanPhone, otp);
+    const success = await login(fullPhone(), otp);
     if (success) {
       navigate(hardwareConnected ? '/dashboard' : '/hardware-setup');
     } else {
@@ -132,29 +137,12 @@ export default function Login() {
             <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: textMuted, marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
               Phone Number
             </label>
-            <div style={{ position: 'relative' }}>
-              <Phone style={{
-                position: 'absolute', left: '13px', top: '50%', transform: 'translateY(-50%)',
-                width: '15px', height: '15px', color: '#10B981', pointerEvents: 'none',
-              }} />
-              <input
-                type="tel"
-                value={phone}
-                onChange={e => setPhone(e.target.value)}
-                placeholder="+91XXXXXXXXXX or 10-digit"
-                disabled={otpSent}
-                style={{
-                  width: '100%', paddingLeft: '40px', height: '46px', borderRadius: '12px',
-                  border: inputBorder, background: inputBg,
-                  fontSize: '14px', color: textMain, outline: 'none',
-                  boxSizing: 'border-box', fontFamily: 'inherit',
-                  transition: 'border 0.2s',
-                  opacity: otpSent ? 0.6 : 1,
-                }}
-                onFocus={e => e.target.style.borderColor = '#10B981'}
-                onBlur={e => e.target.style.borderColor = isDark ? 'rgba(255,255,255,0.10)' : 'rgba(15,23,42,0.12)'}
-              />
-            </div>
+            <PhoneInput
+              value={phone}
+              onChange={(num, code) => { setPhone(num); setDialCode(code); }}
+              disabled={otpSent}
+              isDark={isDark}
+            />
           </div>
 
           {/* Demo OTP display */}
