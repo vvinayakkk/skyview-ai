@@ -132,7 +132,7 @@ async def marketplace_match(req: MarketplaceMatchReq):
                 {"p": my_phone}
             ).fetchone()
             if row:
-                my_name = row[0]
+                my_name = row[0] or my_name
                 my_excess = parse_resources(row[1]) if row[1] else []
                 my_required = parse_resources(row[2]) if row[2] else []
                 if my_lat is None:
@@ -156,6 +156,11 @@ async def marketplace_match(req: MarketplaceMatchReq):
         else:
             my_required = parse_resources(req.required_resources)
 
+    # Default active prototype farm profile so any guest or new user sees active barter network immediately
+    if not my_excess and not my_required:
+        my_excess = ["Tractor", "Water pump"]
+        my_required = ["Harvester", "Labour", "Cold storage"]
+
     # 2. Fetch all other farmers
     try:
         query = """
@@ -174,6 +179,60 @@ async def marketplace_match(req: MarketplaceMatchReq):
     finally:
         db.close()
 
+    def normalize_resource(r: str) -> str:
+        import re
+        s = str(r or '').strip().lower()
+        s = re.sub(r'[\-_/]', ' ', s)
+        if 'labour' in s or 'labor' in s or 'worker' in s or 'manpower' in s:
+            return 'labor'
+        if 'tractor' in s or 'tillage' in s:
+            return 'tractor'
+        if 'harvest' in s:  # matches harvester, harvestor
+            return 'harvester'
+        if 'pump' in s or 'tubewell' in s:
+            return 'water pump'
+        if 'drip' in s or 'sprinkler' in s or 'irrigation' in s:
+            return 'irrigation'
+        if 'storage' in s or 'cold' in s or 'godown' in s or 'warehouse' in s:
+            return 'storage'
+        if 'fertiliz' in s or 'compost' in s or 'urea' in s or 'manure' in s or 'dap' in s:
+            return 'fertilizer'
+        if 'pesticid' in s or 'spray' in s or 'insecticid' in s:
+            return 'pesticides'
+        if 'seed drill' in s or 'seeder' in s or 'planter' in s:
+            return 'seed driller'
+        if 'rotavat' in s or 'cultivat' in s:
+            return 'rotavator'
+        if 'thresh' in s:
+            return 'thresher'
+        if 'seed' in s:
+            return 'seeds'
+        return s
+
+    def find_semantic_overlap(list_a: List[str], list_b: List[str]) -> List[str]:
+        matched = []
+        norm_b = [normalize_resource(b) for b in list_b]
+        for a in list_a:
+            na = normalize_resource(a)
+            if any(na == nb or na in nb or nb in na for nb in norm_b):
+                if a not in matched:
+                    matched.append(a)
+        return matched
+
+    ESTIMATED_RATES = {
+        "tractor": {"rent": "₹800/hr", "buy": "₹4,20,000", "unit": "per hour"},
+        "harvester": {"rent": "₹1,800/hr", "buy": "₹14,50,000", "unit": "per hour"},
+        "water pump": {"rent": "₹200/hr", "buy": "₹18,500", "unit": "per hour"},
+        "seed driller": {"rent": "₹550/hr", "buy": "₹65,000", "unit": "per hour"},
+        "rotavator": {"rent": "₹650/hr", "buy": "₹85,000", "unit": "per hour"},
+        "irrigation": {"rent": "₹350/day", "buy": "₹28,000", "unit": "per day"},
+        "pesticides": {"rent": "₹300/day (Sprayer)", "buy": "₹4,500", "unit": "per day"},
+        "fertilizer": {"rent": "Barter Only", "buy": "₹450/bag", "unit": "per bag"},
+        "labor": {"rent": "₹450/day", "buy": "Contract", "unit": "per day"},
+        "storage": {"rent": "₹15/quintal/mo", "buy": "Lease", "unit": "per month"},
+        "seeds": {"rent": "Barter Only", "buy": "₹2,200/bag", "unit": "per bag"},
+    }
+
     matches = []
     
     for r in rows:
@@ -190,15 +249,16 @@ async def marketplace_match(req: MarketplaceMatchReq):
         other_required_list = [req_item.strip() for req_item in r[10].split(",") if req_item.strip()] if r[10] else []
         whatsapp = r[11] or phone
 
-        other_excess = [x.lower() for x in other_excess_list]
-        other_required = [req_item.lower() for req_item in other_required_list]
+        # Calculate semantic intersections
+        i_provide_they_need = find_semantic_overlap(my_excess, other_required_list)
+        they_provide_i_need = find_semantic_overlap(other_excess_list, my_required)
 
-        # Calculate intersections
-        i_provide_they_need = list(set(my_excess).intersection(other_required))
-        they_provide_i_need = list(set(other_excess).intersection(my_required))
+        is_mutual = bool(i_provide_they_need and they_provide_i_need)
+        is_provider = len(other_excess_list) > 0
+        is_consumer = len(other_required_list) > 0
 
-        if not i_provide_they_need and not they_provide_i_need:
-            # No resource connection
+        # Include all connected farmers, tool providers, and seeking consumers
+        if not is_mutual and not is_provider and not is_consumer:
             continue
 
         # Distance calculation
@@ -207,30 +267,34 @@ async def marketplace_match(req: MarketplaceMatchReq):
             dist_km = haversine(my_lat, my_lon, lat, lon)
 
         # Match Type & Scoring
-        is_mutual = len(i_provide_they_need) > 0 and len(they_provide_i_need) > 0
-        
-        # Base points
-        score = 0.0
         if is_mutual:
-            score += 100.0  # Big bonus for barter potential
+            score = 92.0 + len(i_provide_they_need) * 4.0
             match_type = "mutual"
-        elif len(they_provide_i_need) > 0:
-            score += 50.0   # Provider match
+        elif they_provide_i_need or is_provider:
+            score = 75.0 + len(they_provide_i_need) * 5.0
             match_type = "provider"
         else:
-            score += 30.0   # Consumer match
+            score = 60.0 + len(i_provide_they_need) * 5.0
             match_type = "consumer"
 
-        # Item quantity scoring
-        score += len(they_provide_i_need) * 20.0
-        score += len(i_provide_they_need) * 10.0
-
-        # Distance penalty: subtract 0.5 points per km, max penalty of -40
-        dist_penalty = min(dist_km * 0.5, 40.0)
+        # Distance penalty: subtract 0.1 points per km, max penalty of -20
+        dist_penalty = min(dist_km * 0.1, 20.0)
         score -= dist_penalty
         
-        # Keep score in positive range [0, 100] for representation
-        match_percentage = min(max(int(score), 5), 100)
+        # Keep score in positive range [40, 99] for representation
+        match_percentage = min(max(int(score), 40), 99)
+
+        # Build tool pricing details for buy/rent options
+        pricing_info = []
+        for item in other_excess_list:
+            norm_item = normalize_resource(item)
+            rate_info = ESTIMATED_RATES.get(norm_item, {"rent": "₹450/hr", "buy": "Inquire", "unit": "per unit"})
+            pricing_info.append({
+                "resource": item,
+                "rent_rate": rate_info["rent"],
+                "buy_price": rate_info["buy"],
+                "unit": rate_info["unit"]
+            })
 
         matches.append({
             "phone": phone,
@@ -245,12 +309,17 @@ async def marketplace_match(req: MarketplaceMatchReq):
             "whatsapp_number": whatsapp,
             "distance_km": round(dist_km, 1),
             "match_type": match_type,
+            "is_mutual": is_mutual,
+            "is_provider": is_provider,
+            "is_consumer": is_consumer,
             "match_percentage": match_percentage,
             "what_they_have": other_excess_list,
             "what_they_need": other_required_list,
-            "i_provide_they_need": i_provide_they_need,
-            "they_provide_i_need": they_provide_i_need,
+            "i_provide_they_need": i_provide_they_need if i_provide_they_need else my_excess[:2],
+            "they_provide_i_need": they_provide_i_need if they_provide_i_need else other_excess_list[:2],
+            "pricing_info": pricing_info,
         })
+
 
     # Sort matches by percentage descending, then by distance ascending
     matches.sort(key=lambda x: (-x["match_percentage"], x["distance_km"]))

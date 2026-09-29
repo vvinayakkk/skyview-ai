@@ -11,7 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Search, Mic, Tractor, Users, Wheat, PhoneCall,
   MessageSquare, ArrowRightLeft, MapPin, RotateCw, Compass,
-  Layers, ArrowRight, HelpCircle, Check, Sparkles, User
+  Layers, ArrowRight, HelpCircle, Check, Sparkles, User, ShoppingBag, X
 } from "lucide-react";
 import { CircularBarterLoopCard } from "@/components/marketplace/CircularBarterLoopCard";
 import { getSecureRandomInt } from "@/lib/secureRandom";
@@ -104,6 +104,11 @@ export default function Marketplace() {
   const [negotiating, setNegotiating] = useState(false);
   const [negotiationResult, setNegotiationResult] = useState<any>(null);
   const [negotiationCrop, setNegotiationCrop] = useState("");
+
+  // State for Direct Buy / Rent Tool Modal
+  const [buyModalMatch, setBuyModalMatch] = useState<any>(null);
+  const [selectedToolItem, setSelectedToolItem] = useState<string>("");
+  const [dealType, setDealType] = useState<"rent" | "buy" | "barter">("rent");
 
   // Helper to format logs or static text with bold formatting
   const formatText = (rawText: string) => {
@@ -253,41 +258,45 @@ export default function Marketplace() {
 
   // Filter 2-party matches
   const filteredMatches = matches.filter(m => {
-    if (activeTab !== "all" && m.match_type !== activeTab) return false;
+    if (activeTab === "mutual" && !m.is_mutual && m.match_type !== "mutual") return false;
+    if (activeTab === "provider" && !m.is_provider && m.match_type !== "provider" && !m.is_mutual) return false;
+    if (activeTab === "consumer" && !m.is_consumer && m.match_type !== "consumer") return false;
     if (!searchQuery) return true;
     const query = searchQuery.toLowerCase();
     return (
-      m.name.toLowerCase().includes(query) ||
-      m.location.toLowerCase().includes(query) ||
-      m.crops.some((c: string) => c.toLowerCase().includes(query)) ||
-      m.what_they_have.some((x: string) => x.toLowerCase().includes(query)) ||
-      m.what_they_need.some((n: string) => n.toLowerCase().includes(query))
+      (m.name && m.name.toLowerCase().includes(query)) ||
+      (m.location && m.location.toLowerCase().includes(query)) ||
+      (m.crops && m.crops.some((c: string) => c.toLowerCase().includes(query))) ||
+      (m.what_they_have && m.what_they_have.some((x: string) => x.toLowerCase().includes(query))) ||
+      (m.what_they_need && m.what_they_need.some((n: string) => n.toLowerCase().includes(query)))
     );
   });
 
   const getWhatsAppLink = (match: any) => {
-    const isMutual = match.match_type === "mutual";
+    const isMutual = match.is_mutual || match.match_type === "mutual";
     let text = "";
     if (isMutual) {
-      text = `Hi ${match.name}, I found a match on SkyView! I see you need "${match.i_provide_they_need.join(', ')}" and have excess "${match.they_provide_i_need.join(', ')}". Can we co-operatively trade?`;
-    } else if (match.match_type === "provider") {
-      text = `Hi ${match.name}, I found your listing on SkyView. I noticed you have excess "${match.they_provide_i_need.join(', ')}", which I need for my farm. Can we chat about renting/sharing?`;
+      const give = match.i_provide_they_need?.length ? match.i_provide_they_need.join(', ') : "equipment";
+      const get = match.they_provide_i_need?.length ? match.they_provide_i_need.join(', ') : "resources";
+      text = `Hi ${match.name}, I found your profile on SkyView Marketplace! I can supply "${give}" and I need "${get}". Can we co-operatively barter?`;
+    } else if (match.is_provider || match.match_type === "provider") {
+      const tools = match.what_they_have?.length ? match.what_they_have.join(', ') : "tools";
+      text = `Hi ${match.name}, I saw your listing on SkyView Marketplace. I am interested in your available tools: "${tools}". Can we chat about renting, buying, or sharing?`;
     } else {
-      text = `Hi ${match.name}, I found a match on SkyView. I noticed you need "${match.i_provide_they_need.join(', ')}" which I currently have in excess. Can we discuss resource sharing?`;
+      text = `Hi ${match.name}, I found your listing on SkyView. I noticed you need farm support and I have excess resources. Can we connect?`;
     }
     return `https://wa.me/${match.whatsapp_number.replace(/[+\s-]/g, '')}?text=${encodeURIComponent(text)}`;
   };
 
   const css = {
-    badge: (type: string) => {
-      switch (type) {
-        case "mutual":
-          return { bg: "rgba(16,185,129,0.15)", text: "#10B981", label: "Mutual Swap" };
-        case "provider":
-          return { bg: "rgba(59,130,246,0.15)", text: "#3B82F6", label: "Provider" };
-        default:
-          return { bg: "rgba(245,158,11,0.15)", text: "#F59E0B", label: "Consumer" };
+    badge: (m: any) => {
+      if (m.is_mutual || m.match_type === "mutual") {
+        return { bg: "rgba(16,185,129,0.15)", text: "#10B981", color: "#10B981", label: "🤝 Mutual Barter" };
       }
+      if (m.is_provider || m.match_type === "provider") {
+        return { bg: "rgba(59,130,246,0.15)", text: "#3B82F6", color: "#3B82F6", label: "🛠️ Tool Provider" };
+      }
+      return { bg: "rgba(245,158,11,0.15)", text: "#F59E0B", color: "#F59E0B", label: "🌾 Seeking Resources" };
     }
   };
 
@@ -422,33 +431,41 @@ export default function Marketplace() {
             <GlassSection style={{ padding: "1.5rem", marginBottom: "2rem" }}>
               <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
                 <div className="flex w-full md:w-auto overflow-x-auto gap-2 border-b md:border-b-0 pb-2 md:pb-0 scrollbar-none">
-                  {(["all", "mutual", "provider", "consumer"] as const).map((tab) => (
-                    <button
-                      key={tab}
-                      onClick={() => setActiveTab(tab)}
-                      style={{
-                        padding: "8px 16px",
-                        borderRadius: "8px",
-                        fontSize: "13px",
-                        fontWeight: 700,
-                        transition: "all 0.2s",
-                        border: "none",
-                        cursor: "pointer",
-                        whiteSpace: "nowrap",
-                        background: activeTab === tab
-                          ? (isDark ? "rgba(16,185,129,0.2)" : "rgba(16,185,129,0.1)")
-                          : "transparent",
-                        color: activeTab === tab
-                          ? "#10B981"
-                          : (isDark ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)"),
-                      }}
-                    >
-                      {tab === "all" && "All Matches"}
-                      {tab === "mutual" && "Mutual Barters"}
-                      {tab === "provider" && "Available Tools (Providers)"}
-                      {tab === "consumer" && "Farmers Seeking (Consumers)"}
-                    </button>
-                  ))}
+                  {(["all", "mutual", "provider", "consumer"] as const).map((tab) => {
+                    let count = matches.length;
+                    if (tab === "mutual") count = matches.filter(m => m.is_mutual || m.match_type === "mutual").length;
+                    if (tab === "provider") count = matches.filter(m => m.is_provider || m.match_type === "provider" || m.is_mutual).length;
+                    if (tab === "consumer") count = matches.filter(m => m.is_consumer || m.match_type === "consumer").length;
+
+                    return (
+                      <button
+                        key={tab}
+                        onClick={() => setActiveTab(tab)}
+                        style={{
+                          padding: "8px 16px",
+                          borderRadius: "8px",
+                          fontSize: "13px",
+                          fontWeight: 700,
+                          transition: "all 0.2s",
+                          border: "none",
+                          cursor: "pointer",
+                          whiteSpace: "nowrap",
+                          background: activeTab === tab
+                            ? (isDark ? "rgba(16,185,129,0.2)" : "rgba(16,185,129,0.1)")
+                            : "transparent",
+                          color: activeTab === tab
+                            ? "#10B981"
+                            : (isDark ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)"),
+                        }}
+                      >
+                        {tab === "all" && `All Matches (${count})`}
+                        {tab === "mutual" && `Mutual Barters (${count})`}
+                        {tab === "provider" && `Available Tools (Providers / Buy & Rent) (${count})`}
+                        {tab === "consumer" && `Farmers Seeking (${count})`}
+                      </button>
+                    );
+                  })}
+
                 </div>
 
                 <div className="flex gap-2 w-full md:w-80">
@@ -520,7 +537,7 @@ export default function Marketplace() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <AnimatePresence>
                   {filteredMatches.map((match, i) => {
-                    const b = css.badge(match.match_type);
+                    const b = css.badge(match);
                     return (
                       <motion.div
                         key={match.phone + i}
@@ -532,11 +549,11 @@ export default function Marketplace() {
                         <Card
                           style={{
                             background: isDark ? "rgba(20,30,22,0.85)" : "rgba(255,255,255,0.92)",
-                            border: match.match_type === "mutual"
-                              ? "1px solid rgba(16,185,129,0.35)"
-                              : (isDark ? "1px solid rgba(255,255,255,0.06)" : "1px solid rgba(0,0,0,0.08)"),
-                            boxShadow: match.match_type === "mutual"
-                              ? "0 4px 20px rgba(16,185,129,0.12)"
+                            border: (match.is_mutual || match.match_type === "mutual")
+                              ? "1.5px solid rgba(16,185,129,0.40)"
+                              : (isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(0,0,0,0.08)"),
+                            boxShadow: (match.is_mutual || match.match_type === "mutual")
+                              ? "0 4px 20px rgba(16,185,129,0.14)"
                               : "none",
                             overflow: "hidden"
                           }}
@@ -548,9 +565,9 @@ export default function Marketplace() {
                                 background: "transparent",
                                 color: b.text,
                                 border: `1.5px solid ${b.color || "#10B981"}`,
-                                padding: "2px 8px",
+                                padding: "3px 10px",
                                 borderRadius: "12px",
-                                fontSize: "10px",
+                                fontSize: "10.5px",
                                 fontWeight: 800,
                                 textTransform: "uppercase",
                               }}
@@ -588,78 +605,116 @@ export default function Marketplace() {
                           </CardHeader>
 
                           <CardContent className="pt-2">
-                            <div className="mb-4">
-                              <span className="text-[10px] uppercase font-bold text-gray-400 dark:text-gray-500 block">Crops Cultivated</span>
-                              <div className="flex flex-wrap gap-1 mt-1">
-                                {match.crops.map((c: string, j: number) => (
-                                  <span key={j} className="text-[11px] font-semibold bg-transparent text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/30">
-                                    {c}
-                                  </span>
-                                ))}
+                            {match.crops && match.crops.length > 0 && (
+                              <div className="mb-3">
+                                <span className="text-[10px] uppercase font-bold text-gray-400 dark:text-gray-500 block">Crops Cultivated</span>
+                                <div className="flex flex-wrap gap-1 mt-1">
+                                  {match.crops.map((c: string, j: number) => (
+                                    <span key={j} className="text-[11px] font-semibold bg-transparent text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/30">
+                                      {c}
+                                    </span>
+                                  ))}
+                                </div>
                               </div>
-                            </div>
+                            )}
 
                             <div
                               style={{
                                 padding: "10px 12px",
                                 borderRadius: "10px",
-                                background: "transparent",
-                                border: isDark ? "1.5px solid rgba(255,255,255,0.12)" : "1.5px solid rgba(0,0,0,0.12)",
+                                background: isDark ? "rgba(255,255,255,0.02)" : "#FAFAFA",
+                                border: isDark ? "1.5px solid rgba(255,255,255,0.10)" : "1.5px solid rgba(0,0,0,0.08)",
                                 marginBottom: "1rem"
                               }}
                             >
-                              {(match.match_type === "mutual" || match.match_type === "provider") && (
+                              {(match.is_mutual || match.match_type === "mutual") && (
                                 <div className="mb-2">
-                                  <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wide block">They can provide you:</span>
-                                  <span className="text-xs font-bold text-gray-700 dark:text-gray-300 mt-0.5 block">
-                                    {match.they_provide_i_need.join(", ")}
+                                  <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wide block">🤝 Mutual Barter Swap:</span>
+                                  <span className="text-xs font-bold text-gray-800 dark:text-gray-200 mt-0.5 block">
+                                    You supply: <strong className="text-emerald-600">{match.i_provide_they_need?.join(", ") || "Tractor"}</strong> ↔ They supply: <strong className="text-blue-600">{match.they_provide_i_need?.join(", ") || "Labor / Tools"}</strong>
                                   </span>
                                 </div>
                               )}
 
-                              {(match.match_type === "mutual" || match.match_type === "consumer") && (
-                                <div>
-                                  <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wide block">They need from you:</span>
-                                  <span className="text-xs font-bold text-gray-700 dark:text-gray-300 mt-0.5 block">
-                                    {match.i_provide_they_need.join(", ")}
+                              <div className="mb-1">
+                                <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wide block">🛠️ Available Tools &amp; Resources:</span>
+                                <span className="text-xs font-bold text-gray-800 dark:text-gray-200 mt-0.5 block">
+                                  {match.what_they_have?.length ? match.what_they_have.join(", ") : (match.they_provide_i_need?.join(", ") || "Tools available upon request")}
+                                </span>
+                              </div>
+
+                              {match.what_they_need && match.what_they_need.length > 0 && (
+                                <div className="mt-2">
+                                  <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wide block">🌾 Seeking from Farmers:</span>
+                                  <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 mt-0.5 block">
+                                    {match.what_they_need.join(", ")}
                                   </span>
+                                </div>
+                              )}
+
+                              {/* Tool Pricing / Buy & Rent Tags */}
+                              {match.pricing_info && match.pricing_info.length > 0 && (
+                                <div className="mt-2.5 pt-2 border-t border-dashed border-gray-300 dark:border-gray-700/60">
+                                  <div className="flex flex-wrap gap-1.5 items-center">
+                                    <span className="text-[9.5px] font-bold text-gray-500 uppercase">Rates:</span>
+                                    {match.pricing_info.slice(0, 2).map((p: any, pIdx: number) => (
+                                      <span key={pIdx} className="text-[10px] font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-500/20">
+                                        {p.resource}: Rent {p.rent_rate} • Buy {p.buy_price}
+                                      </span>
+                                    ))}
+                                  </div>
                                 </div>
                               )}
                             </div>
 
+                            {/* Action buttons */}
                             <div className="flex flex-col gap-2">
                               <div className="flex gap-2">
                                 <Button
-                                  asChild
-                                  className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold gap-2 text-xs"
+                                  onClick={() => {
+                                    setBuyModalMatch(match);
+                                    setSelectedToolItem(match.what_they_have?.[0] || "Tractor");
+                                    setDealType("rent");
+                                  }}
+                                  className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold gap-1.5 text-xs h-9"
                                 >
-                                  <a href={getWhatsAppLink(match)} target="_blank" rel="noopener noreferrer">
-                                    <MessageSquare size={14} /> WhatsApp Trade
-                                  </a>
+                                  <ShoppingBag size={13} /> Buy / Rent Tool
                                 </Button>
                                 <Button
                                   asChild
                                   variant="outline"
-                                  className="border-emerald-600/30 text-emerald-800 dark:text-emerald-300 font-semibold gap-1 px-3 text-xs"
+                                  className="border-emerald-600/30 text-emerald-700 dark:text-emerald-300 font-semibold gap-1 px-3 text-xs h-9"
                                 >
-                                  <a href={`tel:${match.phone}`}>
-                                    <PhoneCall size={13} /> Call
+                                  <a href={getWhatsAppLink(match)} target="_blank" rel="noopener noreferrer">
+                                    <MessageSquare size={13} /> Chat
                                   </a>
                                 </Button>
                               </div>
-                              <Button
-                                onClick={() => runNegotiation(match)}
-                                variant="secondary"
-                                className="w-full bg-transparent hover:bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 font-bold gap-2 text-xs border border-emerald-600/30"
-                              >
-                                <Sparkles size={13} /> AI Negotiate Deal
-                              </Button>
+                              <div className="flex gap-2">
+                                <Button
+                                  asChild
+                                  variant="outline"
+                                  className="flex-1 border-emerald-600/30 text-emerald-700 dark:text-emerald-300 font-semibold gap-1 text-xs h-8"
+                                >
+                                  <a href={`tel:${match.phone}`}>
+                                    <PhoneCall size={12} /> Call
+                                  </a>
+                                </Button>
+                                <Button
+                                  onClick={() => runNegotiation(match)}
+                                  variant="secondary"
+                                  className="flex-1 bg-transparent hover:bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 font-bold gap-1 text-xs border border-emerald-600/30 h-8"
+                                >
+                                  <Sparkles size={12} /> AI Broker
+                                </Button>
+                              </div>
                             </div>
                           </CardContent>
                         </Card>
                       </motion.div>
                     );
                   })}
+
                 </AnimatePresence>
               </div>
             )}
@@ -1039,8 +1094,135 @@ export default function Marketplace() {
             </motion.div>
           </div>
         )}
+        {/* ==================== DIRECT BUY / RENT TOOL MODAL ==================== */}
+        {buyModalMatch && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-white dark:bg-zinc-900 border border-emerald-500/30 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl text-left"
+            >
+              <div className="p-5 border-b border-gray-100 dark:border-white/10 flex items-center justify-between">
+                <div>
+                  <h3 className="text-base font-bold text-gray-900 dark:text-white flex items-center gap-2 m-0">
+                    <ShoppingBag size={18} className="text-emerald-500" />
+                    Book / Purchase Tool
+                  </h3>
+                  <p className="text-xs text-gray-500 mt-1 mb-0">
+                    Provider: <strong className="text-emerald-600">{buyModalMatch.name}</strong> • {buyModalMatch.district ? `${buyModalMatch.district}, ${buyModalMatch.state}` : buyModalMatch.location}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setBuyModalMatch(null)}
+                  className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-400"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              <div className="p-5 space-y-4">
+                {/* Select Tool Item */}
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-gray-500 block mb-1.5">
+                    Select Equipment / Resource
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {(buyModalMatch.what_they_have?.length ? buyModalMatch.what_they_have : ["Tractor"]).map((tool: string, idx: number) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => setSelectedToolItem(tool)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
+                          selectedToolItem === tool
+                            ? "bg-emerald-600 text-white border-emerald-600 shadow-sm"
+                            : "bg-transparent text-gray-700 dark:text-gray-300 border-gray-300 dark:border-zinc-700 hover:border-emerald-500"
+                        }`}
+                      >
+                        {tool}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Deal Type Selection */}
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-gray-500 block mb-1.5">
+                    Transaction Model
+                  </label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { key: "rent", label: "Hourly Rent", desc: "Pay per hr / day" },
+                      { key: "buy", label: "Direct Buy", desc: "Permanent deal" },
+                      { key: "barter", label: "Barter Swap", desc: "Trade for produce" },
+                    ].map((mode) => (
+                      <button
+                        key={mode.key}
+                        type="button"
+                        onClick={() => setDealType(mode.key as any)}
+                        className={`p-2.5 rounded-xl text-left border transition-all ${
+                          dealType === mode.key
+                            ? "border-emerald-500 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300"
+                            : "border-gray-200 dark:border-zinc-800 bg-transparent text-gray-700 dark:text-gray-300"
+                        }`}
+                      >
+                        <p className="text-xs font-bold m-0">{mode.label}</p>
+                        <p className="text-[10px] text-gray-400 m-0 mt-0.5">{mode.desc}</p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Pricing / Terms estimation */}
+                <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-zinc-800/50 border border-gray-200 dark:border-zinc-700/60">
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="text-gray-500 font-semibold">Estimated Rate:</span>
+                    <span className="font-extrabold text-emerald-600 text-sm">
+                      {dealType === "rent"
+                        ? (buyModalMatch.pricing_info?.find((p: any) => p.resource === selectedToolItem)?.rent_rate || "₹800/hr")
+                        : dealType === "buy"
+                        ? (buyModalMatch.pricing_info?.find((p: any) => p.resource === selectedToolItem)?.buy_price || "₹4,20,000")
+                        : "Swap for Labor/Produce"}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-gray-400 mt-1 mb-0">
+                    Direct farmer-to-farmer transaction. Zero brokerage fees.
+                  </p>
+                </div>
+
+                {/* Confirm actions */}
+                <div className="pt-2 flex flex-col gap-2">
+                  <Button
+                    asChild
+                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs h-10 gap-2"
+                  >
+                    <a
+                      href={`https://wa.me/${buyModalMatch.whatsapp_number.replace(/[+\s-]/g, '')}?text=${encodeURIComponent(
+                        `Hi ${buyModalMatch.name}, I would like to ${dealType === "buy" ? "buy" : dealType === "rent" ? "rent" : "barter for"} your ${selectedToolItem || "equipment"} from your SkyView Marketplace listing. Please let me know your availability.`
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <MessageSquare size={14} /> Send Booking via WhatsApp
+                    </a>
+                  </Button>
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="w-full border-emerald-600/30 text-emerald-700 dark:text-emerald-300 font-bold text-xs h-10 gap-2"
+                  >
+                    <a href={`tel:${buyModalMatch.phone}`}>
+                      <PhoneCall size={14} /> Call Provider ({buyModalMatch.phone})
+                    </a>
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
       </AnimatePresence>
 
     </div>
   );
 }
+
