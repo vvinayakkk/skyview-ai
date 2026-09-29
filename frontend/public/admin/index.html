@@ -1,0 +1,1699 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>SkyView Admin · Farmer Profile Registry</title>
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* PITCH BLACK DARK THEME (NO DARK GREEN) */
+    :root {
+      --bg-base: #000000;
+      --bg-glass: rgba(10, 10, 10, 0.90);
+      --bg-card: rgba(14, 14, 14, 0.88);
+      --bg-card-hover: rgba(22, 22, 22, 0.94);
+      --bg-slot: rgba(0, 0, 0, 0.95);
+      --border-main: rgba(255, 255, 255, 0.10);
+      --border-accent: rgba(16, 185, 129, 0.45);
+      --border-glow: rgba(16, 185, 129, 0.70);
+      --text-main: #ffffff;
+      --text-muted: #9ca3af;
+      --text-dim: #6b7280;
+      --emerald: #10B981;
+      --emerald-dark: #000000;
+      --emerald-glow: rgba(16, 185, 129, 0.25);
+      --card-shadow: 0 16px 40px rgba(0, 0, 0, 0.90);
+    }
+
+    [data-theme="light"] {
+      --bg-base: #f0fdf4;
+      --bg-glass: rgba(255, 255, 255, 0.92);
+      --bg-card: rgba(255, 255, 255, 0.88);
+      --bg-card-hover: rgba(255, 255, 255, 0.96);
+      --bg-slot: rgba(240, 253, 244, 0.85);
+      --border-main: rgba(16, 185, 129, 0.25);
+      --border-accent: rgba(16, 185, 129, 0.50);
+      --border-glow: rgba(16, 185, 129, 0.60);
+      --text-main: #064e3b;
+      --text-muted: #047857;
+      --text-dim: #059669;
+      --emerald: #059669;
+      --emerald-dark: #ecfdf5;
+      --emerald-glow: rgba(5, 150, 105, 0.20);
+      --card-shadow: 0 16px 40px rgba(16, 185, 129, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Ambient Subtle Glow Overlay (NO background image) */
+    .bg-gradient {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(16, 185, 129, 0.12) 0%, transparent 65%),
+                  radial-gradient(ellipse at 85% 85%, rgba(16, 185, 129, 0.06) 0%, transparent 55%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* STRICT ENFORCEMENT: ZERO BACKGROUND ON SMALL TAGS / PILLS / BUTTONS - BORDER ONLY */
+    .tag-crop,
+    .otp-code-pill,
+    .admin-role-pill,
+    .badge-check,
+    .kpi-tag,
+    .filter-tab,
+    .tag-outline,
+    .tag-phone,
+    .tag-acres,
+    .tag-location,
+    .quick-creds-btn,
+    .quick-role-badge,
+    .island-app-icon,
+    .island-otp-pill,
+    .btn-ctrl,
+    .action-btn,
+    .btn-primary,
+    .btn-secondary {
+      background: transparent !important;
+      background-color: transparent !important;
+    }
+
+    /* Dynamic Island Push Notification / Alert Banner */
+    .dynamic-island {
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      max-width: 500px;
+      margin: 0 auto;
+      z-index: 9999;
+      background: var(--bg-glass);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
+      border: 1.5px solid var(--border-glow);
+      border-radius: 22px;
+      padding: 12px 18px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), 0 0 30px var(--emerald-glow);
+      display: none;
+      transform: translateY(-130%) scale(0.92);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .dynamic-island.show {
+      display: block;
+      transform: translateY(0) scale(1);
+      animation: islandDrop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    @keyframes islandDrop {
+      0% { transform: translateY(-130%) scale(0.90); opacity: 0; }
+      100% { transform: translateY(0) scale(1); opacity: 1; }
+    }
+    .island-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .island-app-badge {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--emerald);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .island-app-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      border: 1px solid var(--emerald);
+      color: var(--emerald);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 900;
+    }
+    .island-time {
+      font-size: 11px;
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+    .island-body {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .island-info h3 {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 2px;
+    }
+    .island-info p {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+    .island-otp-pill {
+      border: 1.5px solid var(--emerald);
+      color: var(--emerald);
+      font-size: 17px;
+      font-weight: 800;
+      padding: 5px 12px;
+      border-radius: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.1em;
+      box-shadow: 0 4px 14px var(--emerald-glow);
+      flex-shrink: 0;
+    }
+
+    /* Glass Top Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-glass);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border-bottom: 1.5px solid var(--border-main);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.3s ease;
+    }
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-emblem-wrap {
+      width: 44px;
+      height: 44px;
+      border-radius: 13px;
+      border: 1.5px solid var(--border-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px;
+      box-shadow: 0 4px 14px var(--emerald-glow);
+      flex-shrink: 0;
+    }
+    .logo-emblem-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .brand-title h1 {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: -0.01em;
+    }
+    .badge-check {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 1.5px solid var(--emerald);
+      color: var(--emerald);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 900;
+    }
+    .status-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 3px;
+    }
+    .live-pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--emerald);
+      box-shadow: 0 0 10px var(--emerald);
+      animation: pulseGlow 1.6s infinite;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(1.35); }
+    }
+    .status-meta span {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .admin-role-pill {
+      border: 1px solid var(--emerald);
+      color: var(--emerald);
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 6px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-left: 4px;
+    }
+
+    /* Controls Group */
+    .controls-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-ctrl {
+      border: 1.5px solid var(--border-main);
+      border-radius: 12px;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--emerald);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-ctrl:hover {
+      border-color: var(--emerald);
+      box-shadow: 0 0 12px var(--emerald-glow);
+    }
+    .btn-ctrl:active { transform: scale(0.92); }
+    .btn-ctrl.active-muted {
+      color: var(--text-dim);
+      border-color: var(--border-main);
+    }
+
+    /* Primary and Secondary Buttons */
+    .btn-primary {
+      border: 1.5px solid var(--emerald);
+      border-radius: 12px;
+      color: var(--emerald);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 9px 18px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-primary:hover, .btn-primary:active {
+      box-shadow: 0 0 16px var(--emerald-glow);
+      border-color: var(--emerald);
+    }
+    .btn-secondary {
+      border: 1.5px solid var(--border-main);
+      border-radius: 12px;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 9px 18px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-secondary:hover {
+      border-color: var(--text-muted);
+      color: var(--text-main);
+    }
+
+    /* Main Dashboard Container */
+    main {
+      position: relative;
+      z-index: 10;
+      flex: 1;
+      max-width: 1180px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 22px 18px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* KPI Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .kpi-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1.5px solid var(--border-main);
+      border-radius: 20px;
+      padding: 18px 20px;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .kpi-card:hover {
+      border-color: var(--border-accent);
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.4), 0 0 20px var(--emerald-glow);
+      transform: translateY(-2px);
+    }
+    .kpi-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .kpi-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: var(--text-dim);
+      letter-spacing: 0.07em;
+    }
+    .kpi-tag {
+      border: 1px solid var(--emerald);
+      color: var(--emerald);
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 6px;
+      letter-spacing: 0.04em;
+    }
+    .kpi-val {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--emerald);
+      font-family: 'JetBrains Mono', monospace;
+      line-height: 1.15;
+    }
+    .kpi-sub {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Toolbar Card */
+    .toolbar-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1.5px solid var(--border-main);
+      border-radius: 20px;
+      padding: 14px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: var(--card-shadow);
+    }
+    .toolbar-row-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .search-box {
+      flex: 1;
+      min-width: 240px;
+      display: flex;
+      align-items: center;
+      border: 1.5px solid var(--border-main);
+      border-radius: 14px;
+      padding: 0 14px;
+      height: 44px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .search-box:focus-within {
+      border-color: var(--emerald);
+      box-shadow: 0 0 14px var(--emerald-glow);
+    }
+    .search-box input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-main);
+      font-size: 13.5px;
+      font-family: inherit;
+    }
+    .search-box input::placeholder {
+      color: var(--text-dim);
+    }
+    .search-clear-btn {
+      cursor: pointer;
+      color: var(--text-dim);
+      font-size: 14px;
+      padding: 4px;
+      display: none;
+    }
+
+    /* Filter Tabs Bar */
+    .filter-tabs-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      scrollbar-width: none;
+    }
+    .filter-tabs-row::-webkit-scrollbar { display: none; }
+    .filter-tab {
+      border: 1px solid var(--border-main);
+      color: var(--text-muted);
+      border-radius: 8px;
+      padding: 4px 12px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .filter-tab:hover {
+      border-color: var(--border-accent);
+      color: var(--text-main);
+    }
+    .filter-tab.active {
+      border: 1.5px solid var(--emerald);
+      color: var(--emerald);
+      box-shadow: 0 0 10px var(--emerald-glow);
+    }
+
+    /* Desktop Table View */
+    .table-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1.5px solid var(--border-main);
+      border-radius: 22px;
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+      display: block;
+    }
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+    th {
+      background: transparent;
+      padding: 14px 18px;
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: var(--text-dim);
+      letter-spacing: 0.06em;
+      border-bottom: 1.5px solid var(--border-main);
+      white-space: nowrap;
+    }
+    td {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border-main);
+      color: var(--text-main);
+      vertical-align: middle;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td {
+      background: rgba(16, 185, 129, 0.035);
+    }
+
+    /* Small Tags - STRICTLY ZERO BACKGROUND / OUTLINE BORDER ONLY */
+    .tag-crop {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--emerald);
+      color: var(--emerald);
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      margin: 2px 3px 2px 0;
+      letter-spacing: 0.02em;
+    }
+    .tag-phone {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border: 1px solid var(--border-main);
+      color: var(--text-main);
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 12.5px;
+      padding: 3px 8px;
+      border-radius: 7px;
+    }
+    .tag-location {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid var(--border-main);
+      color: var(--text-muted);
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+    .tag-acres {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid var(--emerald);
+      color: var(--emerald);
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+    .otp-code-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      color: var(--emerald);
+      border: 1.5px solid var(--emerald);
+      padding: 4px 10px;
+      border-radius: 8px;
+      letter-spacing: 0.12em;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .otp-code-pill:hover {
+      box-shadow: 0 0 12px var(--emerald-glow);
+      transform: scale(1.03);
+    }
+    .otp-code-pill:active {
+      transform: scale(0.96);
+    }
+
+    /* Action Buttons in Table / Cards */
+    .action-btn {
+      border: 1.5px solid var(--border-main);
+      border-radius: 10px;
+      width: 36px;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--emerald);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .action-btn:hover {
+      border-color: var(--emerald);
+      box-shadow: 0 0 10px var(--emerald-glow);
+    }
+    .action-btn:active { transform: scale(0.92); }
+    .action-btn.delete {
+      color: #ef4444;
+      border-color: rgba(239, 68, 68, 0.40);
+    }
+    .action-btn.delete:hover {
+      border-color: #ef4444;
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.35);
+    }
+
+    /* Mobile Responsive Card Feed (< 820px) */
+    .mobile-cards-feed {
+      display: none;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .mobile-farmer-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1.5px solid var(--border-main);
+      border-radius: 20px;
+      padding: 16px 18px;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+    .mobile-farmer-card:hover {
+      border-color: var(--border-accent);
+    }
+    .mobile-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .mobile-card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .mobile-card-crops {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 2px;
+    }
+    .mobile-card-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border-main);
+      padding-top: 10px;
+      margin-top: 2px;
+    }
+
+    @media (max-width: 820px) {
+      .table-card { display: none; }
+      .mobile-cards-feed { display: flex; }
+      .kpi-grid { grid-template-columns: 1fr; }
+      .toolbar-row-top { flex-direction: column; align-items: stretch; }
+      .toolbar-row-top .btn-primary { width: 100%; }
+      header { padding: 12px 14px; }
+      main { padding: 16px 12px 30px; }
+      .brand-title h1 { font-size: 15px; }
+    }
+
+    /* Modals */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-card {
+      background: var(--bg-glass);
+      border: 1.5px solid var(--border-glow);
+      border-radius: 26px;
+      max-width: 480px;
+      width: 100%;
+      padding: 28px 24px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 35px var(--emerald-glow);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-height: 92vh;
+      overflow-y: auto;
+      animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes modalPop {
+      0% { opacity: 0; transform: scale(0.92); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    .modal-card h2 {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group label {
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+    }
+    .form-group input {
+      background: transparent;
+      border: 1.5px solid var(--border-main);
+      border-radius: 12px;
+      height: 44px;
+      padding: 0 14px;
+      color: var(--text-main);
+      font-size: 14px;
+      outline: none;
+      font-family: inherit;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-group input:focus {
+      border-color: var(--emerald);
+      box-shadow: 0 0 12px var(--emerald-glow);
+    }
+    .form-group input:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* Delete Confirmation Modal */
+    .delete-confirm-card {
+      background: var(--bg-glass);
+      border: 1.5px solid rgba(239, 68, 68, 0.55);
+      border-radius: 26px;
+      max-width: 420px;
+      width: 100%;
+      padding: 28px 24px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 30px rgba(239, 68, 68, 0.25);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      text-align: center;
+      animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .delete-warn-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      border: 1.5px solid rgba(239, 68, 68, 0.55);
+      color: #ef4444;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      margin: 0 auto;
+    }
+
+    /* Login Gate Screen */
+    .login-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+      z-index: 10;
+    }
+    .login-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
+      border: 1.5px solid var(--border-accent);
+      border-radius: 28px;
+      max-width: 440px;
+      width: 100%;
+      padding: 36px 28px;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      text-align: center;
+    }
+    .quick-creds-box {
+      border: 1.5px solid var(--border-main);
+      border-radius: 16px;
+      padding: 14px 16px;
+      text-align: left;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .quick-role-badge {
+      border: 1px solid var(--emerald);
+      color: var(--emerald);
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 5px;
+      letter-spacing: 0.04em;
+    }
+    .quick-creds-btn {
+      border: 1px solid var(--emerald);
+      color: var(--emerald);
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .quick-creds-btn:hover {
+      box-shadow: 0 0 8px var(--emerald-glow);
+    }
+    .quick-creds-box code {
+      border: 1px solid var(--border-main);
+      color: var(--emerald);
+      font-family: 'JetBrains Mono', monospace;
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-size: 11px;
+    }
+
+    /* Footer */
+    footer {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 18px 16px;
+      font-size: 11.5px;
+      color: var(--text-dim);
+      border-top: 1px solid var(--border-main);
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Glow Overlay (NO background image) -->
+  <div class="bg-gradient"></div>
+
+  <!-- Dynamic Island Push Notification / Alert -->
+  <div class="dynamic-island" id="dynamic-island">
+    <div class="island-top">
+      <div class="island-app-badge">
+        <div class="island-app-icon">🛡️</div>
+        <span>SkyView Admin · Live Cloud Sync</span>
+      </div>
+      <span class="island-time" id="island-time">Just now</span>
+    </div>
+    <div class="island-body">
+      <div class="island-info">
+        <h3 id="island-title">Registry Synchronized</h3>
+        <p id="island-desc">Connected to Postgres cluster on Render.</p>
+      </div>
+      <div class="island-otp-pill" id="island-otp-pill" style="display:none;"></div>
+    </div>
+  </div>
+
+  <!-- Glass Top Header -->
+  <header>
+    <div class="brand-wrap">
+      <div class="logo-emblem-wrap">
+        <img src="/skyview-emblem.png" alt="SkyView Emblem">
+      </div>
+      <div class="brand-title">
+        <h1>
+          SkyView Admin
+          <span class="badge-check">✓</span>
+        </h1>
+        <div class="status-meta">
+          <span class="live-pulse-dot"></span>
+          <span id="carrier-status-text">Postgres Live Sync</span>
+          <span class="admin-role-pill" id="header-role-pill">Secured</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls-group">
+      <!-- Mute/Sound Toggle -->
+      <button class="btn-ctrl" id="sound-btn" title="Toggle Sound Feedback">
+        <svg id="sound-icon-on" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        </svg>
+        <svg id="sound-icon-off" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <line x1="23" y1="9" x2="17" y2="15"></line>
+          <line x1="17" y1="9" x2="23" y2="15"></line>
+        </svg>
+      </button>
+
+      <!-- Sync / Refresh Button -->
+      <button class="btn-ctrl" id="refresh-btn" title="Refresh Live Database Sync">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="23 4 23 10 17 10"></polyline>
+          <polyline points="1 20 1 14 7 14"></polyline>
+          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+        </svg>
+      </button>
+
+      <!-- Theme Switcher (Light / Dark) -->
+      <button class="btn-ctrl" id="theme-btn" title="Toggle Theme">
+        <svg id="theme-icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <svg id="theme-icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+      </button>
+
+      <!-- Logout Button -->
+      <button class="btn-ctrl" id="logout-btn" title="Logout" style="display:none; color:#ef4444; border-color: rgba(239, 68, 68, 0.4);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Login Gate Screen -->
+  <div class="login-container" id="login-view">
+    <div class="login-card">
+      <div style="display:inline-flex; justify-content:center;">
+        <div class="logo-emblem-wrap" style="width:58px; height:58px;">
+          <img src="/skyview-emblem.png" alt="SkyView Logo">
+        </div>
+      </div>
+      <div>
+        <h2 style="font-size:22px; font-weight:800; color:var(--text-main);">Admin Authentication</h2>
+        <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Sign in to access the Farmer Profile Registry</p>
+      </div>
+
+      <div class="quick-creds-box">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span class="quick-role-badge">Super Admin</span>
+          <button class="quick-creds-btn" onclick="fillCreds('admin@skyview.ai', 'SkyView#Admin2026!')">Fill</button>
+        </div>
+        <div>Email: <code>admin@skyview.ai</code></div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+          <span class="quick-role-badge">Field Officer</span>
+          <button class="quick-creds-btn" onclick="fillCreds('officer@skyview.ai', 'FieldOfficer#2026')">Fill</button>
+        </div>
+        <div>Email: <code>officer@skyview.ai</code></div>
+      </div>
+
+      <form id="admin-login-form" style="display:flex; flex-direction:column; gap:14px;">
+        <div class="form-group" style="text-align:left;">
+          <label>Admin Email</label>
+          <input type="email" id="login-email" required placeholder="admin@skyview.ai">
+        </div>
+        <div class="form-group" style="text-align:left;">
+          <label>Passkey</label>
+          <input type="password" id="login-pass" required placeholder="••••••••••••">
+        </div>
+        <button type="submit" class="btn-primary" style="height:46px; margin-top:4px; font-size:14px;">
+          Authenticate Access →
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Dashboard Screen -->
+  <main id="dashboard-view" style="display:none;">
+    <!-- Live Telemetry KPI Cards -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-top-row">
+          <span class="kpi-label">Registered Farmers</span>
+          <span class="kpi-tag">Postgres Active</span>
+        </div>
+        <span class="kpi-val" id="kpi-total-users">0</span>
+        <span class="kpi-sub">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          Verified Profiles in Database
+        </span>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-top-row">
+          <span class="kpi-label">Total Land Monitored</span>
+          <span class="kpi-tag">Sentinel-2 NDVI</span>
+        </div>
+        <span class="kpi-val" id="kpi-total-acres">0 ac</span>
+        <span class="kpi-sub">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          Active Agricultural Plots
+        </span>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-top-row">
+          <span class="kpi-label">Database Connection</span>
+          <span class="kpi-tag">FPGA Edge Sync</span>
+        </div>
+        <span class="kpi-val" style="font-size:24px; color:var(--emerald);">Render DB</span>
+        <span class="kpi-sub">
+          <span class="live-pulse-dot" style="display:inline-block; margin-right:4px;"></span>
+          PostgreSQL Cloud Cluster Live
+        </span>
+      </div>
+    </div>
+
+    <!-- Toolbar: Search, Filters & Add -->
+    <div class="toolbar-card">
+      <div class="toolbar-row-top">
+        <div class="search-box">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px; color:var(--text-dim);"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="search-input" placeholder="Search by name, phone (+91...), location, or crops...">
+          <span class="search-clear-btn" id="search-clear" title="Clear Search">✕</span>
+        </div>
+
+        <button class="btn-primary" id="open-add-modal-btn">
+          + Register New Farmer
+        </button>
+      </div>
+
+      <div class="filter-tabs-row">
+        <button class="filter-tab active" data-filter="all">All Farmers (<span id="count-all">0</span>)</button>
+        <button class="filter-tab" data-filter="crops">With Crops (<span id="count-crops">0</span>)</button>
+        <button class="filter-tab" data-filter="large">10+ Acres (<span id="count-large">0</span>)</button>
+        <button class="filter-tab" data-filter="otp">Security OTP Synced</button>
+      </div>
+    </div>
+
+    <!-- Desktop Data Table View -->
+    <div class="table-card">
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Farmer Profile</th>
+              <th>Contact Phone</th>
+              <th>Geographic Area</th>
+              <th>Farm Size</th>
+              <th>Monitored Crops</th>
+              <th>Security OTP</th>
+              <th style="text-align:right;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="users-tbody">
+            <tr>
+              <td colspan="7" style="text-align:center; padding:36px; color:var(--text-dim);">
+                Fetching verified profiles from Postgres...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Mobile Responsive Cards Feed (< 820px) -->
+    <div class="mobile-cards-feed" id="mobile-cards-feed">
+      <!-- Injected via JavaScript -->
+    </div>
+  </main>
+
+  <!-- Add / Edit Farmer Modal -->
+  <div class="modal-overlay" id="farmer-modal">
+    <div class="modal-card">
+      <h2 id="modal-title">Register Farmer Profile</h2>
+      <form id="farmer-form" style="display:flex; flex-direction:column; gap:12px;">
+        <input type="hidden" id="modal-is-edit" value="false">
+        
+        <div class="form-group">
+          <label>Phone Number *</label>
+          <input type="text" id="form-phone" required placeholder="+919137784991">
+        </div>
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="form-name" placeholder="Farmer Name">
+        </div>
+        <div class="form-group">
+          <label>Land Size (Acres)</label>
+          <input type="number" step="0.1" id="form-acres" placeholder="e.g. 10.5">
+        </div>
+        <div class="form-group">
+          <label>Location / District</label>
+          <input type="text" id="form-location" placeholder="e.g. Nashik, Maharashtra">
+        </div>
+        <div class="form-group">
+          <label>Crops (comma separated)</label>
+          <input type="text" id="form-crops" placeholder="Wheat, Rice, Cotton">
+        </div>
+        <div class="form-group">
+          <label>Security OTP Code</label>
+          <input type="text" id="form-otp" placeholder="123456">
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:10px;">
+          <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn-primary" id="modal-submit-btn">Save Profile</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Sleek Custom Delete Confirmation Modal -->
+  <div class="modal-overlay" id="delete-modal">
+    <div class="delete-confirm-card">
+      <div class="delete-warn-icon">⚠️</div>
+      <div>
+        <h2 style="font-size:18px; font-weight:800; color:var(--text-main); justify-content:center;">Delete Farmer Profile?</h2>
+        <p style="font-size:13px; color:var(--text-muted); margin-top:6px;" id="delete-modal-msg">
+          Are you sure you want to permanently delete profile?
+        </p>
+      </div>
+      <div style="display:flex; justify-content:center; gap:10px; margin-top:8px;">
+        <button type="button" class="btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+        <button type="button" class="action-btn delete" id="confirm-delete-btn" style="width:auto; padding:0 18px; font-weight:800; font-size:13px;">Confirm Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    SkyView Agricultural Administration Portal · Realtime Postgres Sync · Powered by FPGA Edge AI
+  </footer>
+
+  <script>
+    const API_BASE = 'https://brics-agrin-backend.onrender.com';
+    let allUsers = [];
+    let activeFilter = 'all';
+    let userToDelete = null;
+
+    // Web Audio Synthesizer Chime
+    let audioCtx = null;
+    let isSoundMuted = localStorage.getItem('skyview_admin_sound_muted') === 'true';
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playChime(freq1 = 587.33, freq2 = 880, duration = 0.22) {
+      if (isSoundMuted) return;
+      try {
+        initAudio();
+        const now = audioCtx.currentTime;
+        const osc1 = audioCtx.createOscillator();
+        const osc2 = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc1.type = 'sine';
+        osc2.type = 'triangle';
+        osc1.frequency.setValueAtTime(freq1, now);
+        osc2.frequency.setValueAtTime(freq2, now);
+
+        gain.gain.setValueAtTime(0.01, now);
+        gain.gain.exponentialRampToValueAtTime(0.22, now + 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+        osc1.connect(gain);
+        osc2.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc1.start(now);
+        osc2.start(now);
+        osc1.stop(now + duration);
+        osc2.stop(now + duration);
+      } catch (e) {}
+    }
+
+    // Sound Toggle Setup
+    const soundBtn = document.getElementById('sound-btn');
+    const soundIconOn = document.getElementById('sound-icon-on');
+    const soundIconOff = document.getElementById('sound-icon-off');
+
+    function updateSoundUi() {
+      if (isSoundMuted) {
+        soundIconOn.style.display = 'none';
+        soundIconOff.style.display = 'block';
+        soundBtn.classList.add('active-muted');
+      } else {
+        soundIconOn.style.display = 'block';
+        soundIconOff.style.display = 'none';
+        soundBtn.classList.remove('active-muted');
+      }
+    }
+    updateSoundUi();
+
+    soundBtn.addEventListener('click', () => {
+      isSoundMuted = !isSoundMuted;
+      localStorage.setItem('skyview_admin_sound_muted', isSoundMuted);
+      updateSoundUi();
+      if (!isSoundMuted) playChime(660, 880, 0.18);
+    });
+
+    // Theme Setup (Light / Dark)
+    const rootHtml = document.documentElement;
+    const themeBtn = document.getElementById('theme-btn');
+    const moonIcon = document.getElementById('theme-icon-moon');
+    const sunIcon = document.getElementById('theme-icon-sun');
+    const savedTheme = localStorage.getItem('skyview_admin_theme') || 'dark';
+    applyTheme(savedTheme);
+
+    function applyTheme(theme) {
+      rootHtml.setAttribute('data-theme', theme);
+      localStorage.setItem('skyview_admin_theme', theme);
+      if (theme === 'light') {
+        moonIcon.style.display = 'none';
+        sunIcon.style.display = 'block';
+      } else {
+        moonIcon.style.display = 'block';
+        sunIcon.style.display = 'none';
+      }
+    }
+
+    themeBtn.addEventListener('click', () => {
+      const current = rootHtml.getAttribute('data-theme') || 'dark';
+      applyTheme(current === 'dark' ? 'light' : 'dark');
+      playChime(520, 680, 0.12);
+    });
+
+    // Dynamic Island Push Banner Alert
+    let islandTimer = null;
+    function triggerAlert(title, desc, otp = null) {
+      const island = document.getElementById('dynamic-island');
+      document.getElementById('island-title').textContent = title;
+      document.getElementById('island-desc').textContent = desc;
+      const otpPill = document.getElementById('island-otp-pill');
+
+      if (otp) {
+        otpPill.textContent = otp;
+        otpPill.style.display = 'block';
+      } else {
+        otpPill.style.display = 'none';
+      }
+
+      island.classList.remove('show');
+      void island.offsetWidth;
+      island.classList.add('show');
+      playChime(600, 900, 0.25);
+
+      if (navigator.vibrate) {
+        navigator.vibrate([60, 40, 60]);
+      }
+
+      clearTimeout(islandTimer);
+      islandTimer = setTimeout(() => {
+        island.classList.remove('show');
+      }, 4000);
+    }
+
+    window.fillCreds = function(email, pass) {
+      document.getElementById('login-email').value = email;
+      document.getElementById('login-pass').value = pass;
+      playChime(500, 750, 0.12);
+    };
+
+    // Copy OTP to Clipboard
+    window.copyOtp = function(otp) {
+      if (!otp) return;
+      navigator.clipboard.writeText(otp);
+      triggerAlert('OTP Copied to Clipboard', `Security token ${otp} copied.`);
+      if (navigator.vibrate) navigator.vibrate(40);
+    };
+
+    // Auth State Check
+    const adminToken = localStorage.getItem('skyview_admin_token');
+    if (adminToken) {
+      showDashboard();
+    }
+
+    document.getElementById('admin-login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const pass = document.getElementById('login-pass').value;
+
+      try {
+        const res = await fetch(`${API_BASE}/admin/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: email, password: pass }),
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          localStorage.setItem('skyview_admin_token', data.token);
+          localStorage.setItem('skyview_admin_role', data.user.role);
+          localStorage.setItem('skyview_admin_name', data.user.name);
+          showDashboard();
+          triggerAlert('Access Authorized', `Welcome, ${data.user.name}`);
+        } else {
+          alert('Invalid credentials! Please use the authorized admin credentials shown above.');
+        }
+      } catch (err) {
+        alert('Server connection error. Please try again.');
+      }
+    });
+
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      localStorage.removeItem('skyview_admin_token');
+      localStorage.removeItem('skyview_admin_role');
+      localStorage.removeItem('skyview_admin_name');
+      location.reload();
+    });
+
+    function showDashboard() {
+      document.getElementById('login-view').style.display = 'none';
+      document.getElementById('dashboard-view').style.display = 'flex';
+      document.getElementById('logout-btn').style.display = 'flex';
+      const role = localStorage.getItem('skyview_admin_role') || 'Admin';
+      document.getElementById('header-role-pill').textContent = role;
+      fetchUsers();
+    }
+
+    // Refresh Live Sync
+    document.getElementById('refresh-btn').addEventListener('click', () => {
+      fetchUsers(true);
+      playChime(500, 700, 0.15);
+    });
+
+    // CRUD Handlers
+    async function fetchUsers(manual = false) {
+      try {
+        const res = await fetch(`${API_BASE}/admin/users?_t=${Date.now()}`);
+        if (res.ok) {
+          const data = await res.json();
+          allUsers = data.users || [];
+          applyCurrentFilter();
+          calculateKpis(allUsers);
+          if (manual) {
+            triggerAlert('Live Cloud Sync Active', `${allUsers.length} verified farmer profiles refreshed.`);
+          }
+        }
+      } catch (e) {
+        if (manual) triggerAlert('Connection Issue', 'Unable to reach Postgres server.');
+      }
+    }
+
+    function calculateKpis(users) {
+      document.getElementById('kpi-total-users').textContent = users.length;
+      document.getElementById('count-all').textContent = users.length;
+      
+      const withCropsCount = users.filter(u => u.crops && u.crops.trim().length > 0 && u.crops !== 'Unspecified').length;
+      document.getElementById('count-crops').textContent = withCropsCount;
+
+      const largeFarmsCount = users.filter(u => (u.land_size_acres || 0) >= 10).length;
+      document.getElementById('count-large').textContent = largeFarmsCount;
+
+      const totalAcres = users.reduce((acc, u) => acc + (u.land_size_acres || 0), 0);
+      document.getElementById('kpi-total-acres').textContent = `${Math.round(totalAcres * 10) / 10} ac`;
+    }
+
+    // Filter Tabs
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        activeFilter = tab.getAttribute('data-filter');
+        applyCurrentFilter();
+        playChime(480, 640, 0.1);
+      });
+    });
+
+    function applyCurrentFilter() {
+      let filtered = [...allUsers];
+      if (activeFilter === 'crops') {
+        filtered = filtered.filter(u => u.crops && u.crops.trim().length > 0 && u.crops !== 'Unspecified');
+      } else if (activeFilter === 'large') {
+        filtered = filtered.filter(u => (u.land_size_acres || 0) >= 10);
+      } else if (activeFilter === 'otp') {
+        filtered = filtered.filter(u => u.saved_otp && u.saved_otp.trim().length > 0);
+      }
+
+      const q = document.getElementById('search-input').value.toLowerCase().trim();
+      if (q) {
+        filtered = filtered.filter(u => 
+          (u.name && u.name.toLowerCase().includes(q)) ||
+          (u.phone && u.phone.includes(q)) ||
+          (u.location && u.location.toLowerCase().includes(q)) ||
+          (u.crops && u.crops.toLowerCase().includes(q)) ||
+          (u.saved_otp && u.saved_otp.includes(q))
+        );
+      }
+
+      renderUsers(filtered);
+    }
+
+    // Search Box Listener
+    const searchInput = document.getElementById('search-input');
+    const searchClear = document.getElementById('search-clear');
+
+    searchInput.addEventListener('input', () => {
+      if (searchInput.value.trim().length > 0) {
+        searchClear.style.display = 'block';
+      } else {
+        searchClear.style.display = 'none';
+      }
+      applyCurrentFilter();
+    });
+
+    searchClear.addEventListener('click', () => {
+      searchInput.value = '';
+      searchClear.style.display = 'none';
+      applyCurrentFilter();
+    });
+
+    function renderUsers(list) {
+      const tbody = document.getElementById('users-tbody');
+      const mobileFeed = document.getElementById('mobile-cards-feed');
+
+      if (!list || list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:36px; color:var(--text-dim);">No matching farmer profiles found.</td></tr>`;
+        mobileFeed.innerHTML = `<div style="text-align:center; padding:32px; color:var(--text-dim); border:1.5px dashed var(--border-main); border-radius:18px;">No matching farmer profiles found.</div>`;
+        return;
+      }
+
+      // 1. Desktop Table Rows
+      tbody.innerHTML = list.map(u => {
+        const cropsHtml = (u.crops && u.crops !== 'Unspecified') ? u.crops.split(',').map(c => `<span class="tag-crop">${c.replace(/[{}]/g, '').trim()}</span>`).join('') : '<span style="color:var(--text-dim);">-</span>';
+        const acresHtml = u.land_size_acres ? `<span class="tag-acres">🌾 ${u.land_size_acres} ac</span>` : '<span style="color:var(--text-dim);">-</span>';
+        const locationHtml = u.location ? `<span class="tag-location">📍 ${u.location}</span>` : '<span class="tag-location">📍 India</span>';
+        const otpCode = u.saved_otp || '123456';
+
+        return `
+          <tr>
+            <td>
+              <strong style="color:var(--text-main); font-size:14px; display:block;">${u.name || 'Anonymous Farmer'}</strong>
+              <div style="font-size:11px; color:var(--text-dim); margin-top:2px;">
+                ${u.created_at ? 'Joined ' + new Date(u.created_at).toLocaleDateString() : 'Active Profile'}
+              </div>
+            </td>
+            <td>
+              <span class="tag-phone">
+                📞 ${u.phone}
+              </span>
+            </td>
+            <td>${locationHtml}</td>
+            <td>${acresHtml}</td>
+            <td>${cropsHtml}</td>
+            <td>
+              <button class="otp-code-pill" title="Click to copy OTP" onclick="copyOtp('${otpCode}')">
+                <span>${otpCode}</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              </button>
+            </td>
+            <td style="text-align:right;">
+              <div style="display:inline-flex; gap:6px;">
+                <button class="action-btn" title="Edit Farmer Profile" onclick="editUser('${u.phone}')">✏️</button>
+                <button class="action-btn delete" title="Delete Farmer Profile" onclick="promptDeleteUser('${u.phone}')">🗑️</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      // 2. Mobile Responsive Cards Feed (< 820px)
+      mobileFeed.innerHTML = list.map(u => {
+        const cropsHtml = (u.crops && u.crops !== 'Unspecified') ? u.crops.split(',').map(c => `<span class="tag-crop">${c.replace(/[{}]/g, '').trim()}</span>`).join('') : '<span style="color:var(--text-dim);">-</span>';
+        const acresHtml = u.land_size_acres ? `<span class="tag-acres">🌾 ${u.land_size_acres} ac</span>` : '<span style="color:var(--text-dim);">-</span>';
+        const locationHtml = u.location ? `<span class="tag-location">📍 ${u.location}</span>` : '<span class="tag-location">📍 India</span>';
+        const otpCode = u.saved_otp || '123456';
+
+        return `
+          <div class="mobile-farmer-card">
+            <div class="mobile-card-top">
+              <div>
+                <strong style="font-size:15px; color:var(--text-main); display:block;">${u.name || 'Anonymous Farmer'}</strong>
+                <span class="tag-phone" style="margin-top:4px;">📞 ${u.phone}</span>
+              </div>
+              <button class="otp-code-pill" title="Click to copy OTP" onclick="copyOtp('${otpCode}')">
+                <span>${otpCode}</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              </button>
+            </div>
+
+            <div class="mobile-card-meta">
+              ${locationHtml}
+              ${acresHtml}
+            </div>
+
+            <div class="mobile-card-crops">
+              ${cropsHtml}
+            </div>
+
+            <div class="mobile-card-bottom">
+              <span style="font-size:11px; color:var(--text-dim);">
+                ${u.created_at ? new Date(u.created_at).toLocaleDateString() : 'Active Profile'}
+              </span>
+              <div style="display:flex; gap:6px;">
+                <button class="action-btn" title="Edit Farmer Profile" onclick="editUser('${u.phone}')">✏️</button>
+                <button class="action-btn delete" title="Delete Farmer Profile" onclick="promptDeleteUser('${u.phone}')">🗑️</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Add / Edit Modal Controls
+    const modal = document.getElementById('farmer-modal');
+    document.getElementById('open-add-modal-btn').addEventListener('click', () => {
+      document.getElementById('modal-title').textContent = 'Register New Farmer';
+      document.getElementById('modal-is-edit').value = 'false';
+      document.getElementById('form-phone').value = '';
+      document.getElementById('form-phone').disabled = false;
+      document.getElementById('form-name').value = '';
+      document.getElementById('form-acres').value = '';
+      document.getElementById('form-location').value = '';
+      document.getElementById('form-crops').value = '';
+      document.getElementById('form-otp').value = Math.floor(100000 + Math.random() * 900000).toString();
+      modal.classList.add('active');
+      playChime(520, 720, 0.12);
+    });
+
+    window.closeModal = function() {
+      modal.classList.remove('active');
+    };
+
+    window.editUser = function(phone) {
+      const u = allUsers.find(x => x.phone === phone);
+      if (!u) return;
+      document.getElementById('modal-title').textContent = `Edit Profile · ${phone}`;
+      document.getElementById('modal-is-edit').value = 'true';
+      document.getElementById('form-phone').value = u.phone;
+      document.getElementById('form-phone').disabled = true;
+      document.getElementById('form-name').value = (u.name && u.name !== 'Anonymous Farmer') ? u.name : '';
+      document.getElementById('form-acres').value = u.land_size_acres || '';
+      document.getElementById('form-location').value = (u.location && u.location !== 'India') ? u.location : '';
+      document.getElementById('form-crops').value = (u.crops && u.crops !== 'Unspecified') ? u.crops.replace(/[{}]/g, '') : '';
+      document.getElementById('form-otp').value = u.saved_otp || '123456';
+      modal.classList.add('active');
+      playChime(520, 720, 0.12);
+    };
+
+    // Form Submit Handler (Both Insert and Real Update on PostgreSQL)
+    document.getElementById('farmer-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = document.getElementById('modal-submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Saving...';
+
+      const isEdit = document.getElementById('modal-is-edit').value === 'true';
+      const phone = document.getElementById('form-phone').value.trim();
+      const payload = {
+        phone: phone,
+        name: document.getElementById('form-name').value.trim() || null,
+        land_size_acres: parseFloat(document.getElementById('form-acres').value) || null,
+        location: document.getElementById('form-location').value.trim() || null,
+        crops: document.getElementById('form-crops').value.trim() || null,
+        saved_otp: document.getElementById('form-otp').value.trim() || null,
+      };
+
+      try {
+        const url = isEdit ? `${API_BASE}/admin/users/${encodeURIComponent(phone)}` : `${API_BASE}/admin/users`;
+        const method = isEdit ? 'PUT' : 'POST';
+        const res = await fetch(url, {
+          method: method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        if (res.ok) {
+          triggerAlert(
+            isEdit ? 'Profile Updated' : 'Farmer Registered',
+            `Account ${phone} updated in PostgreSQL cluster.`,
+            payload.saved_otp
+          );
+          closeModal();
+          await fetchUsers();
+        } else {
+          const errData = await res.json().catch(() => ({}));
+          alert(`Failed to save user: ${errData.detail || 'Server error'}`);
+        }
+      } catch (err) {
+        alert('Network error while saving user profile.');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Save Profile';
+      }
+    });
+
+    // Custom Sleek Delete Confirmation Modal (Real Delete from PostgreSQL)
+    const deleteModal = document.getElementById('delete-modal');
+
+    window.promptDeleteUser = function(phone) {
+      userToDelete = phone;
+      const u = allUsers.find(x => x.phone === phone);
+      const nameText = u && u.name ? ` "${u.name}"` : '';
+      document.getElementById('delete-modal-msg').textContent = `Are you sure you want to permanently delete profile${nameText} (${phone}) from the database?`;
+      deleteModal.classList.add('active');
+      playChime(400, 300, 0.2);
+    };
+
+    window.closeDeleteModal = function() {
+      deleteModal.classList.remove('active');
+      userToDelete = null;
+    };
+
+    document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
+      if (!userToDelete) return;
+      const phone = userToDelete;
+      const btn = document.getElementById('confirm-delete-btn');
+      btn.disabled = true;
+      btn.textContent = 'Deleting...';
+
+      try {
+        const res = await fetch(`${API_BASE}/admin/users/${encodeURIComponent(phone)}`, {
+          method: 'DELETE'
+        });
+        if (res.ok) {
+          closeDeleteModal();
+          triggerAlert('Profile Removed', `Farmer profile ${phone} was permanently deleted.`);
+          await fetchUsers();
+        } else {
+          const errData = await res.json().catch(() => ({}));
+          alert(`Failed to delete profile: ${errData.detail || 'Server error'}`);
+        }
+      } catch (err) {
+        alert('Error connecting to server');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Confirm Delete';
+      }
+    });
+
+    // Auto-polling for real-time postgres sync every 8 seconds
+    setInterval(() => {
+      if (localStorage.getItem('skyview_admin_token')) {
+        fetchUsers();
+      }
+    }, 8000);
+  </script>
+</body>
+</html>

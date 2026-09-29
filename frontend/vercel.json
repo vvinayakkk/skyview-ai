@@ -1,7 +1,12 @@
 {
+  "cleanUrls": true,
   "rewrites": [
     { "source": "/api/(.*)", "destination": "https://brics-agrin-backend.onrender.com/api/$1" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/carrier", "destination": "/carrier/index.html" },
+    { "source": "/carrier/(.*)", "destination": "/carrier/$1" },
+    { "source": "/admin", "destination": "/admin/index.html" },
+    { "source": "/admin/(.*)", "destination": "/admin/$1" },
+    { "source": "/((?!carrier|admin|assets|favicon|crops|bg|farmer|house|tractor|solar|sunflower|greenhouse|robots|.*\\..*).*)", "destination": "/index.html" }
   ]
 }
 
