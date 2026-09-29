@@ -150,48 +150,51 @@ export default function Login() {
           </p>
         </div>
 
-        {/* Prototype Testing Banner */}
-        <div style={{
-          padding: '12px 14px',
-          borderRadius: '14px',
-          marginBottom: '18px',
-          background: isDark ? 'rgba(16,185,129,0.06)' : 'rgba(16,185,129,0.05)',
-          border: '1.5px solid rgba(16,185,129,0.30)',
-          textAlign: 'left'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-            <span style={{ fontSize: '11px', fontWeight: 800, color: '#10B981', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <Zap style={{ width: '13px', height: '13px' }} /> For Testing Purposes
-            </span>
+        {/* Error */}
+        {error && (
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px',
+            padding: '10px 14px', borderRadius: '12px', fontSize: '13px', color: '#f87171',
+            background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.20)',
+          }}>
+            <AlertCircle style={{ width: '15px', height: '15px', flexShrink: 0 }} />
+            <span>{error}</span>
+          </div>
+        )}
+
+        {/* Discreet Test Button (Not highlighted, clean & subtle) */}
+        {!otpSent && (
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '18px' }}>
             <button
               type="button"
               onClick={() => handleDemoQuickAccess(DEMO_TEST_PHONE)}
               style={{
                 background: 'transparent',
-                border: '1px solid #10B981',
-                color: '#10B981',
-                fontSize: '11px',
-                fontWeight: 700,
-                padding: '3px 10px',
-                borderRadius: '8px',
+                border: isDark ? '1px solid rgba(255,255,255,0.12)' : '1px solid rgba(0,0,0,0.12)',
+                borderRadius: '20px',
+                padding: '4px 12px',
+                fontSize: '11.5px',
+                color: textMuted,
                 cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '5px',
                 transition: 'all 0.15s ease'
               }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLElement).style.borderColor = '#10B981';
+                (e.currentTarget as HTMLElement).style.color = '#10B981';
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLElement).style.borderColor = isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.12)';
+                (e.currentTarget as HTMLElement).style.color = textMuted;
+              }}
             >
-              1-Click Enter →
+              <Zap style={{ width: '11px', height: '11px' }} />
+              Test Demo Account (9999999999)
             </button>
           </div>
-          <p style={{ margin: 0, fontSize: '12px', color: textMuted, lineHeight: '1.4' }}>
-            Use phone number: <button
-              type="button"
-              onClick={() => handleDemoQuickAccess(DEMO_TEST_PHONE)}
-              style={{
-                background: 'none', border: 'none', padding: 0, cursor: 'pointer',
-                fontFamily: 'monospace', fontWeight: 800, color: '#10B981', textDecoration: 'underline'
-              }}
-            >{DEMO_TEST_PHONE}</button> (Direct access without OTP)
-          </p>
-        </div>
+        )}
 
         <form style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           {/* Phone input */}
