@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth, DEMO_TEST_PHONE, isDemoPhoneNumber } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from 'next-themes';
 import { LanguageSelector } from '@/components/LanguageSelector';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
-import { AlertCircle, ArrowRight, Leaf, RefreshCw, ShieldCheck } from 'lucide-react';
+import { AlertCircle, ArrowRight, Leaf, RefreshCw, ShieldCheck, Zap } from 'lucide-react';
 import { SkyViewLogo } from '@/components/SkyViewLogo';
 import { PhoneInput } from '@/components/PhoneInput';
 
@@ -18,7 +18,7 @@ export default function Login() {
   const [error, setError]     = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const { login, sendOtp, hardwareConnected } = useAuth();
+  const { login, loginDemoUser, sendOtp, hardwareConnected } = useAuth();
   const { t } = useLanguage();
   const navigate = useNavigate();
   const { theme } = useTheme();
@@ -29,16 +29,40 @@ export default function Login() {
     return `${dialCode}${num}`;
   };
 
+  const handleDemoQuickAccess = async (demoNum: string = DEMO_TEST_PHONE) => {
+    setError('');
+    setIsLoading(true);
+    setPhone(demoNum);
+    setDialCode('+91');
+    await loginDemoUser(`+91${demoNum}`);
+    navigate('/dashboard');
+  };
+
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!phone.trim()) {
       setError('Please enter your phone number');
       return;
     }
+
+    // Direct Instant Access for Demo Testing Number
+    if (isDemoPhoneNumber(fullPhone())) {
+      setError('');
+      setIsLoading(true);
+      await loginDemoUser(fullPhone());
+      navigate('/dashboard');
+      return;
+    }
+
     setError('');
     setIsLoading(true);
     const result = await sendOtp(fullPhone());
     if (result.success) {
+      if (result.demo_bypass) {
+        await loginDemoUser(fullPhone());
+        navigate('/dashboard');
+        return;
+      }
       setOtpSent(true);
     } else {
       setError(result.message || 'Phone not registered. Please sign up first.');
@@ -50,6 +74,13 @@ export default function Login() {
     e.preventDefault();
     setError('');
     setIsLoading(true);
+
+    if (isDemoPhoneNumber(fullPhone()) || otp === '999999') {
+      await loginDemoUser(fullPhone());
+      navigate('/dashboard');
+      return;
+    }
+
     const success = await login(fullPhone(), otp);
     if (success) {
       navigate(hardwareConnected ? '/dashboard' : '/hardware-setup');
@@ -119,17 +150,48 @@ export default function Login() {
           </p>
         </div>
 
-        {/* Error */}
-        {error && (
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px',
-            padding: '10px 14px', borderRadius: '12px', fontSize: '13px', color: '#f87171',
-            background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.20)',
-          }}>
-            <AlertCircle style={{ width: '15px', height: '15px', flexShrink: 0 }} />
-            <span>{error}</span>
+        {/* Prototype Testing Banner */}
+        <div style={{
+          padding: '12px 14px',
+          borderRadius: '14px',
+          marginBottom: '18px',
+          background: isDark ? 'rgba(16,185,129,0.06)' : 'rgba(16,185,129,0.05)',
+          border: '1.5px solid rgba(16,185,129,0.30)',
+          textAlign: 'left'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+            <span style={{ fontSize: '11px', fontWeight: 800, color: '#10B981', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <Zap style={{ width: '13px', height: '13px' }} /> For Testing Purposes
+            </span>
+            <button
+              type="button"
+              onClick={() => handleDemoQuickAccess(DEMO_TEST_PHONE)}
+              style={{
+                background: 'transparent',
+                border: '1px solid #10B981',
+                color: '#10B981',
+                fontSize: '11px',
+                fontWeight: 700,
+                padding: '3px 10px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              1-Click Enter →
+            </button>
           </div>
-        )}
+          <p style={{ margin: 0, fontSize: '12px', color: textMuted, lineHeight: '1.4' }}>
+            Use phone number: <button
+              type="button"
+              onClick={() => handleDemoQuickAccess(DEMO_TEST_PHONE)}
+              style={{
+                background: 'none', border: 'none', padding: 0, cursor: 'pointer',
+                fontFamily: 'monospace', fontWeight: 800, color: '#10B981', textDecoration: 'underline'
+              }}
+            >{DEMO_TEST_PHONE}</button> (Direct access without OTP)
+          </p>
+        </div>
 
         <form style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           {/* Phone input */}

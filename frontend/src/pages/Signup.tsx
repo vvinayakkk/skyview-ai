@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth, DEMO_TEST_PHONE, isDemoPhoneNumber } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from 'next-themes';
 import { LanguageSelector } from '@/components/LanguageSelector';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { SmartVoiceForm } from '@/components/SmartVoiceForm';
-import { AlertCircle, MapPin, Leaf, RefreshCw, ShieldCheck, ArrowRight, User, Layers, Wheat, Mic } from 'lucide-react';
+import { AlertCircle, MapPin, Leaf, RefreshCw, ShieldCheck, ArrowRight, User, Layers, Wheat, Mic, Zap } from 'lucide-react';
 import { SkyViewLogo } from '@/components/SkyViewLogo';
 import { PhoneInput } from '@/components/PhoneInput';
 
@@ -23,7 +23,7 @@ export default function Signup() {
   const [error, setError]       = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const { login, sendOtp } = useAuth();
+  const { login, loginDemoUser, sendOtp } = useAuth();
   const { t, language }   = useLanguage();
   const navigate           = useNavigate();
   const { theme }          = useTheme();
@@ -44,6 +44,13 @@ export default function Signup() {
 
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isDemoPhoneNumber(fullPhone())) {
+      setError(''); setIsLoading(true);
+      await loginDemoUser(fullPhone());
+      navigate('/dashboard');
+      return;
+    }
+
     if (!name.trim() || !phone.trim()) { setError('Name and phone are required.'); return; }
     if (name.trim().length < 2) { setError('Please provide a valid name.'); return; }
     const digits = phone.trim().replace(/[\s-]/g, '');
@@ -52,6 +59,11 @@ export default function Signup() {
     setError(''); setIsLoading(true);
     const result = await sendOtp(fullPhone(), true);
     if (result.success) {
+      if (result.demo_bypass) {
+        await loginDemoUser(fullPhone());
+        navigate('/dashboard');
+        return;
+      }
       setOtpSent(true);
     } else {
       setError(result.message || 'Failed to send OTP.');

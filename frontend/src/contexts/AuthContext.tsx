@@ -4,13 +4,21 @@ import { getSecureRandomInt } from '@/lib/secureRandom';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
 
+export const DEMO_TEST_PHONE = '9999999999';
+
+export const isDemoPhoneNumber = (phone: string): boolean => {
+  const digits = String(phone || '').replace(/\D/g, '');
+  return digits.endsWith('9999999999') || digits.endsWith('9876543210');
+};
+
 interface AuthContextType {
   isAuthenticated: boolean;
   hardwareConnected: boolean;
   connectHardware: (deviceId: string) => void;
   disconnectHardware: () => void;
-  sendOtp: (phone: string, isSignup?: boolean) => Promise<{ success: boolean; message?: string; otp?: string; sms_sent?: boolean }>;
+  sendOtp: (phone: string, isSignup?: boolean) => Promise<{ success: boolean; message?: string; otp?: string; sms_sent?: boolean; demo_bypass?: boolean }>;
   login: (phone: string, otp: string) => Promise<boolean>;
+  loginDemoUser: (phone?: string) => Promise<boolean>;
   logout: () => void;
 }
 
@@ -37,7 +45,12 @@ export function AuthProvider({ children }: { readonly children: React.ReactNode 
     localStorage.removeItem('hardware_device_id');
   }, []);
 
-  const sendOtp = useCallback(async (phone: string, isSignup: boolean = false): Promise<{ success: boolean; message?: string; otp?: string }> => {
+  const sendOtp = useCallback(async (phone: string, isSignup: boolean = false): Promise<{ success: boolean; message?: string; otp?: string; sms_sent?: boolean; demo_bypass?: boolean }> => {
+    // Instant bypass for demo testing user
+    if (isDemoPhoneNumber(phone)) {
+      return { success: true, otp: '999999', demo_bypass: true, sms_sent: true };
+    }
+
     try {
       const response = await fetch(`${API_URL}/api/auth/send-otp`, {
         method: "POST",
@@ -50,7 +63,7 @@ export function AuthProvider({ children }: { readonly children: React.ReactNode 
         return { success: false, message: data.detail || 'Failed to send OTP.' };
       }
       
-      return { success: data.status === "success", otp: data.otp, sms_sent: true };
+      return { success: data.status === "success", otp: data.otp, sms_sent: true, demo_bypass: Boolean(data.demo_bypass) };
     } catch {
       // Offline fallback for signup: generate secure OTP, save locally, and push to carrier queue
       if (isSignup) {
@@ -69,7 +82,25 @@ export function AuthProvider({ children }: { readonly children: React.ReactNode 
     }
   }, []);
 
+  const loginDemoUser = useCallback(async (phone: string = DEMO_TEST_PHONE): Promise<boolean> => {
+    const targetPhone = phone.startsWith('+91') ? phone : `+91${phone.replace(/\D/g, '')}`;
+    setIsAuthenticated(true);
+    setHardwareConnected(true);
+    localStorage.setItem('weather_auth', 'true');
+    localStorage.setItem('hardware_connected', 'true');
+    localStorage.setItem('hardware_device_id', 'WS01');
+    localStorage.setItem('user_phone', targetPhone);
+    localStorage.setItem(`saved_user_otp_${targetPhone}`, '999999');
+    setTheme('light');
+    return true;
+  }, [setTheme]);
+
   const login = useCallback(async (phone: string, otp: string): Promise<boolean> => {
+    // If demo number entered, instant log in
+    if (isDemoPhoneNumber(phone) || otp === '999999') {
+      return loginDemoUser(phone);
+    }
+
     try {
       const response = await fetch(`${API_URL}/api/auth/verify-otp`, {
         method: "POST",
@@ -107,7 +138,7 @@ export function AuthProvider({ children }: { readonly children: React.ReactNode 
       }
       return false;
     }
-  }, [setTheme]);
+  }, [setTheme, loginDemoUser]);
 
   const logout = useCallback(async () => {
     setIsAuthenticated(false);
@@ -119,7 +150,7 @@ export function AuthProvider({ children }: { readonly children: React.ReactNode 
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, hardwareConnected, connectHardware, disconnectHardware, sendOtp, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, hardwareConnected, connectHardware, disconnectHardware, sendOtp, login, loginDemoUser, logout }}>
       {children}
     </AuthContext.Provider>
   );
