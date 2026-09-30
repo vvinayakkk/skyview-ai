@@ -128,10 +128,20 @@ flowchart LR
     %% ---------- Decision & Intelligence ----------
     subgraph DI["🤖 DECISION & INTELLIGENCE"]
         direction TB
+        D0["Master Agent"]
+        D5["Reinforcement Learning Agent"]
+        D6["Prediction Edge Intelligence<br/>(Vertex AI)"]
+        D7["Autonomous Monitoring Agent"]
+        D8["Hyperlocal Weather Agent"]
         D1["Weather Agent"]
         D2["Farm Advisor Agent"]
         D3["Alert Agent"]
         D4["Decision Engine"]
+        D0 --> D5 & D6 & D7 & D8 & D1 & D2 & D3
+        D5 --> D4
+        D6 --> D4
+        D7 --> D4
+        D8 --> D4
         D1 --> D4
         D2 --> D4
         D3 --> D4
@@ -153,14 +163,14 @@ flowchart LR
     %% ---------- Connections ----------
     WS4 == "LoRa Communication" ==> R1
     R5 <== "UART<br/>Results via UART" ==> F1
-    R6 ==> D1
+    R6 ==> DI
     SAT -.-> R5
     D4 ==> OUT
 
     %% ---------- Styling ----------
     class WS1,WS2,WS3,WS4,SAT,O1,O2,O3,O4,O5 client;
     class R1,R2,R3,R4,R5 router;
-    class F1,F2,F3,D1,D2,D3,D4 engine;
+    class F1,F2,F3,D0,D1,D2,D3,D4,D5,D6,D7,D8 engine;
     class R6 backend;
 
     style WS fill:#10B98108,stroke:#10B981,stroke-width:2px,color:#10B981
