@@ -153,11 +153,11 @@ flowchart LR
     %% ---------- Output ----------
     subgraph OUT["📱 OUTPUT & USER INTERFACE"]
         direction LR
-        O1["React Dashboard"]
+        O1["Website"]
         O2["WhatsApp Alerts"]
         O3["Farm Reports"]
         O4["Crop Insights & Plan"]
-        O5["📲 Mobile App"]
+        O5["Mobile App"]
     end
 
     %% ---------- Connections ----------
