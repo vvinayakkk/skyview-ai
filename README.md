@@ -9,7 +9,7 @@
   ╚══════╝╚═╝  ╚═╝   ╚═╝     ╚═══╝  ╚═╝╚══════╝ ╚══╝╚══╝     ╚═╝  ╚═╝╚═╝
 ```
 
-### **The Autonomous Planetary Agricultural Intelligence Operating System**
+### **The Autonomous Planetary Agricultural Intelligence System**
 *Open-Source Digital Public Good for 500 Million Smallholder Farmers*
 
 ---
@@ -86,28 +86,88 @@
 ## 🏗️ System Architecture
 
 ```mermaid
-graph TD
+flowchart LR
     classDef client fill:#10B98115,stroke:#10B981,stroke-width:2px,color:#10B981;
     classDef router fill:#3B82F615,stroke:#3B82F6,stroke-width:2px,color:#3B82F6;
     classDef engine fill:#8B5CF615,stroke:#8B5CF6,stroke-width:1.5px,color:#A78BFA;
     classDef backend fill:#EC489915,stroke:#EC4899,stroke-width:2px,color:#F472B6;
 
-    A["<b>Unified Ingestion & Dispatch</b><br/>Web (React 18) • Mobile (Flutter) • Voice"]:::client
-    B["<b>System-One Typed Decision Router (Jev Architecture)</b><br/>Sub-millisecond classification & intent dispatch"]:::router
-    
-    C["<b>Autonomous Agentic Mesh</b><br/>Groq LPU Distributed Array<br/>• gpt-oss-120b<br/>• qwen3.8-27b<br/>• gpt-oss-20b"]:::engine
-    D["<b>Multimodal Vision Engine</b><br/>Google DeepMind Gemini 2.5<br/>• 512x512 ResNet Normalizer<br/>• SVG Reticle Segmentation"]:::engine
-    E["<b>Edge Hardware Pipeline</b><br/>Xilinx ZC706 FPGA / Vivado HLS<br/>• 12.4ms Hardware Anomaly<br/>• Solar Telemetry"]:::engine
-    
-    F["<b>FastAPI Central Agro-Backend</b><br/>PostgreSQL Neon • Sarvam AI STT/TTS • MyScheme"]:::backend
+    %% ---------- Smart Weather Station ----------
+    subgraph WS["🌦️ SMART WEATHER STATION (ESP32 Transmitter)"]
+        direction TB
+        WS1["☀️ Solar-powered system"]
+        WS2["Soil, Weather, Rain, Wind, UV,<br/>Temperature sensors"]
+        WS3["Energy monitoring"]
+        WS4["LoRa Data Transmission"]
+        WS1 --> WS2 --> WS3 --> WS4
+    end
 
-    A --> B
-    B -->|Text & Conversational| C
-    B -->|Pathology Images| D
-    B -->|Sensor Fusion & IoT| E
-    C --> F
-    D --> F
-    E --> F
+    %% ---------- Raspberry Pi ----------
+    subgraph RPI["🍓 RASPBERRY PI RECEIVER (Edge AI Gateway)"]
+        direction TB
+        R1["LoRa Subscriber"]
+        R2["FastAPI Backend"]
+        R3["Frontend"]
+        R4["Agentic AI Agents"]
+        R5["Data Processing & Routing"]
+        R6[("Database<br/>Sensor Data + FPGA Results")]
+        R1 --> R2 --> R5 --> R6
+        R2 --- R3
+        R2 --- R4
+    end
+
+    %% ---------- FPGA ----------
+    subgraph FPGA["⚡ AMD ZYNQ-7000 FPGA (ML Accelerator)"]
+        direction TB
+        F1["Sensor Fusion Accelerator (IP Core)"]
+        F2["Rain Prediction Model (IP Core)"]
+        F3["Parallel ML Inference"]
+        F1 --> F2 --> F3
+    end
+
+    %% ---------- Decision & Intelligence ----------
+    subgraph DI["🤖 DECISION & INTELLIGENCE"]
+        direction TB
+        D1["Weather Agent"]
+        D2["Farm Advisor Agent"]
+        D3["Alert Agent"]
+        D4["Decision Engine"]
+        D1 --> D4
+        D2 --> D4
+        D3 --> D4
+    end
+
+    %% ---------- Satellite ----------
+    SAT["🛰️ SATELLITE DATA<br/>NDVI / Vegetation Health<br/>Crop Stress & Condition"]
+
+    %% ---------- Output ----------
+    subgraph OUT["📱 OUTPUT & USER INTERFACE"]
+        direction LR
+        O1["React Dashboard"]
+        O2["WhatsApp Alerts"]
+        O3["Farm Reports"]
+        O4["Crop Insights & Plan"]
+        O5["📲 Mobile App"]
+    end
+
+    %% ---------- Connections ----------
+    WS4 == "LoRa Communication" ==> R1
+    R5 <== "UART<br/>Results via UART" ==> F1
+    R6 ==> D1
+    SAT -.-> R5
+    D4 ==> OUT
+
+    %% ---------- Styling ----------
+    class WS1,WS2,WS3,WS4,SAT,O1,O2,O3,O4,O5 client;
+    class R1,R2,R3,R4,R5 router;
+    class F1,F2,F3,D1,D2,D3,D4 engine;
+    class R6 backend;
+
+    style WS fill:#10B98108,stroke:#10B981,stroke-width:2px,color:#10B981
+    style RPI fill:#3B82F608,stroke:#3B82F6,stroke-width:2px,color:#3B82F6
+    style FPGA fill:#8B5CF608,stroke:#8B5CF6,stroke-width:2px,color:#A78BFA
+    style DI fill:#8B5CF608,stroke:#8B5CF6,stroke-width:2px,color:#A78BFA
+    style OUT fill:#10B98108,stroke:#10B981,stroke-width:2px,color:#10B981
 ```
 
 ---
@@ -396,7 +456,7 @@ flutter run
 ## 📦 Continuous Delivery & Cloud Builds
 
 ### Production Web & API
-- **Web App:** Deployed on **Vercel** with global edge CDN: [https://frontend-woad-seven-93.vercel.app](https://frontend-woad-seven-93.vercel.app)
+- **Web App:** Deployed on **Vercel** with global edge CDN: [https://skyview-ai.vercel.app](https://skyview-ai.vercel.app)
 - **Agro-Backend:** Deployed on **Render** with PostgreSQL Neon database: [https://brics-agrin-backend.onrender.com](https://brics-agrin-backend.onrender.com)
 
 ### Android Release APK
